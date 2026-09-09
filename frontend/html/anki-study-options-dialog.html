@@ -1,0 +1,43 @@
+<dialog id="ankiStudyOptionsDialog" class="dialog dialog-lg anki-study-options-dialog"
+  aria-labelledby="ankiStudyOptionsTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <div class="dialog-head-title-row">
+          <h2 id="ankiStudyOptionsTitle" class="dialog-title dialog-title-lg">Study Options</h2>
+          <p id="ankiStudyOptionStatus" class="dialog-help dialog-status system-message" role="status"></p>
+        </div>
+        <p class="dialog-help">Anki schedules a deck with the study options it names, so every deck on
+          the same preset is scheduled the same way.</p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <section class="anki-entity-section">
+      <div class="anki-picker-row">
+        <select id="ankiStudyOptionSelect" class="field" aria-label="Study options"></select>
+        <input id="ankiStudyOptionName" class="field" placeholder="Study options name"
+          aria-label="Rename study options" hidden>
+        <input id="ankiNewStudyOptionName" class="field" placeholder="e.g. Slow &amp; steady"
+          aria-label="Create study options" hidden>
+        <button id="ankiStudyOptionConfirm" class="button button-write button-icon" type="button"
+          aria-label="Rename study options" title="Rename study options">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+        </button>
+        <button id="ankiStudyOptionReturn" class="button button-ui button-icon" type="button" hidden
+          aria-label="Back to the study options list" title="Back to the study options list">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+        </button>
+        <button id="ankiDeleteStudyOption" class="button button-delete button-icon" type="button"
+          aria-label="Delete study options" title="Delete study options">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+        </button>
+      </div>
+      <p id="ankiStudyOptionHelp" class="dialog-help"></p>
+      </section>
+      <div id="ankiStudyOptionFields" class="anki-entity-sections"></div>
+    </div>
+  </div>
+</dialog>

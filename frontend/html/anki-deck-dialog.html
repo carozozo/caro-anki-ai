@@ -1,0 +1,50 @@
+<dialog id="ankiDeckDialog" class="dialog dialog-md anki-deck-dialog" aria-labelledby="ankiDeckDialogTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <div class="dialog-head-title-row">
+          <h2 id="ankiDeckDialogTitle" class="dialog-title dialog-title-lg">Deck Studio</h2>
+          <p id="ankiDeckStatus" class="dialog-help dialog-status system-message" role="status"></p>
+        </div>
+        <p class="dialog-help">Deleting a deck deletes every note filed under it, and Anki cannot undo it.</p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <section class="anki-entity-section">
+      <div class="anki-picker-row">
+        <select id="ankiDeckSelect" class="field" aria-label="Deck"></select>
+        <input id="ankiDeckName" class="field" placeholder="Deck name" aria-label="Rename deck" hidden>
+        <input id="ankiNewDeckName" class="field" placeholder="e.g. English::Idioms"
+          aria-label="Create deck" hidden>
+        <button id="ankiDeckConfirm" class="button button-write button-icon" type="button"
+          aria-label="Rename deck" title="Rename deck">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+        </button>
+        <button id="ankiDeckReturn" class="button button-ui button-icon" type="button" hidden
+          aria-label="Back to the deck list" title="Back to the deck list">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+        </button>
+        <button id="ankiDeleteDeck" class="button button-delete button-icon" type="button"
+          aria-label="Delete deck" title="Delete deck">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+        </button>
+      </div>
+      <p id="ankiDeckHelp" class="dialog-help"></p>
+      </section>
+      <section class="anki-entity-section">
+      <div class="anki-entity-section-head"><span class="eyebrow">STUDY OPTIONS</span></div>
+      <div class="anki-entity-section-head anki-deck-study-option-picker">
+        <select id="ankiDeckStudyOption" class="field field-select" aria-label="Study options"></select>
+        <button id="ankiEditDeckStudyOptions" class="button button-ui button-icon" type="button"
+          aria-label="Edit study options" title="Edit study options">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sliders"></use></svg>
+        </button>
+      </div>
+      <p id="ankiDeckStudyOptionHelp" class="dialog-help"></p>
+      </section>
+    </div>
+  </div>
+</dialog>

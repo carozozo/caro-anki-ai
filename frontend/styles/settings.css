@@ -1,0 +1,224 @@
+/* 3.6 settings — one dialog keeps Anki and Agent controls separate without duplicating modal chrome. */
+.settings-tabs, .anki-note-type-tabs { display: flex; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+#ankiSettingsDialog .dialog-content { gap: 0; overflow: hidden; padding-bottom: 0; }
+#ankiSettingsDialog .settings-tabs { flex: none; flex-wrap: wrap; }
+.settings-tab, .anki-note-type-tab { flex: 1; }
+#ankiSettingsDialog .settings-tab { flex-basis: 120px; }
+.settings-dialog-panels {
+  display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; overflow-y: auto;
+  padding: 12px 0 18px;
+  /* The panels band is the only scroller, so a classic scrollbar would narrow the panel that happens to overflow
+     and make the content jump sideways when the user switches labels. Reserving the gutter keeps every panel the
+     same width; on overlay scrollbars it is a no-op. */
+  scrollbar-gutter: stable;
+}
+.settings-tab.is-active, .anki-note-type-tab.is-active {
+  color: var(--ink); background: var(--accent-soft); border-color: var(--accent);
+}
+.settings-panel, .settings-form { display: flex; flex-direction: column; gap: 12px; }
+.settings-form .field-select { width: 100%; max-width: none; }
+.settings-panel[hidden] { display: none; }
+/* A top-level section wrapper is a pass-through for the one sub-panel it shows, so it must not add a gap of its
+   own: the 12px below the label band is the panels area's own top padding and the single source of that distance.
+   Its `gap` only ever spaced its sub-panels apart, and since exactly one is shown it did nothing — except that a
+   hidden sibling still holds a flex slot, which pushed whichever sub-panel sits outside the section's form wrapper
+   down an extra 12px and made the panels disagree on their distance from the labels. */
+.settings-dialog-panels > .settings-panel { gap: 0; }
+/* The settings dialog is three stacked bands inside its content area: the dialog's own tabs, the section label
+   strips, and the panel they name. Only the last band scrolls, so a long panel never carries its own labels out
+   of view — they are siblings, not one nested inside the other, which is why no band needs `position: sticky`.
+   The sub-tab band holds every section's strip and `selectSettingsSection` hides all but the active one, so an
+   inactive section's labels are never in the layout. Each label is sized to its own words instead of stretched
+   like the top-level tabs. */
+.settings-dialog-subtabs { flex: none; }
+.settings-subtabs { padding-top: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.settings-subtabs[hidden] { display: none; }
+#ankiSettingsDialog .settings-subtabs .settings-tab { flex: 0 0 auto; padding: 0 12px; }
+.shortcut-settings-section { display: grid; gap: 12px; }
+.shortcut-settings-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.shortcut-settings-heading .eyebrow, .shortcut-settings-heading .dialog-help { margin: 0; }
+.shortcut-settings-actions { display: flex; align-items: center; gap: 6px; }
+.shortcut-filter { width: 210px; }
+.shortcut-reset-all { --icon-button-size: 30px; --icon-button-glyph: 15px; flex: none; }
+.shortcut-settings-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
+.shortcut-setting { display: grid; grid-template-columns: minmax(0, 1fr) 150px 26px; align-items: center; gap: 8px;
+  min-width: 0; padding: 8px;
+  border: 1px solid var(--line); border-radius: 5px; background: #0b192e; }
+.shortcut-setting-label { min-width: 0; overflow-wrap: anywhere; color: var(--ink); font-size: 12px; line-height: 1.3; }
+.shortcut-binding { width: 150px; min-width: 0; text-align: center; }
+.shortcut-binding.is-capturing { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+.shortcut-reset { --icon-button-size: 26px; --icon-button-glyph: 14px; }
+.shortcut-empty { grid-column: 1 / -1; margin: 4px 0; }
+@media (max-width: 640px) {
+  .shortcut-settings-heading { align-items: stretch; flex-direction: column; }
+  .shortcut-settings-actions { align-self: stretch; }
+  .shortcut-filter { flex: 1; width: auto; }
+  .shortcut-setting { grid-template-columns: minmax(0, 1fr) 124px 26px; }
+  .shortcut-binding { width: 124px; }
+}
+@media (max-width: 480px) { .shortcut-settings-list { grid-template-columns: 1fr; } }
+/* The library is one row plus one editor: the row picks an entry — an instruction file or a skill folder — and
+   makes, renames and deletes it, and the editor under it writes the one the row has open. It was two columns
+   when the entries were a list, and it is a column now that the row is the list. */
+.library-editor { display: flex; flex-direction: column; gap: 12px; }
+.library-editor-form { display: grid; align-content: start; gap: 8px; min-width: 0; }
+.library-editor-content { min-height: 360px; padding: 10px; resize: vertical; font: 13px/1.5 ui-monospace, monospace; }
+
+/* Agent settings — availability and configuration management are separate, self-naming blocks. */
+.agent-availability, .agent-profile-manager, .agent-profile-form {
+  padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: #0b192e;
+}
+.agent-availability {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-width: 0;
+}
+.agent-section-copy { display: grid; gap: 5px; min-width: 0; }
+.agent-section-copy .eyebrow, .agent-section-copy .dialog-help { margin: 0; }
+.agent-switch {
+  position: relative; flex: none; width: 38px; height: 22px; padding: 2px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--white);
+  transition: background .15s ease, border-color .15s ease;
+}
+.agent-switch > span {
+  display: block; width: 16px; height: 16px; border-radius: 50%; background: var(--muted);
+  transition: transform .15s ease, background .15s ease;
+}
+.agent-switch.is-enabled { border-color: var(--accent); background: var(--accent); }
+.agent-switch.is-enabled > span { transform: translateX(16px); background: #fff; }
+.agent-profile-manager { display: grid; gap: 10px; }
+.agent-profile-manager .eyebrow { margin: 0; }
+.agent-profile-picker { --row-control-height: 30px; min-width: 0; }
+.agent-profile-picker .button-icon {
+  --icon-button-size: var(--row-control-height); --icon-button-glyph: 15px;
+}
+.agent-profile-form { display: grid; gap: 10px; }
+.agent-profile-form-heading { display: grid; gap: 5px; }
+.agent-profile-form-heading .eyebrow, .agent-profile-form-heading .dialog-help { margin: 0; }
+.agent-field-help { color: var(--muted); font: 11px/1.4 Arial, sans-serif; }
+.agent-profile-form .field-select { width: 100%; max-width: none; }
+
+/* 3.7 Anki settings */
+.anki-settings-section { display: grid; gap: 8px; }
+.anki-settings-section .eyebrow { margin: 2px 0 0; }
+/* Settings' rows are denser than a studio's, so the profile picker states the smaller height and the field and
+   every button in its row take it. */
+.anki-settings-section .anki-picker-row { --row-control-height: 30px; }
+.anki-settings-section .anki-picker-row .button-icon {
+  --icon-button-size: var(--row-control-height);
+  --icon-button-glyph: 15px;
+}
+.anki-setting-check {
+  display: flex; align-items: center; gap: 8px; padding: 10px 0 3px;
+  border-top: 1px solid var(--line); color: var(--muted); font: 700 11px/1.2 Arial, sans-serif;
+}
+.anki-setting-check input { accent-color: var(--accent); }
+.anki-settings-heading, .anki-account-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.anki-account-actions { justify-content: flex-end; }
+.anki-sync-conflict-actions { flex-wrap: wrap; }
+.anki-account-actions [hidden], .anki-sync-conflict-actions [hidden] { display: none; }
+#ankiRuntimeState { margin: 8px 0 0; }
+.anki-maintenance-form { gap: 20px; }
+.anki-maintenance-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.anki-maintenance-heading .eyebrow, .anki-maintenance-heading .dialog-help { margin: 0; }
+.anki-maintenance-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.anki-maintenance-report {
+  max-height: 240px; margin: 0; padding: 10px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere;
+  border: 1px solid var(--line); border-radius: 5px; background: #0b192e; color: var(--muted);
+  font: 12px/1.5 ui-monospace, monospace;
+}
+.anki-backup-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.anki-backup-settings .field { width: 100%; }
+@media (max-width: 520px) {
+  .anki-maintenance-heading { align-items: stretch; flex-direction: column; }
+  .anki-maintenance-heading .button { align-self: start; }
+  .anki-backup-settings { grid-template-columns: 1fr; }
+}
+
+/* The deck list is a scrollable checkbox grid: a collection holds far more decks than a dialog should
+   grow to fit, and the "All decks" choice disables the grid instead of hiding it so the names stay
+   visible while they are switched off. */
+.anki-deck-modes { display: flex; flex-wrap: wrap; gap: 16px; }
+.anki-deck-mode {
+  display: flex; align-items: center; gap: 8px; color: var(--muted); font: 700 11px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+.anki-deck-mode input, .anki-deck-choice input { accent-color: var(--accent); }
+.anki-deck-choices {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 2px;
+  max-height: 176px; margin-top: 10px; padding: 6px; overflow-y: auto;
+  border: 1px solid var(--line); border-radius: 5px; background: var(--paper);
+}
+.anki-deck-choices.is-disabled, .anki-deck-choices.is-disabled .anki-deck-choice { cursor: default; }
+/* Its checkbox already dims through the global `input:disabled` rule, so only the label text fades here. */
+.anki-deck-choices.is-disabled .anki-deck-choice span { opacity: var(--disabled-opacity); }
+.anki-deck-choices.is-disabled .anki-deck-choice:hover { background: none; }
+.anki-deck-choice {
+  display: flex; align-items: center; gap: 7px; min-width: 0; padding: 3px 5px; border-radius: 4px;
+  color: var(--ink); font: 11px/1.4 Arial, sans-serif; cursor: pointer;
+}
+.anki-deck-choice:hover { background: var(--white); }
+.anki-deck-choice span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#ankiDeckHint { margin: 8px 0 0; }
+
+/* The List Fields sub-tab names its own panel, so that panel carries no page title and instead fills the dialog:
+   its left table pane reaches the bottom of the window while the right rosters split their half. Quick settings
+   itself has to fill for a panel inside it to have a height to fill, and the offset is the dialog's chrome — its
+   head plus the section's own two label strips. Both labels have to be the shown ones: a panel left un-hidden
+   inside a section the user has left is not what the dialog is displaying. */
+#ankiSettingsDialog:has(#quickSettingsPanel:not([hidden]) #quickListFieldsPanel:not([hidden])) .dialog-body
+  { height: calc(100vh - 206px); }
+#quickSettingsPanel, #quickListFieldsPanel { flex: 1 1 auto; min-height: 0; }
+#quickListFieldsPanel > .anki-settings-section { flex: 1 1 auto; grid-template-rows: 1fr auto; min-height: 0; }
+#quickListFieldsPanel .card-fields {
+  display: flex; flex: 1 1 auto; flex-direction: column; gap: 8px; min-height: 0;
+}
+#quickListFieldsPanel .anki-list-fields { flex: 1 1 auto; min-height: 0; }
+/* The list-fields panel is two panes over one set of columns: the left one is the table itself, in the order it
+   shows its columns, and the right one is the roster a column comes from and returns to, split into Anki's own
+   columns and the collection's note type fields. A row IS the control — pressing it moves the column between the
+   panes, and dragging it reorders the left pane — so the panes stay plain lists and the grip is only the mark that
+   says a row can be dragged. A pinned row (the row number) cannot move and is not pressable. Each list scrolls
+   inside its own pane. */
+.anki-list-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+.anki-list-fields-pane { display: grid; grid-template-rows: auto 1fr; gap: 6px; min-width: 0; min-height: 0; }
+.anki-list-fields-pane .eyebrow { margin: 0; }
+.anki-list-fields-roster { display: grid; grid-auto-rows: minmax(0, 1fr); gap: 8px; min-width: 0; min-height: 0; }
+.anki-column-rows {
+  display: grid; align-content: start; gap: 2px; padding: 6px;
+  border: 1px solid var(--line); border-radius: 5px; background: var(--paper);
+  min-height: 24px; overflow-y: auto;
+}
+#ankiListFieldsActive, #ankiListFieldsNative, #ankiListFieldsFieldRoster { min-height: 0; }
+.anki-column-group { display: grid; grid-template-rows: 1fr; min-height: 0; }
+.anki-column-row {
+  display: flex; align-items: center; gap: 7px; min-width: 0; padding: 4px 6px; border-radius: 4px;
+  color: var(--ink); font: 11px/1.4 Arial, sans-serif; cursor: pointer;
+  touch-action: pan-y; user-select: none;
+}
+.anki-column-row:hover { background: var(--white); }
+.anki-column-row:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 1px; }
+.anki-column-row.is-column-dragging { cursor: grabbing; opacity: .45; }
+.anki-column-row.is-column-drop-before { box-shadow: inset 0 1px 0 var(--accent); }
+.anki-column-row.is-column-drop-after { box-shadow: inset 0 -1px 0 var(--accent); }
+.anki-column-row[data-draggable="true"] { cursor: grab; }
+.anki-column-row.is-pinned { cursor: default; }
+.anki-column-grip { flex: none; color: var(--muted); font: 11px/1 Arial, sans-serif; letter-spacing: -2px; }
+.anki-column-row:not([data-draggable="true"]) .anki-column-grip { opacity: var(--disabled-opacity); }
+.anki-column-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.anki-column-pinned { flex: none; color: var(--muted); font: 700 9px/1.2 Arial, sans-serif; }
+.anki-list-fields-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+.anki-list-fields-actions .dialog-status { margin: 0 auto 0 0; }
+@media (max-width: 560px) { .anki-list-fields { grid-template-columns: 1fr; } }
+
+/* The account dialog shows either the sign-in form or the stored account, so only one of the two
+   states is ever in the DOM's flow. */
+.anki-account-details { display: grid; gap: 10px; margin: 0; }
+.anki-account-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.anki-account-details dt { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.anki-account-details dd { margin: 0; overflow-wrap: anywhere; font: 12px/1.4 Arial, sans-serif; }
+/* The topbar controls reflect their own state: the accent while signed in, a warn fill for ordinary pending
+   changes, and an error fill when AnkiWeb requires a full upload or download. */
+#ankiAccountOpen.is-signed-in { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+#syncAnki.is-needs-sync {
+  color: var(--status-warn); border-color: var(--status-warn); background: var(--status-warn-soft);
+}
+#syncAnki.is-full-sync-required { color: var(--status-error); border-color: var(--status-error); background: #492a3b; }

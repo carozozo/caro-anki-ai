@@ -1,0 +1,73 @@
+<aside id="ankiChat" class="anki-chat" aria-label="ANKI AGENT">
+  <header class="panel-heading">
+    <button id="collapseChat" class="icon-button" type="button" aria-controls="ankiChat"
+      aria-expanded="true" aria-label="Collapse anki agent (Command or Control+Alt+G)"
+      aria-keyshortcuts="Meta+Alt+G Control+Alt+G" title="Collapse anki agent (⌘/Ctrl+Alt+G)">
+      <svg aria-hidden="true" focusable="false"><use href="#i-chevron-right"></use></svg>
+    </button>
+    <span id="chatTitle" class="eyebrow">ANKI AGENT</span>
+    <button id="chatSessions" class="button button-ui button-icon" type="button" hidden
+      aria-label="Back to sessions (Escape)" title="Back to sessions (Esc)">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+    </button>
+    <button id="clearSessions" class="button button-delete button-icon" type="button"
+      aria-label="Clear chat history" title="Clear chat history">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+    </button>
+  </header>
+  <section id="agentDisabledPanel" class="agent-disabled-panel" aria-label="Anki Agent unavailable">
+    <p>Anki Agent is disabled. Enable it in Settings to start chatting.</p>
+  </section>
+  <div id="agentChatWorkspace" class="agent-chat-workspace" hidden>
+    <div id="chatStatus" class="chat-status system-message" role="status"></div>
+    <section id="sessionPanel" class="sessions-panel" aria-label="Chat history">
+      <div class="panel-heading"><span class="eyebrow">SESSIONS</span></div>
+      <div id="sessionList" class="session-list"><div class="empty-state compact">Loading…</div></div>
+    </section>
+    <section id="conversationPanel" class="conversation-panel" aria-label="Conversation" hidden>
+      <div id="messageList" class="message-list" role="log" aria-live="polite"></div>
+    </section>
+    <div id="chatSelection" class="chat-selection" hidden>
+      <span id="chatSelectionText" class="chat-selection-text"></span>
+      <button id="clearChatSelection" class="icon-button icon-button-xs icon-button-round chat-selection-clear"
+        type="button" aria-label="Clear selected notes" title="Clear selection">
+        <svg aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </div>
+    <form id="composer" class="composer">
+      <div id="composerSkills" class="composer-skills" role="listbox" aria-label="Skills" hidden></div>
+      <div class="composer-input">
+        <label class="sr-only" for="messageInput">Message input</label>
+        <div id="composerSkillControl" class="composer-skill-control">
+          <span id="composerSkillChips" class="composer-skill-chips" hidden></span>
+          <textarea id="messageInput" class="field field-bare" rows="1"
+            aria-label="Message input (Command or Control+Enter to send)"
+            aria-keyshortcuts="Meta+Shift+G Control+Shift+G" aria-controls="composerSkills" aria-expanded="false"
+            title="Agent message (⌘/Ctrl+Shift+G)"
+            placeholder="Create, edit, delete, or search Anki cards, or /skill-name"></textarea>
+        </div>
+        <button class="composer-submit button button-ui button-icon" type="submit"
+          aria-label="Send (Command or Control+Enter)" title="Send (⌘/Ctrl+Enter)">
+          <svg class="icon composer-icon-send" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>
+          <svg class="icon composer-icon-pending" aria-hidden="true" focusable="false"><use href="#i-retry"></use></svg>
+        </button>
+      </div>
+      <div id="composerTools" class="composer-tools">
+        <label id="agentNameControl" class="composer-tool" for="agentName">Agent
+          <select id="agentName" class="field field-sm" aria-label="Agent name (Command or Control+Shift+A)"
+            aria-keyshortcuts="Meta+Shift+A Control+Shift+A" title="Agent name (⌘/Ctrl+Shift+A)"></select>
+        </label>
+        <label id="reasoningEffortControl" class="composer-tool" for="reasoningEffort">Effort
+          <select id="reasoningEffort" class="field field-sm"
+            aria-label="Reasoning effort (Command or Control+Shift+E)"
+            aria-keyshortcuts="Meta+Shift+E Control+Shift+E" title="Reasoning effort (⌘/Ctrl+Shift+E)"></select>
+        </label>
+        <button id="dismissPending" class="button button-ui button-with-icon" type="button" hidden
+          aria-label="Keep the records and end this request" title="Keep records and end this request">
+          <svg aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+          <span>End request</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</aside>

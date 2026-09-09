@@ -1,0 +1,131 @@
+/* 3.5 anki agent chat */
+.anki-chat {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  border-left: 1px solid var(--line); background: var(--panel); overflow: hidden;
+}
+.anki-chat [hidden], .anki-chat[hidden] { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > :not(.panel-heading) { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading { justify-content: center; padding: 10px 0; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading > :not(#collapseChat) { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading .icon-button svg { transform: rotate(180deg); }
+/* The heading must not set `padding` on its buttons: it would beat the kit's `padding: 0`. */
+.anki-chat > .panel-heading { gap: 4px; padding: 10px; border-bottom: 1px solid var(--line); }
+.anki-chat > .panel-heading .eyebrow {
+  flex: 1; overflow: hidden; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis;
+}
+.anki-chat > .panel-heading button { flex-shrink: 0; }
+.agent-chat-workspace { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+.agent-disabled-panel {
+  display: grid; flex: 1; place-items: center; padding: 24px; color: var(--muted); text-align: center;
+}
+.agent-disabled-panel p { max-width: 260px; margin: 0; }
+.anki-chat .sessions-panel, .anki-chat .conversation-panel {
+  flex: 1; min-height: 0; height: auto; padding: 0; border: 0; overflow: hidden;
+}
+.anki-chat .sessions-panel .panel-heading { padding: 16px; }
+.anki-chat .session-list { overflow-y: auto; min-height: 0; padding: 0 12px 12px; }
+.anki-chat .message-list { padding: 14px; align-content: start; overflow-wrap: anywhere; }
+.anki-chat .composer { flex-shrink: 0; margin: 0; padding: 12px; }
+.anki-chat .composer textarea { min-width: 0; }
+/* The status strip is a band of its own above the content, so it gets air above and below its one line and a
+   rule that separates it from what the panel shows underneath — the session list or the conversation. Only the
+   inline padding is stated here so the empty strip keeps the shared `system-message` block minimum; a filled
+   one widens that padding and draws the rule, while the heading's own rule is the divider for an empty strip. */
+.chat-status { padding-inline: 12px; font-size: 12px; overflow-wrap: anywhere; }
+.chat-status:not(:empty) { padding: 8px 12px; border-bottom: 1px solid var(--line); }
+/* A run is one window: the head reports it and folds it, the body is a fixed-height box that scrolls its own
+   overflow, so a long run cannot push the answer under it off the screen. It deliberately uses the muted
+   default — a normally working turn is not a warning state. */
+.chat-run { display: flex; flex-direction: column; gap: 6px; min-width: 0; color: var(--muted); font-size: 12px; }
+.chat-run-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+/* The head is the disclosure, and a button rather than a `<summary>` so the Stop control can sit beside it
+   without having to cancel a toggle it is nested in. */
+.chat-run-toggle {
+  display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; padding: 2px 0;
+  border: 0; color: inherit; background: transparent; font: inherit; text-align: left; cursor: pointer;
+}
+.chat-run-toggle:hover, .chat-run-toggle:focus-visible { color: var(--ink); outline: none; }
+.chat-run-toggle:focus-visible .chat-run-title { text-decoration: underline; }
+.chat-run-chevron { flex: none; width: 12px; height: 12px; transition: transform .15s ease; }
+.chat-run:not(.is-collapsed) .chat-run-chevron { transform: rotate(90deg); }
+.chat-run-title { flex: none; font-weight: 700; }
+.chat-run-meta {
+  flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+.chat-run-stop { flex: none; }
+.chat-run-body {
+  display: grid; gap: 10px; align-content: start; min-width: 0;
+  max-height: 220px; overflow-y: auto; padding: 2px 0 2px 20px;
+  border-left: 1px solid var(--line);
+}
+.chat-run.is-collapsed .chat-run-body { display: none; }
+.chat-run-spinner {
+  flex: none; width: 11px; height: 11px; border: 2px solid currentColor; border-radius: 50%;
+  border-right-color: transparent; animation: icon-spin .7s linear infinite;
+}
+/* A streamed step owns both of the elements `renderMessage` returns for a tool record, so the pair
+   replaces as one node when the call finishes. */
+.chat-step { display: grid; gap: 6px; min-width: 0; }
+.operation.is-running > summary { color: var(--status-pending); }
+.operation.is-running > summary::before {
+  content: ''; display: inline-block; width: 9px; height: 9px; margin-right: 6px; vertical-align: -1px;
+  border: 2px solid currentColor; border-radius: 50%; border-right-color: transparent;
+  animation: icon-spin .7s linear infinite;
+}
+.chat-selection {
+  display: flex; align-items: center; gap: 6px; margin: 8px 12px 0; padding: 6px 8px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--white);
+  color: var(--muted); font-size: 12px;
+}
+.chat-selection-text { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chat-selection-clear, .chat-selection-clear:hover { border-color: transparent; }
+.chat-selection-clear { color: inherit; }
+.chat-selection-clear:hover { background: var(--line); color: var(--ink); }
+/* Composer: the input row grows with the textarea, the tools row stays underneath. The form is the
+   positioning context for the slash menu, which opens upward over the conversation. */
+.composer { display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 1px solid var(--line); position: relative; }
+.composer-input { display: flex; gap: 10px; align-items: flex-end; }
+.composer textarea {
+  flex: 1 1 120px; resize: none; min-height: 23px; max-height: 180px; overflow-y: hidden; padding: 0 3px;
+}
+/* The slash menu is the tag suggestion list in the composer: same rows, anchored just above the form so
+   the message the user is typing stays visible underneath. */
+.composer-skills {
+  position: absolute; z-index: 6; bottom: calc(100% + 4px); left: 12px; right: 12px; max-height: 190px;
+  overflow-y: auto; border: 1px solid var(--accent); border-radius: 4px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.composer-skill {
+  display: block; width: 100%; padding: 6px 9px; border: 0; border-top: 1px solid var(--line);
+  color: var(--ink); background: transparent; text-align: left; font: 12px/1.3 Arial, sans-serif;
+}
+.composer-skill:first-child { border-top: 0; }
+.composer-skill:hover, .composer-skill:focus-visible,
+.composer-skill.is-active { color: #9fc5ff; background: var(--accent-soft); outline: none; }
+.composer-skill-name { font-weight: 700; }
+.composer-skill-description {
+  display: block; margin-top: 2px; overflow: hidden; opacity: .8;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+/* The message box is one bordered field the way a note's tag control is: the pinned skill — the `/name` the
+   message itself starts with, resolved against the installed library — is a chip inside it, and the message
+   continues beside that chip. The chip is its own remove button and removing it is a plain clear: nothing is
+   lost, the command is simply dropped from the message. */
+.composer-skill-control {
+  flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px;
+  padding: 9px 11px; border: 1px solid var(--line); border-radius: 5px; background: var(--white);
+}
+.composer-skill-control:focus-within { border-color: var(--accent); }
+/* `display: contents` lets the chip sit directly in the box's flex row without an extra box. */
+.composer-skill-chips { display: contents; }
+.composer-tools { display: flex; align-items: center; gap: 10px; }
+.composer-tool { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.composer-tool select { min-width: 0; }
+.composer-tool select:not(:disabled) { cursor: pointer; }
+/* The armed request's escape control ends its row, away from the controls that only shape a new request. */
+#dismissPending { margin-left: auto; }
+.composer-submit .composer-icon-pending { display: none; }
+.composer-submit.is-pending .composer-icon-send { display: none; }
+.composer-submit.is-pending .composer-icon-pending { display: block; }
+

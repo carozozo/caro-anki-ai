@@ -1,0 +1,286 @@
+/* ---------------------------------------------------------------- 3. screens */
+
+/* 3.1 topbar */
+.topbar {
+  position: fixed; z-index: 20; inset: 0 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 74px; padding: 0 28px; border-bottom: 1px solid var(--line); background: #0b192e;
+}
+.brand { color: var(--ink); font: 700 16px/1.1 Arial, sans-serif; letter-spacing: .08em; text-decoration: none; }
+.brand span { color: var(--accent); }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+/* 3.2 browser shell */
+.anki-browser-pannel { height: calc(100vh - 74px); min-height: 0; }
+.anki-browser { display: flex; width: 100%; height: 100%; min-height: 0; flex-direction: column; }
+.anki-search { display: flex; gap: 8px; padding: 22px 24px 16px; }
+.anki-search-prefix { width: min(150px, 28vw); min-width: 0; }
+.anki-query-field { position: relative; flex: 1; min-width: 0; }
+.anki-browser-body {
+  position: relative; display: grid;
+  --quick-track: var(--anki-quick-panel, 150px);
+  --quick-handle: 6px;
+  --chat-track: var(--anki-chat-panel, clamp(300px, 32vw, 480px));
+  --chat-handle: 6px;
+  grid-template-columns: var(--quick-track) var(--quick-handle) minmax(0, 1fr)
+    var(--chat-handle) var(--chat-track);
+  flex: 1; min-height: 0; border-top: 1px solid var(--line);
+}
+/* Collapsing a panel swaps in a 46px rail and hides its splitter (visibility, not display, so the
+   remaining children keep their grid tracks). Never collapse a panel to 0 width. */
+.anki-browser-body.is-quick-collapsed { --quick-track: 46px; --quick-handle: 0px; }
+.anki-browser-body.is-chat-collapsed { --chat-track: 46px; --chat-handle: 0px; }
+.anki-browser-body.is-quick-collapsed .anki-splitter[data-anki-splitter="left"],
+.anki-browser-body.is-chat-collapsed .anki-splitter[data-anki-splitter="right"] {
+  visibility: hidden; pointer-events: none;
+}
+.anki-quick-search {
+  display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden;
+  border-right: 1px solid var(--line);
+}
+.anki-quick-search .panel-heading { padding: 14px 14px 0; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .panel-heading { justify-content: center; padding: 14px 0 0; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .eyebrow,
+.anki-browser-body.is-quick-collapsed .anki-quick-search-list { display: none; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .icon-button svg { transform: rotate(180deg); }
+.anki-quick-search-list {
+  display: grid; align-content: start; gap: 14px; flex: 1; min-height: 0; overflow-y: auto; padding: 12px 14px;
+}
+.anki-quick-group { display: grid; gap: 7px; align-content: start; }
+.anki-quick-group-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; padding: 5px 2px; border: 0; border-bottom: 1px solid var(--line);
+  color: var(--muted); background: transparent; cursor: grab;
+}
+.anki-quick-group-head:hover, .anki-quick-group-head:focus-visible { color: #9fc5ff; border-bottom-color: var(--accent-soft); }
+.anki-quick-group-head svg { flex: none; width: 13px; height: 13px; transition: transform .2s ease; }
+.anki-quick-group.is-expanded .anki-quick-group-head svg { transform: rotate(180deg); }
+.anki-quick-group.is-quick-group-dragging { opacity: .45; }
+.anki-quick-group.is-quick-group-drop-before { box-shadow: inset 0 3px 0 var(--accent); }
+.anki-quick-group.is-quick-group-drop-after { box-shadow: inset 0 -3px 0 var(--accent); }
+body.is-reordering-quick-groups { cursor: grabbing; user-select: none; }
+.anki-quick-group-body { display: none; gap: 5px; align-content: start; }
+.anki-quick-group.is-expanded .anki-quick-group-body { display: grid; }
+.anki-quick-item {
+  width: 100%; padding: 8px 10px; border: 1px solid transparent; border-radius: 5px;
+  color: var(--muted); text-align: left; background: transparent;
+  font: 12px/1.3 Arial, sans-serif; overflow-wrap: anywhere;
+}
+.anki-quick-item:hover, .anki-quick-item:focus-visible {
+  color: #9fc5ff; border-color: var(--accent-soft); background: var(--white);
+}
+.anki-quick-item.is-flag-item { color: #000; background: var(--anki-flag-color); }
+.anki-quick-item.is-flag-item:hover, .anki-quick-item.is-flag-item:focus-visible {
+  color: #000; border-color: #000; background: var(--anki-flag-color);
+}
+.anki-note-list-panel { display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden; }
+.anki-note-list-panel.is-editing .anki-note-list { display: none; }
+/* The status bar sits above the table: db operation messages left, the selected count right. */
+.anki-note-statusbar {
+  display: flex; align-items: center; gap: 10px; flex: none; padding: 12px 16px; border-bottom: 1px solid var(--line);
+}
+.anki-selected-count {
+  flex: none; margin-left: auto; color: #9fc5ff; font: 700 10px/1 Arial, sans-serif; letter-spacing: .04em;
+}
+.anki-note-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none; min-height: 42px;
+  padding: 12px; border-bottom: 1px solid var(--line);
+}
+.anki-note-toolbar-left, .anki-note-toolbar-right { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.anki-note-toolbar-left .field-select { width: min(240px, 32vw); }
+.anki-note-toolbar-right { margin-left: auto; }
+.anki-find-replace-options { display: grid; gap: 7px; font: 12px/1.3 Arial, sans-serif; }
+.anki-find-replace-options label { display: flex; align-items: center; gap: 7px; }
+.anki-find-replace-dialog .dialog-actions { padding-top: 4px; }
+.anki-card-preview-dialog { width: min(980px, calc(100vw - 32px)); }
+/* The preview owns its whole window, so its body states its own width instead of the shared `.dialog-lg`
+   clamp — otherwise the panel is wider than the content and the frame stops lining up with its footer. */
+.anki-card-preview-dialog .dialog-body { width: auto; }
+.anki-card-preview-content { display: grid; gap: 16px; min-width: 0; }
+.anki-card-preview-card { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.anki-card-preview-card:first-child { padding-top: 0; border-top: 0; }
+.anki-card-preview-card h3, .anki-card-preview-side h4 { margin: 0; }
+.anki-card-preview-card h3 { color: var(--ink); font: 700 14px/1.3 Arial, sans-serif; }
+.anki-card-preview-side { display: grid; gap: 5px; min-width: 0; }
+.anki-card-preview-side h4 { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+/* The frame carries the card's own page, so it never draws a surface of its own: the document inside states
+   it (`previewDocument`), and this only has to hold that page's size and outline it. */
+.anki-card-preview-frame {
+  width: 100%; height: clamp(240px, 46vh, 560px); border: 1px solid var(--line); background: var(--paper);
+}
+.anki-card-preview-actions { justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--line); }
+.anki-card-preview-nav { display: flex; align-items: center; gap: 6px; }
+.anki-card-preview-position {
+  color: var(--muted); font: 11px/1 Arial, sans-serif; font-variant-numeric: tabular-nums;
+}
+.anki-template-source {
+  display: block; min-height: 250px; padding: 12px; resize: vertical; font: 12px/1.5 ui-monospace, SFMono-Regular,
+    Menlo, Monaco, Consolas, monospace; tab-size: 2;
+}
+.anki-note-type-dialog { width: min(1040px, calc(100vw - 32px)); }
+/* Note Type Studio holds the app's tallest content — one note type's whole field set — so it is the one dialog
+   whose own box has to stay inside the window it was opened in: the head, the message and the tabs hold their
+   place, and the field list is the part that gives way instead of pushing the dialog's bottom edge past the
+   window. Only if even that is not enough does the body itself scroll. */
+.anki-note-type-dialog .dialog-body { width: 100%; }
+.anki-note-type-dialog .anki-entity-section { flex: none; }
+/* The label strip states the distance on both of its own sides, exactly as the Settings dialog's band does, and
+   the content under it states its own: no gap on their shared parent competes with either, so the two panels can
+   never sit at different distances from the labels and the picker above them never moves them. */
+#ankiNoteTypeDialog .dialog-content { gap: 0; }
+#ankiNoteTypeDialog .anki-note-type-tabs { padding-top: 12px; }
+#ankiNoteTypeDialog .anki-note-type-panel { margin-top: 12px; }
+/* The message is written on the title's own line rather than a row of its own: the head is the one block nothing
+   scrolls, so the answer to a save is where the user is already looking. */
+/* The studios whose header is one control that changes what it is — the collection's list, the open one's name, or
+   a name for a new one — share this row: the confirm button that takes the step and the return button that gives
+   the list back sit beside whichever of the three is showing, and a destructive delete stays at the far end, apart
+   from the two the row exists for. Note Type Studio, its card templates, Deck Studio, Study Options, the
+   Collection Profile picker and the library editor in Settings are all built from it; only the collection profile
+   adds a control of its own to the row, the switch that opens the collection the list is showing. */
+.anki-picker-row { display: flex; align-items: center; gap: 8px; }
+.anki-note-type-panel {
+  display: flex; flex-direction: column; gap: 9px; flex: 1; min-height: 0; overflow-y: auto;
+}
+/* The field list is the one pane whose height the user sets: fifteen fields are read at a height they chose
+   instead of at whatever the dialog's own maximum happens to leave. It is also the only pane allowed to shrink,
+   so the height it gives up is what keeps the dialog inside the window. */
+.anki-note-type-panel-fields {
+  flex: 0 1 auto; height: 46vh; min-height: 140px; max-height: 62vh; resize: vertical;
+}
+.anki-deck-dialog { width: min(520px, calc(100vw - 32px)); }
+.anki-tag-dialog { width: min(520px, calc(100vw - 32px)); }
+/* Study Options is the third studio: the same picker as the other two, plus the preset's own form, which
+   is its schema rendered in two columns instead of a bespoke layout per option. */
+.anki-study-options-dialog { width: min(760px, calc(100vw - 32px)); }
+.anki-study-options-dialog .dialog-body { width: 100%; }
+.anki-entity-sections { display: flex; flex-direction: column; gap: 12px; }
+.anki-study-option-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+.anki-template-editor { display: flex; flex-direction: column; gap: 9px; }
+.anki-template-source-labels { display: flex; align-items: center; gap: 4px; }
+.anki-template-source-label { color: var(--muted); }
+.anki-template-source-label.is-active { color: var(--ink); background: var(--white); box-shadow: inset 0 -2px var(--accent); }
+/* A section divides itself from the section above it, never from the head: the head already draws that line,
+   and two of them 12px apart is what made the same dialog look different from one that starts with a plain
+   block. The leading section keeps the body's own gap as its spacing. */
+.anki-entity-section { display: flex; flex-direction: column; gap: 9px; padding-top: 12px; border-top: 1px solid var(--line); }
+.dialog-content > .anki-entity-section:first-child { padding-top: 0; border-top: 0; }
+.anki-entity-section-head { display: flex; align-items: center; gap: 10px; }
+.anki-entity-section-head .button { margin-left: auto; }
+.anki-deck-study-option-picker .field { flex: 0 1 320px; }
+.anki-deck-study-option-picker .button { margin-left: 0; }
+.anki-inline-control { display: flex; align-items: center; gap: 8px; }
+/* A row pairs a field with the icon button that acts on it, and the two are one control: the row states one height
+   (the toolbar button's own 38px) and the field takes it instead of keeping its own shorter line box, so a select
+   and the button beside it line up. Note Type Studio, Deck Studio, Study Options and the collection profiles all
+   arrange their controls this way; the dense field list keeps its own smaller rows. */
+.anki-picker-row .field,
+.anki-entity-section-head .field,
+.anki-inline-control .field { flex: 1; min-width: 0; min-height: var(--row-control-height, 38px); }
+.anki-schema-list { display: flex; flex-direction: column; gap: 8px; }
+/* One field is a row of controls plus the settings it owns, which stay folded until the row's own toggle is
+   used: Anki's ``Fields`` screen is a list and a settings pane, and this is that pane under its row. */
+.anki-schema-row { display: flex; flex-direction: column; }
+.anki-schema-row-main { display: flex; align-items: center; gap: 7px; }
+.anki-schema-row-main .field { min-width: 0; flex: 1; }
+/* Which of the note type's fields Anki sorts the note by is one radio per row, at the head of the row it names. */
+.anki-field-sort {
+  flex: none; width: 14px; height: 14px; margin: 0; accent-color: var(--accent); cursor: pointer;
+}
+.anki-field-settings {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px;
+  margin: 6px 0 2px 8px; padding: 10px 12px; border-left: 2px solid var(--line); background: var(--white);
+}
+.anki-field-toggles { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.anki-field-description, .anki-field-toggles { grid-column: 1 / -1; }
+.anki-field-narrow { max-width: 110px; }
+.anki-field-settings .anki-setting-check { padding: 0; border-top: 0; }
+@media (max-width: 700px) {
+  .anki-study-option-grid { grid-template-columns: 1fr; }
+  .anki-inline-control { flex-wrap: wrap; }
+}
+.anki-note-list { flex: 1; min-width: 0; min-height: 0; overflow: auto; }
+.anki-browser-status { font: 11px/1.4 Arial, sans-serif; overflow-wrap: anywhere; }
+
+/* 3.3 note table */
+.anki-note-table { width: 100%; min-width: 1344px; border-collapse: collapse; table-layout: fixed; }
+.anki-note-table col.anki-note-col-index { width: 60px; }
+.anki-note-table col.anki-note-col-flag { width: 56px; }
+.anki-note-table col.anki-note-col-note-type { width: 120px; }
+.anki-note-table col.anki-note-col-tags { width: 120px; }
+.anki-note-table col.anki-note-col-deck { width: 90px; }
+/* A field column shows the note type's own content, so it gets the room note text needs; the one the rows are
+   recognised by — whichever sits first — gets the most. */
+.anki-note-table col.anki-note-col-field { width: 170px; }
+.anki-note-table col.anki-note-col-deck + col.anki-note-col-field { width: 210px; }
+.anki-note-table col.anki-note-col-created, .anki-note-table col.anki-note-col-due { width: 180px; }
+.anki-note-table th, .anki-note-table td {
+  height: 42px; padding: 7px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  overflow: hidden; text-align: left; text-overflow: ellipsis; vertical-align: middle; white-space: nowrap;
+}
+.anki-note-table th:last-child, .anki-note-table td:last-child { border-right: 0; }
+.anki-note-table th {
+  position: sticky; top: 0; z-index: 2; color: var(--muted); background: var(--paper);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em;
+  box-shadow: inset -1px 0 0 var(--line), inset 0 -1px 0 var(--line);
+}
+.anki-note-table th:last-child { box-shadow: inset 0 -1px 0 var(--line); }
+.anki-note-table .anki-note-index { text-align: center; }
+/* Anki user flags are numbered 1-7 with a colour each; the quick-search buttons reuse the exact palette. */
+.anki-note-table th.anki-note-flag, .anki-note-table tbody td.anki-note-flag-cell { text-align: center; }
+.anki-note-flag-badge {
+  display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 9px;
+  color: #fff; background: var(--anki-flag-color); font: 700 10px/1.4 Arial, sans-serif;
+}
+.is-flag-1 { --anki-flag-color: #d0453e; }
+.is-flag-2 { --anki-flag-color: #e08a1e; }
+.is-flag-3 { --anki-flag-color: #3fa34d; }
+.is-flag-4 { --anki-flag-color: #3b7dd8; }
+.is-flag-5 { --anki-flag-color: #d16bb0; }
+.is-flag-6 { --anki-flag-color: #29a8a2; }
+.is-flag-7 { --anki-flag-color: #8a5cd1; }
+/* The whole row is the selection affordance; the row number is just a visual index. */
+.anki-note-table tbody tr { cursor: pointer; }
+.anki-note-table tbody td.anki-note-index { color: var(--muted); user-select: none; }
+.anki-note-table tbody td:not(.anki-note-index) { user-select: text; }
+.anki-note-table tbody tr:hover td.anki-note-index,
+.anki-note-table tbody tr.selected td.anki-note-index { color: var(--accent); }
+.anki-note-table tbody tr:hover { background: var(--white); }
+/* Selected rows must read at a glance: tinted fill, left accent rail, and a filled index badge. */
+.anki-note-table tbody tr.selected, .anki-note-table tbody tr.selected:hover { background: rgba(66, 133, 232, .22); }
+.anki-note-table tbody tr.selected td { border-bottom-color: var(--accent-soft); }
+.anki-note-table tbody tr.selected td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.anki-note-table tbody tr.selected td.anki-note-index {
+  color: var(--ink); font-weight: 700; background: rgba(66, 133, 232, .32);
+}
+.anki-note-table tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.anki-note-table tbody tr.anki-note-spacer { cursor: default; }
+.anki-note-table tbody tr.anki-note-spacer td { height: 0; padding: 0; border: 0; }
+.anki-note-table tbody tr.anki-note-empty { cursor: default; }
+.anki-note-table tbody tr.anki-note-empty td { padding: 22px 10px; color: var(--muted); text-align: center; cursor: default; }
+.anki-note-table th.anki-note-sortable { cursor: pointer; }
+.anki-note-table th.anki-note-sortable:hover, .anki-note-table th.anki-note-sortable:focus-visible {
+  color: var(--accent); background: var(--white); outline: none;
+}
+.anki-note-table th.anki-note-sortable:focus-visible { box-shadow: inset 0 0 0 2px var(--accent-soft); }
+.anki-note-table th.anki-note-sortable.is-sorted-asc,
+.anki-note-table th.anki-note-sortable.is-sorted-desc { color: var(--accent); }
+.anki-note-sort-label { vertical-align: middle; }
+.anki-note-sort-indicator { display: none; margin-left: 4px; color: var(--accent); font-size: 9px; vertical-align: middle; }
+.anki-note-table th.is-sorted-asc .anki-note-sort-indicator,
+.anki-note-table th.is-sorted-desc .anki-note-sort-indicator { display: inline; }
+.anki-note-table th.is-column-draggable { cursor: grab; }
+.anki-note-table th.is-column-dragging { opacity: .45; cursor: grabbing; }
+.anki-note-table th.is-column-draggable:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: -2px; }
+.anki-note-table th.is-column-drop-before {
+  box-shadow: inset 3px 0 0 var(--accent), inset 0 -1px 0 var(--line);
+}
+.anki-note-table th.is-column-drop-after {
+  box-shadow: inset -3px 0 0 var(--accent), inset 0 -1px 0 var(--line);
+}
+body.is-reordering-columns { cursor: grabbing; user-select: none; }
+/* Higher specificity than `th.anki-note-sortable` so every resizable header shows the col-resize cursor. */
+.anki-note-table th.is-column-boundary, .anki-note-table td.is-column-boundary,
+.anki-note-table th.is-column-resizing, .anki-note-table td.is-column-resizing {
+  border-right-color: var(--accent); cursor: col-resize;
+}

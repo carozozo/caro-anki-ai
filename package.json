@@ -1,0 +1,28 @@
+{
+  "name": "caro-anki",
+  "productName": "Caro Anki",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Caro Anki — standalone flashcards with an integrated conversational card agent",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "check": "node scripts/js/check-syntax.js",
+    "validate": "npm run check && npm test",
+    "test": "node --test backend/test/*.test.js",
+    "anki:runtime": "sh scripts/sh/build-anki-runtime.sh",
+    "desktop:dev": "env -u ELECTRON_RUN_AS_NODE CARO_APP_VARIANT=dev electron desktop/main.js",
+    "desktop:build-dev": "node scripts/js/install-desktop-dev.js",
+    "desktop:install-dev": "sh scripts/sh/install-caro-anki-dev.sh",
+    "desktop:test": "env -u ELECTRON_RUN_AS_NODE electron desktop/smoke.js",
+    "desktop:test-memories": "env -u ELECTRON_RUN_AS_NODE electron desktop/memories-smoke.js",
+    "desktop:test-menu": "env -u ELECTRON_RUN_AS_NODE electron desktop/menu-smoke.js",
+    "desktop:clean": "rm -rf \"tmp/Caro Anki Dev.app\" tmp/desktop-dev.log tmp/desktop-smoke.png && find tmp -maxdepth 1 -name 'electron.part*' -delete 2>/dev/null; true"
+  },
+  "devDependencies": {
+    "electron": "^44.3.0"
+  }
+}

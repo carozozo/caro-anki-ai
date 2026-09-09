@@ -1,0 +1,100 @@
+<dialog id="ankiNoteTypeDialog" class="dialog dialog-lg anki-note-type-dialog" aria-labelledby="ankiNoteTypeTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <div class="dialog-head-title-row">
+          <h2 id="ankiNoteTypeTitle" class="dialog-title dialog-title-lg">Note Type Studio</h2>
+          <p id="ankiNoteTypeStatus" class="dialog-help dialog-status system-message" role="status"></p>
+        </div>
+        <p class="dialog-help">The removal of fields or templates will directly modify the Anki collection.</p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <section class="anki-entity-section">
+      <div class="anki-picker-row">
+        <select id="ankiNoteTypeSelect" class="field" aria-label="Note type"></select>
+        <input id="ankiNoteTypeName" class="field" placeholder="Note type name" aria-label="Rename note type"
+          hidden>
+        <input id="ankiNewNoteTypeName" class="field" placeholder="New note type" aria-label="Create note type"
+          hidden>
+        <button id="ankiNoteTypeConfirm" class="button button-write button-icon" type="button"
+          aria-label="Rename note type" title="Rename note type">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+        </button>
+        <button id="ankiNoteTypeReturn" class="button button-ui button-icon" type="button" hidden
+          aria-label="Back to the note type list" title="Back to the note type list">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+        </button>
+        <button id="ankiDeleteNoteType" class="button button-delete button-icon"
+          type="button" aria-label="Delete note type" title="Delete note type">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+        </button>
+      </div>
+      </section>
+    <div class="settings-tabs anki-note-type-tabs" role="tablist" aria-label="Note type sections">
+      <button id="ankiNoteTypeFieldsTab" class="button button-quiet anki-note-type-tab is-active" type="button"
+        role="tab" aria-controls="ankiNoteTypeFieldsPanel" aria-selected="true"
+        data-note-type-section="fields">Fields</button>
+      <button id="ankiNoteTypeCardsTab" class="button button-quiet anki-note-type-tab" type="button"
+        role="tab" aria-controls="ankiNoteTypeCardsPanel" aria-selected="false" tabindex="-1"
+        data-note-type-section="cards">Card templates</button>
+    </div>
+    <section id="ankiNoteTypeFieldsPanel" class="anki-note-type-panel anki-note-type-panel-fields" role="tabpanel"
+      aria-labelledby="ankiNoteTypeFieldsTab">
+      <p class="dialog-help">A field saves as you change it: its name when the row loses focus, and each of its
+        own settings — font, size, direction, hint, and what the note editor shows — as you change it. The
+        mark on the left names the field Anki sorts the note by.</p>
+      <div id="ankiNoteTypeFields" class="anki-schema-list"></div>
+      <div class="anki-inline-control">
+        <input id="ankiNewNoteTypeField" class="field" placeholder="New field name">
+        <button id="ankiAddNoteTypeField" class="button button-write button-icon" type="button"
+          aria-label="Add field" title="Add field">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+        </button>
+      </div>
+      </section>
+      <section id="ankiNoteTypeCardsPanel" class="anki-note-type-panel" role="tabpanel"
+      aria-labelledby="ankiNoteTypeCardsTab" hidden>
+      <div class="anki-picker-row">
+        <select id="ankiNoteTypeTemplateSelect" class="field" aria-label="Card template"></select>
+        <input id="ankiNoteTypeTemplateName" class="field" placeholder="Card name"
+          aria-label="Rename card template" hidden>
+        <input id="ankiNewNoteTypeTemplate" class="field" placeholder="New card name"
+          aria-label="Create card template" hidden>
+        <select id="ankiNewNoteTypeTemplateField" class="field field-select" aria-label="Front field"
+          title="Field the new card's front template shows" hidden></select>
+        <button id="ankiNoteTypeTemplateConfirm" class="button button-write button-icon" type="button"
+          aria-label="Rename card template" title="Rename card template">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+        </button>
+        <button id="ankiNoteTypeTemplateReturn" class="button button-ui button-icon" type="button" hidden
+          aria-label="Back to the card list" title="Back to the card list">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+        </button>
+        <button id="ankiDeleteNoteTypeTemplate" class="button button-delete button-icon" type="button"
+          aria-label="Delete card template" title="Delete card template">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+        </button>
+      </div>
+      <div class="anki-template-editor">
+        <div class="anki-template-source-labels" aria-label="Card template source">
+          <button class="button button-quiet anki-template-source-label is-active" type="button"
+            data-template-source="front" aria-pressed="true">Front</button>
+          <button class="button button-quiet anki-template-source-label" type="button"
+            data-template-source="back" aria-pressed="false">Back</button>
+          <button class="button button-quiet anki-template-source-label" type="button"
+            data-template-source="styling" aria-pressed="false">Styling</button>
+        </div>
+        <label class="dialog-field" for="ankiNoteTypeTemplateSource">
+          <span id="ankiNoteTypeTemplateSourceLabel" class="dialog-label">Front template</span>
+          <textarea id="ankiNoteTypeTemplateSource" class="field anki-template-source" spellcheck="false"
+            aria-labelledby="ankiNoteTypeTemplateSourceLabel"></textarea>
+        </label>
+      </div>
+      </section>
+    </div>
+  </div>
+</dialog>

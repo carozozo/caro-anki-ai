@@ -1,0 +1,50 @@
+<dialog id="ankiFindReplaceDialog" class="dialog dialog-md anki-find-replace-dialog"
+  aria-labelledby="ankiFindReplaceTitle">
+  <form id="ankiFindReplaceForm" class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <div class="dialog-head-title-row">
+          <h2 id="ankiFindReplaceTitle" class="dialog-title dialog-title-lg">Find and Replace</h2>
+          <p id="ankiFindReplaceError" class="dialog-error system-message is-error" role="alert"></p>
+        </div>
+        <p id="ankiFindReplaceScope" class="dialog-help"></p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <label class="dialog-field" for="ankiFindReplaceFind">
+        <span class="dialog-label">Find</span>
+        <input id="ankiFindReplaceFind" class="field" type="text" list="ankiFindReplaceFindHistory"
+          autocomplete="off" required>
+        <datalist id="ankiFindReplaceFindHistory"></datalist>
+      </label>
+      <label class="dialog-field" for="ankiFindReplaceWith">
+        <span class="dialog-label">Replace with</span>
+        <input id="ankiFindReplaceWith" class="field" type="text" list="ankiFindReplaceWithHistory"
+          autocomplete="off">
+        <datalist id="ankiFindReplaceWithHistory"></datalist>
+      </label>
+      <label class="dialog-field" for="ankiFindReplaceField">
+        <span class="dialog-label">In</span>
+        <select id="ankiFindReplaceField" class="field field-select" aria-label="Field"></select>
+      </label>
+      <div class="anki-find-replace-options">
+        <label><input id="ankiFindReplaceSelected" type="checkbox"> Selected notes only</label>
+        <label><input id="ankiFindReplaceIgnoreCase" type="checkbox" checked> Ignore case</label>
+        <label><input id="ankiFindReplaceRegex" type="checkbox" checked> Treat input as regular expression</label>
+      </div>
+      <footer class="dialog-actions">
+        <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Cancel"
+          title="Cancel">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+        </button>
+        <button class="button button-write button-icon" type="submit" aria-label="Replace" title="Replace">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-find-replace"></use></svg>
+        </button>
+      </footer>
+      <p class="dialog-keys">⌘/Ctrl + Shift + R open · Esc close</p>
+    </div>
+  </form>
+</dialog>

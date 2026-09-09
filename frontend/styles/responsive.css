@@ -1,0 +1,36 @@
+/* ---------------------------------------------------------------- 4. responsive */
+@media (max-width: 1050px) {
+  .anki-browser-body:not(.is-chat-collapsed) .anki-chat {
+    position: absolute; z-index: 20; inset: 0 0 0 auto; width: min(440px, 100vw); box-shadow: var(--shadow);
+  }
+  .anki-browser-body { --chat-track: 0px; --chat-handle: 0px; }
+  .anki-browser-body.is-chat-collapsed { --chat-track: 46px; }
+  .anki-splitter[data-anki-splitter="right"] { visibility: hidden; pointer-events: none; }
+}
+
+@media (max-width: 720px) {
+  .anki-browser-body {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+    --chat-track: 0px; --chat-handle: 0px;
+  }
+  .anki-browser-body.is-quick-collapsed {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: 46px minmax(0, 1fr);
+  }
+  .anki-splitter { display: none; }
+  .anki-quick-search { border-right: 0; border-bottom: 1px solid var(--line); }
+  .anki-browser-body.is-chat-collapsed .anki-chat {
+    position: fixed; z-index: 20; right: 0; top: 64px; bottom: 0; width: 46px; box-shadow: var(--shadow);
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar { min-height: 64px; padding: 0 16px; }
+  .topbar-actions { gap: 6px; }
+  #connectionStatus { display: none; }
+  body { padding-top: 64px; }
+  .button { padding: 0 11px; font-size: 11px; }
+  /* Icon-only buttons must stay square: the padding above is for text buttons. */
+  .button-icon { padding: 0; }
+  .anki-browser-pannel { height: calc(100vh - 64px); }
+  .session-list { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 16px; padding: 0 16px; }
+}

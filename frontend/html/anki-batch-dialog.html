@@ -1,0 +1,28 @@
+<dialog id="ankiBatchDialog" class="dialog dialog-sm" aria-labelledby="ankiBatchDialogTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div class="dialog-head-title-row">
+        <h2 id="ankiBatchDialogTitle" class="dialog-title"></h2>
+        <p id="ankiBatchDialogError" class="dialog-error system-message is-error" role="alert"></p>
+      </div>
+      <button id="ankiBatchDialogClose" class="button button-ui button-icon" type="button"
+        data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <p id="ankiBatchDialogHint" class="dialog-hint"></p>
+    <div class="dialog-field" data-dialog-field="deck">
+      <label class="dialog-label" for="ankiBatchDeck">Destination deck</label>
+      <select id="ankiBatchDeck" class="field field-md" aria-describedby="ankiBatchDialogHelp"></select>
+    </div>
+    <div class="dialog-field" data-dialog-field="due">
+      <label class="dialog-label" for="ankiBatchDue">Due time</label>
+      <input id="ankiBatchDue" class="field field-md" type="text" inputmode="numeric" autocomplete="off"
+        placeholder="1 or 1-3" aria-describedby="ankiBatchDialogHelp">
+    </div>
+    <p id="ankiBatchDialogHelp" class="dialog-help"></p>
+    <p class="dialog-keys">⌘/Ctrl + D change deck · ⌘/Ctrl + U set due time · Esc close</p>
+    </div>
+  </div>
+</dialog>

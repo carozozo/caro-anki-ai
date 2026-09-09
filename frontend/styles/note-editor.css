@@ -1,0 +1,89 @@
+/* 3.4 note editor — fixed metadata and tag bars bracket the scrolling field body. */
+.anki-note-editor { flex: 1; min-height: 0; flex-direction: column; overflow: hidden; }
+.anki-note-editor:not([hidden]) { display: flex; }
+.anki-note-top {
+  display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 22px; border-bottom: 1px solid var(--line); background: var(--paper);
+}
+.anki-note-top-items { display: flex; flex: 1; align-items: center; gap: 12px; min-width: 0; }
+.anki-note-meta { display: flex; flex: none; align-items: center; gap: 8px; }
+.anki-note-body {
+  display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 12px;
+  overflow-y: auto; padding: 0 22px;
+}
+.anki-note-body > .card-fields { margin-top: 18px; }
+.anki-note-footer { flex: none; padding: 12px 22px; border-top: 1px solid var(--line); background: var(--paper); }
+.anki-note-type-field, .anki-deck-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.anki-note-type, .anki-note-deck {
+  min-width: 0; color: var(--ink); font: 12px/1.4 Arial, sans-serif; overflow-wrap: anywhere;
+}
+.anki-note-type-select { min-width: 130px; max-width: 220px; }
+/* The deck is a readout: the toolbar's Change-deck action (⌘/Ctrl+D) is the only way to move the note. */
+.anki-tag-field { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; }
+/* The tag input box holds the note's chips plus a free-text input, so both wrap in one bordered field. */
+.anki-tag-control {
+  position: relative; display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: 5px;
+  min-width: 150px; padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white);
+}
+.anki-tag-control:focus-within { border-color: var(--accent); }
+/* `display: contents` lets the chips sit directly in the control's flex row without an extra box. */
+.anki-tag-chips { display: contents; }
+.anki-tag-input { flex: 1; min-width: 70px; padding: 2px 3px; font: 12px/1.4 Arial, sans-serif; }
+.anki-tag-suggestions {
+  position: absolute; z-index: 6; bottom: calc(100% + 4px); left: -1px; right: -1px; max-height: 190px;
+  overflow-y: auto; border: 1px solid var(--accent); border-radius: 4px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.anki-tag-suggestion {
+  display: block; width: 100%; padding: 6px 9px; border: 0; border-top: 1px solid var(--line);
+  color: var(--ink); background: transparent; text-align: left; font: 12px/1.3 Arial, sans-serif;
+}
+.anki-tag-suggestion:first-child { border-top: 0; }
+.anki-tag-suggestion:hover, .anki-tag-suggestion:focus-visible,
+.anki-tag-suggestion.is-active { color: #9fc5ff; background: var(--accent-soft); outline: none; }
+/* Note fields: an editable rendered preview by default, toggled into a raw-HTML textarea. A field name is also its
+   own fold control, while the note type only determines how that control starts. */
+.anki-rich-head { display: flex; align-items: center; gap: 8px; }
+.anki-rich-field-name {
+  display: flex; align-items: center; gap: 3px; min-width: 0; margin: 0; padding: 0; border: 0;
+  color: var(--muted); background: transparent; font: 700 10px/1 Arial, sans-serif; letter-spacing: .06em;
+  text-align: left; cursor: pointer;
+}
+.anki-rich-field-name:hover { color: var(--ink); }
+.anki-rich-field-name:focus-visible { color: var(--ink); outline: 1px solid #79adfb; outline-offset: 3px; }
+.anki-rich-field-name .icon { width: 12px; height: 12px; }
+.anki-rich-hint {
+  min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--muted);
+}
+.anki-rich-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.anki-rich-field-options {
+  display: flex; flex-wrap: wrap; gap: 5px 14px; margin: 2px 0; padding: 7px 9px;
+  border-left: 2px solid var(--line); background: var(--white);
+}
+.anki-rich-setting-check {
+  display: flex; align-items: center; gap: 5px; color: var(--muted); font: 700 10px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+.anki-rich-setting-check input { margin: 0; accent-color: var(--accent); }
+.anki-rich-collapse { background: transparent; }
+.anki-rich-collapse:hover { color: var(--ink); }
+.anki-rich-collapse .icon { transition: transform .12s ease; }
+.anki-rich-field:not(.is-collapsed) .anki-rich-collapse .icon { transform: rotate(90deg); }
+.anki-rich-field.is-collapsed > .anki-rich-view,
+.anki-rich-field.is-collapsed > .anki-note-input,
+.anki-rich-field.is-collapsed > .anki-rich-field-options { display: none; }
+.anki-rich-toggle { background: transparent; }
+.anki-rich-toggle:hover { color: var(--ink); border-color: #79adfb; }
+.anki-rich-toggle[aria-pressed="true"] { color: var(--ink); background: #14243d; border-color: #79adfb; }
+.anki-rich-view {
+  display: block; width: 100%; min-height: 34px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white); overflow: hidden;
+}
+/* The caret lives in the frame's own document, so the field — not `:focus-within`, which no frame's focus
+   ever reaches — states that it is being typed in (`bindRichView`). */
+.anki-rich-field.is-focused > .anki-rich-view { border-color: #79adfb; box-shadow: 0 0 0 2px #4285e833; }
+.anki-rich-field:not(.is-editing) > .anki-note-input { display: none; }
+.anki-rich-field.is-editing > .anki-rich-view { display: none; }
+.anki-note-input { resize: none; max-height: 300px; overflow-y: hidden; }
+

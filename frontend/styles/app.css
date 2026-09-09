@@ -1,0 +1,8 @@
+/* Caro Anki frontend style entrypoint. Keep imports in cascade order. */
+@import url("./tokens.css");
+@import url("./ui-kit.css");
+@import url("./anki-browser.css");
+@import url("./note-editor.css");
+@import url("./agent-chat.css");
+@import url("./settings.css");
+@import url("./responsive.css");

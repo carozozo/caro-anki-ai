@@ -1,0 +1,2 @@
+ALTER TABLE agent_profiles ADD COLUMN step_limit INTEGER NOT NULL DEFAULT 12
+  CHECK (step_limit BETWEEN 4 AND 50);

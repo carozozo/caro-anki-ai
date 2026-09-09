@@ -1,0 +1,57 @@
+/* ============================================================================================
+   Caro Anki frontend styles.
+   Section 1 holds the tokens, section 2 the UI kit — the base style and states of every
+   component family the app is built from (icons, buttons, fields, chips, status messages,
+   dialogs, lists, panels). Section 3 lays those components out per screen and section 4 adapts
+   them to narrow viewports. `frontend/scripts/core/ui-kit.js` is the behaviour half of the same kit, so a new
+   control only needs a kit class here and a kit factory there.
+   ============================================================================================ */
+
+/* ---------------------------------------------------------------- 1. tokens */
+:root {
+  color-scheme: dark;
+  --ink: #e4edf9;
+  --muted: #9aaecb;
+  --line: #293e5d;
+  --paper: #081426;
+  --panel: #0e1d33;
+  --white: #13253f;
+  --accent: #4285e8;
+  --accent-soft: #203e67;
+  --status-pending: #f4d18e;
+  --status-ok: #98dfc1;
+  --status-warn: #ffc27a;
+  --status-warn-soft: #4d3319;
+  --status-error: #ffb5bd;
+  --shadow: 0 16px 48px rgba(0, 6, 18, .25);
+  /* The one dim every disabled control wears, so "this cannot be used right now" reads the same
+     on a button, a field and a chip. */
+  --disabled-opacity: .48;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  min-width: 320px;
+  margin: 0;
+  padding-top: 74px;
+  color: var(--ink);
+  background: var(--paper);
+  font: 15px/1.5 Arial, sans-serif;
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+/* Every form control, not just a button: an input or a select that cannot be typed in must look it. */
+button:disabled, input:disabled, textarea:disabled, select:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+button:focus-visible { outline: 2px solid #9fc5ff; outline-offset: 3px; }
+.muted { color: var(--muted); font: 11px/1.3 Arial, sans-serif; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+

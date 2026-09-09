@@ -1,0 +1,55 @@
+<dialog id="ankiAccountDialog" class="dialog dialog-sm" aria-labelledby="ankiAccountTitle">
+  <form id="ankiAccountForm" class="dialog-body">
+    <header class="dialog-head">
+      <div class="dialog-head-title-row">
+        <h2 id="ankiAccountTitle" class="dialog-title dialog-title-lg">AnkiWeb account</h2>
+        <p id="ankiAccountStatus" class="dialog-help dialog-status system-message" role="status"></p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close
+        aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <div id="ankiAccountSignIn" class="card-fields">
+      <label class="card-field">
+        <span>AnkiWeb ID</span>
+        <input id="ankiSyncUsername" class="field card-input" type="email" required
+          autocomplete="username" placeholder="name@example.com">
+      </label>
+      <label class="card-field">
+        <span>Password</span>
+        <input id="ankiSyncPassword" class="field card-input" type="password" required
+          autocomplete="current-password" placeholder="Your AnkiWeb password">
+      </label>
+      <label class="card-field">
+        <span>Custom sync server</span>
+        <input id="ankiSyncEndpoint" class="field card-input" type="url" autocomplete="off"
+          placeholder="Optional — leave blank for AnkiWeb">
+      </label>
+      <label class="anki-setting-check">
+        <input id="ankiSyncMedia" type="checkbox">
+        <span>Sync media</span>
+      </label>
+    </div>
+    <div id="ankiAccountSignedIn" hidden>
+      <dl class="anki-account-details">
+        <div><dt>AnkiWeb ID</dt><dd id="ankiAccountUsername"></dd></div>
+        <div><dt>Sync server</dt><dd id="ankiAccountEndpoint"></dd></div>
+        <div><dt>Media</dt><dd id="ankiAccountMedia"></dd></div>
+      </dl>
+    </div>
+    <p id="ankiAccountHelp" class="dialog-help"></p>
+    <footer class="dialog-actions anki-account-actions">
+      <button id="ankiAccountLogout" class="button button-delete button-icon" type="button" hidden
+        aria-label="Log out of AnkiWeb" title="Log out of AnkiWeb">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg>
+      </button>
+      <button id="ankiAccountLogin" class="button button-write button-icon" type="submit"
+        aria-label="Log in to AnkiWeb" title="Log in to AnkiWeb">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-login"></use></svg>
+      </button>
+      </footer>
+    </div>
+  </form>
+</dialog>

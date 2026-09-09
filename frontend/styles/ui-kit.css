@@ -1,0 +1,400 @@
+/* ---------------------------------------------------------------- 2. UI kit */
+
+/* 2.1 icons — one sprite of <symbol>s, referenced through `icon(name)` or `<use href="#i-*">`.
+   `flex: none` keeps a glyph from shrinking inside a flex parent. */
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon { flex: none; }
+
+/* 2.2 buttons — text buttons carry a colour variant; icon-only buttons are square targets that keep
+   those same variants. Labelled icon buttons preserve their text for actions where direction matters.
+   A variant names what the press DOES to the user's data, not how it should look, so the same press
+   reads the same way everywhere — only three of them exist:
+     `-ui`     shows or navigates (opens a window or studio, searches, previews, steps through the
+               collection, copies, closes): a calm accent tint, visible without shouting.
+     `-write`  creates, updates or deletes-through-a-form — anything that changes stored cards or
+               settings: one solid fill, the strongest thing on the surface that is not a warning.
+     `-delete` destroys data outright: the red tint, which `confirm.armed()` escalates to the solid
+               `-danger` red on the first click of its two-step confirm.
+   `-quiet` is left for controls whose colour is their own state — tab strips and the topbar's account
+   and sync buttons — so a control that only reports state never reads as an action. */
+.button {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font: 700 12px/1 Arial, sans-serif;
+  letter-spacing: .04em;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.button-ui { color: #9fc5ff; background: #1a3054; border-color: #35618f; }
+.button-write { color: #fff; background: #245394; border-color: #2c66b3; }
+.button-delete { color: #ffb5bd; background: #3b2531; border-color: #7d2b39; }
+.button-primary { color: #fff; background: #2865bd; }
+.button-quiet { color: var(--muted); background: transparent; border-color: var(--line); }
+.button-warn { color: var(--status-warn); background: var(--status-warn-soft); border-color: var(--status-warn); }
+.button-danger { color: #fff; background: #b33a48; border-color: #b33a48; }
+.button-confirm { color: #fff; background: var(--accent); border-color: var(--accent); }
+.button-write:not(:disabled):hover, .button-primary:not(:disabled):hover, .button-warn:not(:disabled):hover,
+.button-danger:not(:disabled):hover, .button-confirm:not(:disabled):hover { filter: brightness(1.14); }
+.button-ui:not(:disabled):hover { background: #22406e; border-color: var(--accent); }
+/* `button-danger` follows `button-delete` so the armed solid red outranks the resting tint; the hover
+   below has to exclude the armed state for the same reason. */
+.button-delete:not(.button-danger):not(:disabled):hover { background: #4a2c39; border-color: #a84252; }
+.button-with-icon { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.button-with-icon svg { width: 14px; height: 14px; }
+
+.button-icon, .icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--icon-button-size, 26px);
+  min-width: var(--icon-button-size, 26px);
+  min-height: var(--icon-button-size, 26px);
+  height: var(--icon-button-size, 26px);
+  padding: 0;
+  border-radius: 5px;
+}
+.button-icon { --icon-button-size: 38px; --icon-button-glyph: 16px; }
+.icon-button-xs { --icon-button-size: 20px; --icon-button-glyph: 12px; }
+.icon-button-sm { --icon-button-size: 24px; --icon-button-glyph: 13px; }
+.button-icon svg, .icon-button svg {
+  flex: none;
+  width: var(--icon-button-glyph, 14px);
+  height: var(--icon-button-glyph, 14px);
+}
+/* A bare icon control — the compact panel/row affordance that takes no text-button variant. */
+.icon-button {
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--white);
+  transition: color .15s ease, border-color .15s ease;
+}
+.icon-button:hover, .icon-button:focus-visible { color: #9fc5ff; border-color: var(--accent-soft); }
+.icon-button-round { border-color: transparent; border-radius: 999px; background: transparent; }
+
+@keyframes icon-spin { to { transform: rotate(1turn); } }
+.button-icon.is-syncing:disabled { opacity: 1; cursor: progress; }
+.button-icon.is-syncing svg { animation: icon-spin .9s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .button-icon.is-syncing svg,
+  .chat-run-spinner,
+  .operation.is-running > summary::before,
+  .dialog-progress:not([value]) { animation: none; }
+  /* The window still lingers for its result here; without motion the reason it lingers is gone. */
+  .dialog.is-closing { animation-duration: .01s; }
+}
+
+/* 2.3 fields — every input, select and textarea shares the `.field` skeleton; a size variant and a
+   context rule add the rest. `optionsHtml()` in ui-kit.js renders the options of every select. */
+.field {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+}
+.field:focus { border-color: var(--accent); }
+.field::placeholder { color: var(--muted); }
+/* A disabled field is dimmed by the base rule and flattened here, so it reads as inert rather than as an
+   empty field waiting for input: no accent hover, no focus ring, and the page colour, not the field one. */
+.field:disabled { border-color: var(--line); color: var(--muted); background: var(--paper); box-shadow: none; }
+.field.field-bare:disabled { background: transparent; }
+.field-lg { min-height: 38px; padding: 0 12px; }
+.field-md { min-height: 34px; padding: 6px 9px; font: 12px/1.3 Arial, sans-serif; }
+.field-sm { padding: 4px 6px; font: 12px/1.2 Arial, sans-serif; }
+.field-bare { border: 0; background: transparent; }
+.field-select { min-width: 160px; max-width: 320px; }
+.field-select:not(:disabled):hover, .field-select:not(:disabled):focus-visible { border-color: var(--accent); }
+/* Card-content fields keep the face the card template itself renders with (Arial) and get an accent focus ring. */
+.card-input {
+  padding: 8px 9px;
+  border-radius: 4px;
+  font: 14px/1.35 Arial, sans-serif;
+}
+.card-input:focus { border-color: #79adfb; box-shadow: 0 0 0 2px #4285e833; }
+.card-input[aria-invalid="true"] { border-color: #e68a9c; }
+.card-field { display: grid; gap: 4px; padding: 7px 0; border: 0; border-top: 1px solid var(--line); }
+.card-field:first-child { border-top: 0; }
+.card-field > span { padding: 0; color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .06em; }
+.card-fields { padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: #0b192e; }
+
+/* 2.4 chips and text-only buttons — content affordances that intentionally stay text. */
+.locate-note {
+  max-width: 100%; padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--white); color: var(--accent);
+  font: 700 11px/1.7 Arial, sans-serif; letter-spacing: .02em;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.locate-note:hover { border-color: var(--accent); background: var(--line); }
+.anki-tag-chip {
+  display: inline-flex; align-items: center; gap: 3px; max-width: 100%; min-height: 20px;
+  padding: 1px 4px 1px 9px; border: 1px solid var(--accent-soft); border-radius: 999px;
+  color: #9fc5ff; background: var(--accent-soft); font: 700 11px/1.7 Arial, sans-serif;
+  letter-spacing: .02em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.anki-tag-chip:hover, .anki-tag-chip:focus-visible {
+  border-color: #b33a48; color: #ffb5bd; background: #3b2531; outline: none;
+}
+.anki-tag-chip svg { width: 9px; height: 9px; }
+
+/* 2.5 status messages — one vocabulary and a reserved line for every system-generated status. The block
+   padding is the minimum every status gets: a line of text never sits flush against what is above or below it,
+   so a status landing in a new host needs no spacing rule of its own. It is unconditional rather than gated on
+   content, because an empty status reserves its `1lh` line and a filled one is that line plus this padding —
+   the same box either way once it has text. A host wanting more air (the chat strip) or none at all (the
+   status pill, which sizes itself with `min-height`) overrides `padding` itself. */
+.system-message { min-block-size: 1lh; padding-block: 2px; color: var(--muted); }
+.system-message.is-pending { color: var(--status-pending); }
+.system-message.is-ok { color: var(--status-ok); }
+.system-message.is-warn { color: var(--status-warn); }
+.system-message.is-error { color: var(--status-error); }
+.status-pill {
+  display: inline-flex; align-items: center; min-height: 25px; padding: 0 9px; border-radius: 999px;
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em; text-transform: uppercase;
+}
+.status-pill.is-pending { background: #3a3024; }
+.status-pill.is-ok { background: #173b39; }
+.status-pill.is-warn { background: var(--status-warn-soft); }
+.status-pill.is-error { background: #492a3b; }
+
+/* 2.6 dialogs — every modal is a native <dialog> built from these blocks and opened through
+   `CaroUI.dialogs.create()`, which owns Escape, the backdrop and `[data-dialog-close]`. */
+dialog {
+  position: fixed; top: 150px; bottom: auto; max-height: calc(100vh - 166px); margin: 0 auto; padding: 0;
+  color: var(--ink); border: 1px solid var(--line); border-radius: 7px; box-shadow: var(--shadow);
+}
+dialog::backdrop { background: rgba(0, 6, 18, .65); }
+.dialog { color: var(--ink); background: var(--panel); overflow: hidden; }
+.dialog[open] { display: flex; flex-direction: column; }
+.dialog-sm { width: min(380px, calc(100vw - 40px)); }
+/* Wide enough for the one actions row that carries three labelled buttons (the sync direction choice). */
+.dialog-md { width: min(460px, calc(100vw - 40px)); }
+.dialog-lg { width: fit-content; max-width: calc(100vw - 32px); }
+.dialog-body {
+  --dialog-pad-x: 22px; --dialog-pad-y: 20px;
+  display: flex; flex-direction: column; min-height: 0; max-height: calc(100vh - 168px); overflow: hidden;
+}
+.dialog-lg .dialog-body { width: clamp(520px, 58vw, 720px); max-width: calc(100vw - 32px); }
+.dialog-head {
+  --dialog-head-pad-b: 15px;
+  flex: none; display: flex; align-items: center; gap: 8px;
+  padding: var(--dialog-pad-y) var(--dialog-pad-x) var(--dialog-head-pad-b);
+  background: var(--panel); border-bottom: 1px solid var(--line);
+}
+.dialog-content {
+  display: flex; flex: 1 1 auto; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto;
+  padding: 12px var(--dialog-pad-x) 18px;
+}
+.dialog-title { flex: 1; margin: 0; font: 700 14px/1.2 Arial, sans-serif; }
+.dialog-title-lg { flex: 0 0 auto; font: 700 18px/1.2 Arial, sans-serif; letter-spacing: .01em; }
+.dialog-head .button-icon { margin-left: auto; }
+.dialog-head > div { flex: 1 1 auto; min-width: 0; }
+.dialog-head-title-row { display: flex; align-items: baseline; gap: 12px; flex: 1 1 auto; min-width: 0; }
+.dialog-head-title-row .dialog-title { flex: 0 0 auto; }
+.dialog-head-title-row .system-message { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.dialog-head-title-row .system-message:empty { display: none; }
+.dialog-head-statuses { display: flex; flex: 1 1 auto; gap: 12px; min-width: 0; }
+.dialog-head-statuses .system-message { margin: 0; }
+.dialog-hint { margin: 0; font: 12px/1.45 Arial, sans-serif; }
+#ankiSyncProgressText { white-space: pre-line; }
+.dialog-field { display: flex; flex-direction: column; gap: 6px; }
+.dialog-label { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.dialog-help, .dialog-error { margin: 0; font: 11px/1.45 Arial, sans-serif; }
+.dialog-help { color: var(--muted); }
+/* A line that has been cleared away gives its space back. These paragraphs are flex items of their parent's gap,
+   so an empty one would still push the block after it a whole gutter down — the same phantom slot that made a
+   dialog whose help text was not written yet start lower than one whose was. Status lines are exempt, because
+   reserving their line is the whole point of them. */
+.dialog-help:empty:not(.system-message),
+.dialog-hint:empty:not(.system-message) { display: none; }
+.dialog-keys {
+  margin: 0; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--muted); font: 10px/1.4 Arial, sans-serif;
+}
+.dialog-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+/* The one dialog block that reports work in flight. A full sync is the only kind Anki reports a byte total
+   for, so it is the only kind that gets a determinate fill from `value`; a merge sends change chunks and
+   reports no total, and that is also the one state `appearance: none` leaves completely empty, so it draws
+   its own band and sweeps it across the track instead of relying on the control's own animation. */
+.dialog-progress {
+  width: 100%; height: 6px; border: 0; border-radius: 999px; background: var(--line);
+  appearance: none; overflow: hidden;
+}
+.dialog-progress::-webkit-progress-bar { background: transparent; border-radius: 999px; }
+.dialog-progress::-webkit-progress-value { background: var(--accent); }
+.dialog-progress:not([value]) {
+  background-image: linear-gradient(90deg, transparent 35%, var(--accent) 35% 65%, transparent 65%);
+  background-size: 60% 100%; background-repeat: no-repeat;
+  animation: progress-sweep 1.3s linear infinite;
+}
+@keyframes progress-sweep { from { background-position: -60% 0; } to { background-position: 160% 0; } }
+/* A finished sync holds its window for as long as the result needs to be read, then goes. The fade is one
+   more state of the same dialog, set by `runAnkiSync` and cleared by the factory's own close hook. */
+.dialog.is-closing { animation: dialog-fade .25s ease-in forwards; pointer-events: none; }
+@keyframes dialog-fade { to { opacity: 0; } }
+
+/* 2.7 lists — the shared row shell, empty state and message bubble of every panel. */
+.empty-state { display: grid; justify-items: start; gap: 9px; max-width: 330px; color: var(--muted); }
+.empty-state.compact { font-size: 13px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.eyebrow { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .12em; }
+.operation { min-width: 0; font-size: 12px; color: var(--muted); }
+.operation > summary { cursor: pointer; }
+.operation pre { max-height: 240px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* The raw record behind a step, for tracking down a slow or surprising one without a log file. */
+.operation-raw { margin-top: 6px; }
+.operation-raw > summary, .operation-save-preview-path {
+  color: var(--muted);
+  font: 700 10px/1.7 Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase;
+}
+.operation-raw > summary { cursor: pointer; }
+.operation-raw > pre {
+  max-height: 320px; margin: 4px 0 0; padding: 8px;
+  border: 1px solid var(--line); border-radius: 4px; background: #0b192e;
+}
+/* A proposal's body is read in the preview dialog, never in the conversation, so its file box carries no cap
+   of its own — the dialog's own max-height is what shortens the read. */
+.operation-save-preview > pre {
+  margin: 4px 0 0; padding: 8px; white-space: pre-wrap; overflow-wrap: anywhere;
+  border: 1px solid var(--line); border-radius: 4px; background: #0b192e;
+}
+/* What a run proposed, under the reply that asked for it. The agent still writes it with apply_card_profile /
+   apply_instructions / apply_skills once the user agrees in words; Preview only opens a read-only modal. */
+.operation-saves { display: grid; gap: 10px; margin-top: 6px; }
+.operation-save { display: grid; gap: 4px; }
+.operation-save-name { font-size: 13px; }
+.operation-save-preview { display: grid; gap: 2px; }
+.operation-save-preview-button { justify-self: start; }
+.agent-proposal-preview-dialog { top: 48px; max-height: calc(100vh - 96px); }
+.agent-proposal-preview-dialog .dialog-body {
+  width: min(920px, calc(100vw - 32px)); max-height: calc(100vh - 96px);
+}
+.agent-proposal-preview-content { display: grid; gap: 12px; min-width: 0; }
+/* Note chips always sit in a flex row — a bare grid item with `overflow: hidden` gets
+   `min-height: 0`, so its row collapses and the label disappears. */
+.operation-notes {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);
+}
+.message-list {
+  display: grid; flex: 1; align-content: center; gap: 14px; min-height: 0; overflow-y: auto; padding: 40px 0;
+}
+.message-list:has(.message, .chat-step, .chat-run) { align-content: start; overflow-y: auto; }
+.message {
+  width: min(86%, 620px); padding: 13px 15px; border: 1px solid var(--line); border-radius: 7px;
+  background: var(--white);
+}
+.message-user { justify-self: end; border-color: #305887; background: #183457; }
+.message > span {
+  display: block; margin-bottom: 5px; color: var(--muted);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+}
+.message p { margin: 0; white-space: pre-wrap; }
+/* The answer streams into the bubble token by token; the ellipsis holds the line until the first one. */
+.message-stream:empty::before { content: '…'; color: var(--muted); }
+.message-retry { margin-top: 10px; }
+
+/* 2.8 markdown — the one place an agent's own formatting is rendered (`frontend/scripts/chat/markdown.js`). Every
+   rule is scoped to `.message-body`, so nothing here reaches the rest of the page and the bubble keeps
+   its own scale; the table scrolls sideways instead of widening the bubble. */
+.message-body { min-width: 0; overflow-wrap: anywhere; }
+.message-body > :first-child { margin-top: 0; }
+.message-body > :last-child { margin-bottom: 0; }
+.message-body p, .message-body ul, .message-body ol, .message-body blockquote,
+.message-body .md-code, .message-body .md-table { margin: 0 0 10px; }
+.message-body h1, .message-body h2, .message-body h3, .message-body h4, .message-body h5,
+.message-body h6 { margin: 14px 0 8px; font: 700 15px/1.3 Arial, sans-serif; }
+.message-body h1 { font-size: 18px; }
+.message-body h2 { font-size: 16.5px; }
+.message-body h3 { font-size: 15.5px; }
+.message-body h4, .message-body h5, .message-body h6 { font-size: 14.5px; color: var(--muted); }
+.message-body ul, .message-body ol { padding-left: 21px; }
+.message-body li + li { margin-top: 4px; }
+.message-body li > ul, .message-body li > ol { margin: 4px 0 0; }
+.message-body code {
+  padding: 1px 5px; border-radius: 3px; background: #0b192e;
+  font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.message-body .md-code {
+  padding: 9px 11px; overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: #0b192e;
+}
+.message-body .md-code code { padding: 0; background: none; white-space: pre; }
+.message-body blockquote { padding: 2px 0 2px 11px; border-left: 2px solid var(--accent-soft); color: var(--muted); }
+.message-body hr { margin: 12px 0; border: 0; border-top: 1px solid var(--line); }
+.message-body a { color: #9fc5ff; }
+.message-body .md-table { overflow-x: auto; }
+.message-body table { border-collapse: collapse; font: 13px/1.4 Arial, sans-serif; }
+.message-body th, .message-body td { padding: 5px 9px; border: 1px solid var(--line); text-align: left; }
+.message-body th { background: var(--panel); color: var(--muted); font-weight: 700; }
+.message-body .md-right { text-align: right; }
+.message-body .md-center { text-align: center; }
+.session-list {
+  display: grid; gap: 8px; align-content: start; flex: 1; min-height: 0; overflow-y: auto;
+  margin-top: 24px; padding: 0 22px;
+}
+.session-row { position: relative; }
+.session-item {
+  width: 100%; padding: 12px 42px 12px 13px; border: 1px solid transparent; border-radius: 5px;
+  color: var(--ink); text-align: left; background: transparent;
+}
+.session-item:hover, .session-item.active { border-color: var(--accent-soft); background: var(--white); }
+.session-item strong {
+  display: block; overflow: hidden; color: var(--muted);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.session-item time { display: block; margin-top: 5px; color: var(--muted); font: 11px/1.2 Arial, sans-serif; }
+/* The delete affordance stays hidden until the row is hovered or the button is focused. The armed
+   (button-danger) state keeps it visible so the second click of the confirm stays reachable. */
+.session-delete { position: absolute; top: 9px; right: 9px; opacity: 0; transition: opacity .12s ease; }
+.session-row:hover .session-delete, .session-delete:focus-visible,
+.session-delete.button-danger { opacity: 1; }
+.session-delete:hover, .session-delete.button-danger { color: #fff; background: #b33a48; border-color: #b33a48; }
+@media (hover: none) { .session-delete { opacity: 1; } }
+.anki-query-history {
+  position: absolute; z-index: 10; top: calc(100% + 4px); right: 0; left: 0; max-height: 260px;
+  overflow-y: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.anki-query-history-item {
+  display: block; width: 100%; padding: 9px 12px; overflow: hidden; border: 0; color: var(--ink);
+  background: transparent; font: inherit; text-align: left;
+  text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
+}
+.anki-query-history-item:hover, .anki-query-history-item.active { background: var(--accent-soft); }
+
+/* 2.8 panels and splitters — a panel is a flex column that owns its own scroller; a splitter is a
+   6px drag handle between two of them. */
+.sessions-panel { display: flex; flex-direction: column; overflow: hidden; }
+.sessions-panel .panel-heading { padding: 28px 22px 0; }
+.conversation-panel {
+  display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden;
+  padding: 30px clamp(22px, 4vw, 62px); background: var(--panel);
+}
+.anki-splitter {
+  position: relative; z-index: 1; padding: 0; border: 0; cursor: col-resize;
+  background: transparent; touch-action: none;
+}
+.anki-splitter::after {
+  content: ''; position: absolute; z-index: 0; inset: 0 2px; border-radius: 3px;
+  background: transparent; transition: background .15s ease;
+}
+.anki-splitter::before {
+  content: ''; position: absolute; z-index: 1; top: 50%; left: 50%; width: 6px; height: 18px;
+  transform: translate(-50%, -50%); opacity: .55;
+  background-image: radial-gradient(circle, var(--muted) 1.5px, transparent 1.6px); background-size: 6px 6px;
+  transition: opacity .15s ease, background-image .15s ease;
+}
+.anki-splitter:hover::after, .anki-splitter:focus-visible::after, .anki-splitter.active::after {
+  background: var(--accent);
+}
+.anki-splitter:hover::before, .anki-splitter:focus-visible::before, .anki-splitter.active::before {
+  opacity: 1; background-image: radial-gradient(circle, #9fc5ff 1.5px, transparent 1.6px);
+}
+.anki-splitter:focus-visible { outline: none; }
+body.is-resizing { cursor: col-resize; }
+body.is-resizing * { user-select: none; }
+

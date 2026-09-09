@@ -1,0 +1,40 @@
+<dialog id="ankiTagDialog" class="dialog dialog-md anki-tag-dialog" aria-labelledby="ankiTagDialogTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <div class="dialog-head-title-row">
+          <h2 id="ankiTagDialogTitle" class="dialog-title dialog-title-lg">Tags</h2>
+          <p id="ankiTagStatus" class="dialog-help dialog-status system-message" role="status"></p>
+        </div>
+        <p class="dialog-help">Deleting a tag removes it from every note, and Anki cannot undo it.</p>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close"
+        title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <section class="anki-entity-section">
+      <div class="anki-picker-row">
+        <select id="ankiTagSelect" class="field" aria-label="Tag"></select>
+        <input id="ankiTagName" class="field" placeholder="Tag name" aria-label="Rename tag" hidden>
+        <button id="ankiTagConfirm" class="button button-write button-icon" type="button"
+          aria-label="Rename tag" title="Rename tag">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+        </button>
+        <button id="ankiTagReturn" class="button button-ui button-icon" type="button" hidden
+          aria-label="Back to the tag list" title="Back to the tag list">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+        </button>
+        <button id="ankiDeleteTag" class="button button-delete button-icon" type="button"
+          aria-label="Delete tag" title="Delete tag">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+        </button>
+        <button id="ankiClearUnusedTags" class="button button-delete" type="button">
+          Clear unused tags
+        </button>
+      </div>
+      </section>
+    </div>
+  </div>
+</dialog>

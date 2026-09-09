@@ -1,0 +1,390 @@
+<dialog id="ankiSettingsDialog" class="dialog dialog-lg" aria-labelledby="ankiSettingsTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div class="dialog-head-title-row">
+        <h2 id="ankiSettingsTitle" class="dialog-title dialog-title-lg">Settings</h2>
+        <div class="dialog-head-statuses">
+          <p id="quickSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="ankiProfileStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="ankiMaintenanceStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="ankiRuntimeState" class="dialog-error system-message is-error" role="alert"></p>
+          <p id="librarySettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="agentSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="agentProfileFormStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          <p id="shortcutSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+        </div>
+      </div>
+      <button class="button button-ui button-icon" type="button" data-dialog-close
+        aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <div class="settings-tabs settings-main-tabs" role="tablist" aria-label="Settings sections">
+      <button id="ankiSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+        aria-controls="ankiSettingsPanel" aria-selected="true" data-settings-section="anki">Anki</button>
+      <button id="quickSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+        aria-controls="quickSettingsPanel" aria-selected="false" tabindex="-1"
+        data-settings-section="quick">Quick Settings</button>
+      <button id="agentSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+        aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1"
+        data-settings-section="agent">Agent</button>
+    </div>
+    <div class="settings-dialog-subtabs">
+      <div class="settings-tabs settings-subtabs" role="tablist" aria-label="Anki sections"
+        data-sub-tabs="anki">
+        <button id="ankiCollectionProfileTab" class="button button-quiet settings-tab settings-subtab"
+          type="button" role="tab" aria-controls="ankiProfilePanel" aria-selected="true"
+          data-sub-section="collection-profile">Collection Profile</button>
+        <button id="ankiMaintenanceTab" class="button button-quiet settings-tab settings-subtab" type="button"
+          role="tab" aria-controls="ankiMaintenancePanel" aria-selected="false" tabindex="-1"
+          data-sub-section="maintenance">Maintenance</button>
+      </div>
+      <div class="settings-tabs settings-subtabs" role="tablist" aria-label="Quick Settings sections"
+        data-sub-tabs="quick" hidden>
+        <button id="quickCardDefaultsTab" class="button button-quiet settings-tab settings-subtab" type="button"
+          role="tab" aria-controls="quickCardDefaultsPanel" aria-selected="true"
+          data-sub-section="card-defaults">Card Defaults</button>
+        <button id="quickDeckListTab" class="button button-quiet settings-tab settings-subtab" type="button"
+          role="tab" aria-controls="quickDeckListPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="deck-list">Deck List</button>
+        <button id="quickListFieldsTab" class="button button-quiet settings-tab settings-subtab" type="button"
+          role="tab" aria-controls="quickListFieldsPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="list-fields">List Fields</button>
+        <button id="quickShortcutsTab" class="button button-quiet settings-tab settings-subtab" type="button"
+          role="tab" aria-controls="quickShortcutsPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="shortcuts">Shortcuts</button>
+      </div>
+      <div class="settings-tabs settings-subtabs" role="tablist" aria-label="Agent sections"
+        data-sub-tabs="agent" hidden>
+        <button id="agentConfigurationTab" class="button button-quiet settings-tab settings-subtab"
+          type="button" role="tab" aria-controls="agentConfigurationPanel" aria-selected="true"
+          data-sub-section="configuration">Configuration</button>
+        <button id="agentInstructionsTab" class="button button-quiet settings-tab settings-subtab"
+          type="button" role="tab" aria-controls="librarySettingsPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="instructions">Instructions</button>
+        <button id="agentSkillsTab" class="button button-quiet settings-tab settings-subtab"
+          type="button" role="tab" aria-controls="librarySettingsPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="skills">Skills</button>
+        <button id="agentMemoriesTab" class="button button-quiet settings-tab settings-subtab"
+          type="button" role="tab" aria-controls="librarySettingsPanel" aria-selected="false" tabindex="-1"
+          data-sub-section="memories">Memories</button>
+      </div>
+    </div>
+    <div class="settings-dialog-panels">
+    <section id="ankiSettingsPanel" class="settings-panel" role="tabpanel" aria-labelledby="ankiSettingsTab">
+      <section id="ankiProfilePanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="ankiCollectionProfileTab" data-sub-panel="collection-profile">
+      <div class="settings-form">
+        <section class="anki-settings-section">
+          <div class="card-fields">
+            <div class="anki-picker-row">
+              <select id="ankiProfileSelect" class="field field-select" aria-label="Collection profile"
+                aria-describedby="ankiProfileHelp"></select>
+              <input id="ankiProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                aria-label="Rename this collection profile" aria-describedby="ankiProfileHelp">
+              <input id="ankiNewProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                placeholder="New collection profile" aria-label="New collection profile name"
+                aria-describedby="ankiProfileHelp">
+              <button id="ankiProfileConfirm" class="button button-write button-icon" type="button"
+                aria-label="Rename this collection profile" title="Rename this collection profile">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+              </button>
+              <button id="ankiProfileReturn" class="button button-ui button-icon" type="button" hidden
+                aria-label="Back to the collection profiles" title="Back to the collection profiles">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+              </button>
+              <button id="ankiProfileActivate" class="button button-write button-icon" type="button"
+                aria-label="Switch to this collection profile" title="Switch to this collection profile">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+              </button>
+              <button id="ankiProfileDelete" class="button button-delete button-icon" type="button"
+                aria-label="Delete this collection profile" title="Delete this collection profile">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+              </button>
+            </div>
+          </div>
+          <p id="ankiProfileHelp" class="dialog-help"></p>
+        </section>
+      </div>
+      </section>
+      <section id="ankiMaintenancePanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="ankiMaintenanceTab" data-sub-panel="maintenance" hidden>
+        <div class="settings-form anki-maintenance-form">
+          <section class="anki-settings-section">
+            <div class="anki-maintenance-heading">
+              <div>
+                <h3 class="eyebrow">COLLECTION CHECKS</h3>
+                <p class="dialog-help">Checks run against the active collection.</p>
+              </div>
+            </div>
+            <div class="anki-maintenance-actions">
+              <button id="ankiCheckDatabase" class="button button-ui" type="button">Check database</button>
+              <button id="ankiCheckMedia" class="button button-ui" type="button">Check media</button>
+            </div>
+            <pre id="ankiMaintenanceReport" class="anki-maintenance-report" hidden></pre>
+          </section>
+          <section class="anki-settings-section">
+            <div class="anki-maintenance-heading">
+              <div>
+                <h3 class="eyebrow">BACKUPS</h3>
+                <p class="dialog-help">Automatic backups exclude images and audio.</p>
+              </div>
+              <button id="ankiCreateBackup" class="button button-write" type="button">Create backup</button>
+            </div>
+            <div class="anki-backup-settings">
+              <label class="card-field">
+                <span>Minutes between backups</span>
+                <input id="ankiBackupInterval" class="field" type="number" min="0" max="100000" step="1"
+                  inputmode="numeric">
+              </label>
+              <label class="card-field">
+                <span>Daily backups to keep</span>
+                <input id="ankiBackupDaily" class="field" type="number" min="0" max="100000" step="1"
+                  inputmode="numeric">
+              </label>
+              <label class="card-field">
+                <span>Weekly backups to keep</span>
+                <input id="ankiBackupWeekly" class="field" type="number" min="0" max="100000" step="1"
+                  inputmode="numeric">
+              </label>
+              <label class="card-field">
+                <span>Monthly backups to keep</span>
+                <input id="ankiBackupMonthly" class="field" type="number" min="0" max="100000" step="1"
+                  inputmode="numeric">
+              </label>
+            </div>
+            <p class="dialog-help">Set a retention value to 0 to keep none of that backup period.</p>
+          </section>
+        </div>
+      </section>
+    </section>
+      <section id="quickSettingsPanel" class="settings-panel" role="tabpanel" aria-labelledby="quickSettingsTab"
+      hidden>
+      <div id="ankiSettingsForm" class="settings-form">
+        <section id="quickCardDefaultsPanel" class="settings-panel" role="tabpanel"
+          aria-labelledby="quickCardDefaultsTab" data-sub-panel="card-defaults">
+          <section class="anki-settings-section">
+            <div class="card-fields">
+              <label class="card-field">
+                <span>Note type</span>
+                <select id="ankiDefaultModel" class="field field-select card-input"></select>
+              </label>
+              <label class="anki-setting-check">
+                <input id="ankiAllowDuplicate" type="checkbox">
+                <span>Allow duplicate cards</span>
+              </label>
+            </div>
+          </section>
+        </section>
+        <section id="quickDeckListPanel" class="settings-panel" role="tabpanel"
+          aria-labelledby="quickDeckListTab" data-sub-panel="deck-list" hidden>
+          <section class="anki-settings-section">
+            <div class="card-fields">
+              <div class="anki-deck-modes" role="radiogroup"
+                aria-label="Decks listed in quick search and Change deck">
+                <label class="anki-deck-mode">
+                  <input id="ankiDeckModeAll" type="radio" name="ankiDeckMode" value="all" checked>
+                  <span>All decks</span>
+                </label>
+                <label class="anki-deck-mode">
+                  <input id="ankiDeckModeSelected" type="radio" name="ankiDeckMode" value="selected">
+                  <span>Selected decks only</span>
+                </label>
+              </div>
+              <div id="ankiDeckChoices" class="anki-deck-choices" role="group"
+                aria-label="Decks to list in quick search and Change deck"></div>
+              <p id="ankiDeckHint" class="dialog-help"></p>
+            </div>
+          </section>
+        </section>
+      </div>
+      <section id="quickListFieldsPanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="quickListFieldsTab" data-sub-panel="list-fields" hidden>
+        <section class="anki-settings-section">
+          <div class="card-fields">
+            <div class="anki-list-fields">
+              <div class="anki-list-fields-pane">
+                <h4 class="eyebrow">ON THE TABLE</h4>
+                <div id="ankiListFieldsActive" class="anki-column-rows" role="group"
+                  aria-label="Columns of the note list, in the order they are shown"></div>
+              </div>
+              <div class="anki-list-fields-pane">
+                <h4 class="eyebrow">AVAILABLE COLUMNS</h4>
+                <div class="anki-list-fields-roster">
+                  <div id="ankiListFieldsNative" class="anki-column-rows" role="group"
+                    aria-label="Anki columns that are not on the table"></div>
+                  <div id="ankiListFieldsFields" class="anki-column-group">
+                    <div id="ankiListFieldsFieldRoster" class="anki-column-rows" role="group"
+                      aria-label="Note type fields that are not on the table"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p id="ankiListFieldsHint" class="dialog-help"></p>
+          </div>
+          <div class="anki-list-fields-actions">
+            <p id="ankiListFieldsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            <button id="ankiListFieldsReset" class="button button-write button-icon" type="button"
+              aria-label="Reset the list columns to their defaults"
+              title="Reset the list columns to their defaults">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-retry"></use></svg>
+            </button>
+          </div>
+        </section>
+      </section>
+      <section id="quickShortcutsPanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="quickShortcutsTab" data-sub-panel="shortcuts" hidden>
+        <section class="anki-settings-section shortcut-settings-section" aria-labelledby="shortcutSettingsTitle">
+          <div class="shortcut-settings-heading">
+            <div>
+              <h3 id="shortcutSettingsTitle" class="eyebrow">KEYBOARD SHORTCUTS</h3>
+              <p class="dialog-help">Select a binding, then press Command or Control with the key you want.</p>
+            </div>
+            <div class="shortcut-settings-actions">
+              <label class="sr-only" for="shortcutFilter">Search shortcuts</label>
+              <input id="shortcutFilter" class="field field-sm shortcut-filter" type="search"
+                autocomplete="off" placeholder="Search shortcuts" aria-label="Search shortcuts">
+              <button id="shortcutResetAll" class="button button-write button-icon shortcut-reset-all" type="button"
+                aria-label="Restore all default shortcuts" title="Restore all defaults">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+              </button>
+            </div>
+          </div>
+          <div id="shortcutSettingsList" class="shortcut-settings-list" role="list"
+            aria-label="Customizable keyboard shortcuts"></div>
+        </section>
+      </section>
+    </section>
+    <section id="agentSettingsPanel" class="settings-panel" role="tabpanel"
+      aria-labelledby="agentSettingsTab" hidden>
+      <section id="agentConfigurationPanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="agentConfigurationTab" data-sub-panel="configuration">
+      <div class="agent-availability">
+        <div class="agent-section-copy">
+          <h3 class="eyebrow">ANKI AGENT</h3>
+          <p id="agentAvailabilityText" class="dialog-help">Disabled</p>
+        </div>
+        <button id="agentToggle" class="agent-switch" type="button" role="switch"
+          aria-checked="false" aria-describedby="agentAvailabilityText"
+          aria-label="Enable Anki Agent" title="Enable Anki Agent">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <section class="agent-profile-manager" aria-label="Agent configuration">
+        <div id="agentProfilePicker" class="anki-picker-row agent-profile-picker">
+          <select id="agentProfileSelect" class="field field-select" aria-label="Agent configuration"></select>
+          <input id="agentProfileName" class="field" maxlength="64" autocomplete="off" hidden
+            aria-label="Rename this Agent configuration">
+          <input id="agentNewProfileName" class="field" maxlength="64" autocomplete="off" hidden
+            placeholder="New Agent configuration" aria-label="New Agent configuration name">
+          <button id="agentProfileConfirm" class="button button-write button-icon" type="button"
+            aria-label="Rename this Agent configuration" title="Rename this Agent configuration">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+          </button>
+          <button id="agentProfileReturn" class="button button-ui button-icon" type="button" hidden
+            aria-label="Back to Agent configurations" title="Back to Agent configurations">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+          </button>
+          <button id="agentProfileDelete" class="button button-delete button-icon" type="button"
+            aria-label="Delete configuration" title="Delete configuration">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+          </button>
+        </div>
+      </section>
+      <form id="agentProfileForm" class="agent-profile-form" aria-labelledby="agentProfileFormTitle" hidden>
+        <header class="agent-profile-form-heading">
+          <h3 id="agentProfileFormTitle" class="eyebrow">NEW CONFIGURATION</h3>
+          <p id="agentProfileFormHint" class="dialog-help">Create an Agent configuration.</p>
+        </header>
+        <div class="card-fields">
+          <label class="card-field">
+            <span>Provider</span>
+            <select id="agentProfileProvider" class="field field-sm field-select" required>
+              <option value="deepseek">DeepSeek</option>
+            </select>
+          </label>
+          <label class="card-field">
+            <span>Model</span>
+            <input id="agentProfileModel" class="field card-input" required placeholder="The model to use">
+          </label>
+          <label class="card-field">
+            <span>Default language</span>
+            <select id="agentProfileLanguage" class="field field-sm field-select" required
+              aria-describedby="agentProfileLanguageHelp"></select>
+            <small id="agentProfileLanguageHelp" class="agent-field-help">Used for chat replies and
+              Agent-authored
+              instructions, skills, and memories. A direct request for another language takes precedence.</small>
+          </label>
+          <label class="card-field">
+            <span>API endpoint</span>
+            <input id="agentProfileBaseUrl" class="field card-input" required
+              placeholder="The API endpoint URL">
+          </label>
+          <label class="card-field">
+            <span>Default thinking</span>
+            <select id="agentProfileEffort" class="field field-sm">
+              <option value="none">Off</option><option value="low">Low</option><option value="high">High</option>
+              <option value="max">Max</option><option value="auto" selected>Auto</option>
+            </select>
+            <small class="agent-field-help">Used for this profile's chats and card writing; Auto asks
+              the backend to pick a budget per request.</small>
+          </label>
+          <label class="card-field">
+            <span>Request step limit</span>
+            <input id="agentProfileStepLimit" class="field field-sm" type="number" min="4" max="50" step="1"
+              value="12" required aria-describedby="agentProfileStepLimitHelp">
+            <small id="agentProfileStepLimitHelp" class="agent-field-help">Maximum AI thinking and tool rounds for
+              one request, not a card count. Higher values may take longer and perform more writes. At the limit,
+              the Agent reports completed work and waits for you to decide whether to continue.</small>
+          </label>
+          <label class="card-field">
+            <span>API key</span>
+            <input id="agentProfileApiKey" class="field card-input" type="password"
+              autocomplete="new-password" placeholder="Enter API key" required
+              aria-describedby="agentProfileApiKeyHelp">
+            <small id="agentProfileApiKeyHelp" class="agent-field-help">
+              Required and stored in the macOS Keychain.
+            </small>
+          </label>
+        </div>
+      </form>
+      </section>
+      <section id="librarySettingsPanel" class="settings-panel" role="tabpanel"
+        aria-labelledby="agentInstructionsTab" data-sub-panel="instructions memories skills" hidden>
+        <div class="library-editor">
+          <div class="anki-picker-row">
+            <select id="librarySelect" class="field field-select" aria-label="Instructions"></select>
+            <input id="libraryName" class="field" maxlength="64" autocomplete="off" hidden
+              aria-label="Rename this instruction">
+            <input id="libraryNewName" class="field" maxlength="64" autocomplete="off" hidden
+              placeholder="New instruction name" aria-label="New instruction name">
+            <button id="libraryConfirm" class="button button-write button-icon" type="button"
+              aria-label="Rename this instruction" title="Rename this instruction">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="libraryReturn" class="button button-ui button-icon" type="button" hidden
+              aria-label="Back to the library" title="Back to the library">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="libraryDelete" class="button button-delete button-icon" type="button"
+              aria-label="Delete this instruction" title="Delete this instruction">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+          <div id="libraryEditorForm" class="library-editor-form">
+            <input id="libraryEntryType" type="hidden"><input id="libraryEntryName" type="hidden">
+            <h3 id="libraryEditorTitle" class="eyebrow">SELECT AN ENTRY</h3>
+            <label id="libraryDescriptionField" class="dialog-field" hidden>
+              <span class="dialog-label">Description</span>
+              <input id="libraryEditorDescription" class="field field-md">
+            </label>
+            <textarea id="libraryEditorContent" class="field library-editor-content"
+              aria-label="Agent library content"></textarea>
+          </div>
+        </div>
+      </section>
+      </section>
+    </div>
+    </div>
+</dialog>

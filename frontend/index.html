@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{APP_TITLE}}</title>
+  <link rel="stylesheet" href="/styles/app.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-chat" viewBox="0 0 16 16">
+      <path d="M4.5 2.3h7a1.9 1.9 0 0 1 1.9 1.9v4.3a1.9 1.9 0 0 1-1.9 1.9H7.6L4.4 12.9v-2.5h.1a1.9 1.9 0 0 1-1.9-1.9V4.2a1.9 1.9 0 0 1 1.9-1.9z"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 16 16">
+      <path d="M2.5 4h11M2.5 8h11M2.5 12h11" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="6" cy="4" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+      <circle cx="10.5" cy="8" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+      <circle cx="7.5" cy="12" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+    </symbol>
+    <symbol id="i-sync" viewBox="0 0 16 16">
+      <path d="M13.4 5.7A5.8 5.8 0 0 0 3 4.2L1.8 6.1M2.6 10.3A5.8 5.8 0 0 0 13 11.8l1.2-1.9"
+        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M1.7 2.9v3.3H5M14.3 13.1V9.8H11" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 16 16">
+      <circle cx="8" cy="5.4" r="2.8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M2.7 14a5.5 5.5 0 0 1 10.6 0" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-login" viewBox="0 0 16 16">
+      <path d="M9.6 2.6h3A1.4 1.4 0 0 1 14 4v8a1.4 1.4 0 0 1-1.4 1.4h-3" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M2.2 8h6.6M6.4 4.6 9.8 8l-3.4 3.4" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-logout" viewBox="0 0 16 16">
+      <path d="M6.4 2.6h-3A1.4 1.4 0 0 0 2 4v8a1.4 1.4 0 0 0 1.4 1.4h3" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M13.8 8H7.2M9.6 4.6 13 8l-3.4 3.4" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-retry" viewBox="0 0 16 16">
+      <path d="M3.11 6.22A5.2 5.2 0 1 0 7.1 2.88" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M7.1 1.3 4.1 2.9 7.1 4.5" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-undo" viewBox="0 0 16 16">
+      <path d="M4.4 3.6 1.7 6.3l2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M1.7 6.3h7.2a4.4 4.4 0 0 1 0 8.8H5.6" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-redo" viewBox="0 0 16 16">
+      <path d="M11.6 3.6 14.3 6.3l-2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.3 6.3H7.1a4.4 4.4 0 0 0 0 8.8h3.3" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 16 16">
+      <circle cx="6.8" cy="6.8" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M10.2 10.2 13.8 13.8" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-find-replace" viewBox="0 0 16 16">
+      <circle cx="5.2" cy="5.2" r="2.9" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="m7.4 7.4 1.8 1.8M8.2 11.5h5.1m-1.8-1.8 1.8 1.8-1.8 1.8" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-history" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 4.8V8l2.4 1.5" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 16 16">
+      <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 16 16">
+      <path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 16 16">
+      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 16 16">
+      <path d="M14.2 1.8 7.4 8.6M14.2 1.8 9.9 14.2l-2.5-5.6-5.6-2.5z" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-check-circle" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M5.6 8.2 7.3 9.9l3.2-3.4" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 16 16">
+      <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 16 16">
+      <rect x="2.5" y="5.5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor"
+        stroke-width="1.4"/>
+      <path d="M5.5 4.5V3A1.5 1.5 0 0 1 7 1.5h5A1.5 1.5 0 0 1 13.5 3v5A1.5 1.5 0 0 1 12 9.5h-1.5"
+        fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="i-sparkles" viewBox="0 0 16 16">
+      <path d="M6.4 1.8 7.6 5l3.2 1.2L7.6 7.4 6.4 10.6 5.2 7.4 2 6.2 5.2 5z" fill="none"
+        stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M12.2 9.2l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-stop" viewBox="0 0 16 16">
+      <rect x="4" y="4" width="8" height="8" rx="1.6" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16">
+      <path d="M3.5 4.5h9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M6.5 4.5V3.2A1.2 1.2 0 0 1 7.7 2h.6a1.2 1.2 0 0 1 1.2 1.2v1.3"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M4.8 4.5l.6 8.3a1.5 1.5 0 0 0 1.5 1.4h2.2a1.5 1.5 0 0 0 1.5-1.4l.6-8.3"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 16 16">
+      <path d="M13 8H3.4M7.6 3.6 3.2 8l4.4 4.4" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-locate" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 1.4v2.2M8 12.4v2.2M1.4 8h2.2M12.4 8h2.2" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16">
+      <path d="M1.4 8S3.8 3.7 8 3.7 14.6 8 14.6 8 12.2 12.3 8 12.3 1.4 8 1.4 8z" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="i-code" viewBox="0 0 16 16">
+      <path d="M5.8 3.8 2.2 8l3.6 4.2M10.2 3.8 13.8 8l-3.6 4.2" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-deck" viewBox="0 0 16 16">
+      <path d="M2 4.2 8 1.8l6 2.4L8 6.6zM2 7.2l6 2.4 6-2.4M2 10.2l6 2.4 6-2.4" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 16 16">
+      <path d="M2.2 3.4v4.8l5.5 5.5a1.5 1.5 0 0 0 2.1 0l3.7-3.7a1.5 1.5 0 0 0 0-2.1L8 2.4H3.2a1 1 0 0 0-1 1z"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="5.3" cy="5.4" r=".9" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 4.6V8l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16">
+      <path d="M8 2.5v11M2.5 8h11" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-pencil" viewBox="0 0 16 16">
+      <path d="M2.6 13.4l.6-2.7 7.6-7.6 2.1 2.1-7.6 7.6z" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M9.3 4.6l2.1 2.1" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 16 16">
+      <path d="M8 13V3M3.8 7.2 8 3l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 16 16">
+      <path d="M8 3v10m4.2-4.2L8 13 3.8 8.8" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-up-bar" viewBox="0 0 16 16">
+      <path d="M3.2 2.8h9.6M8 13.4V6.2M4.7 9.5 8 6.2l3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-down-bar" viewBox="0 0 16 16">
+      <path d="M3.2 13.2h9.6M8 2.6v7.2m-3.3-3.3L8 9.8l3.3-3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 16 16">
+      <path d="M13 8H3m4.2-4.2L3 8l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 16 16">
+      <path d="M3 8h10m-4.2-4.2L13 8l-4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-left-bar" viewBox="0 0 16 16">
+      <path d="M2.8 3.2v9.6M13.4 8H6.2M9.5 4.7 6.2 8l3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-right-bar" viewBox="0 0 16 16">
+      <path d="M13.2 3.2v9.6M2.6 8h7.2M6.5 4.7 9.8 8l-3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-sliders" viewBox="0 0 16 16">
+      <path d="M2.4 4.6h1.3M6.9 4.6h6.7M2.4 11.4h6.9M12.5 11.4h1.1" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="5.3" cy="4.6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="10.9" cy="11.4" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+  </svg>
+
+  <template data-partial="/html/topbar.html"></template>
+
+  <section id="ankiBrowserPannel" class="anki-browser-pannel" aria-label="Anki card browser">
+    <div class="anki-browser">
+      <form id="ankiSearchForm" class="anki-search">
+        <label class="sr-only" for="ankiSearchPrefix">Anki search prefix</label>
+        <select id="ankiSearchPrefix" class="field field-lg anki-search-prefix" aria-label="Anki search prefix">
+          <option value="">None</option>
+        </select>
+        <label class="sr-only" for="ankiQuery">Anki search syntax</label>
+        <div class="anki-query-field">
+          <input id="ankiQuery" class="field field-lg" type="search" autocomplete="off" aria-autocomplete="list"
+            aria-label="Search Anki cards (Command or Control+F)" aria-controls="ankiQueryHistory"
+            aria-expanded="false"
+            placeholder='Search syntax, e.g. deck:"_Todo" or tag:verb'>
+          <div id="ankiQueryHistory" class="anki-query-history" role="listbox" hidden></div>
+        </div>
+        <button class="button button-ui button-icon" type="submit" aria-label="Search" title="Search">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+        </button>
+      </form>
+      <div class="anki-browser-body">
+        <aside class="anki-quick-search" aria-label="Quick search">
+          <div class="panel-heading">
+            <span class="eyebrow">QUICK SEARCH</span>
+            <button id="toggleAnkiQuickSearch" class="icon-button" type="button"
+              aria-label="Collapse quick search (Command or Control+Alt+Q)" aria-expanded="true"
+              aria-controls="ankiQuickSearchList" title="Collapse quick search (⌘/Ctrl+Alt+Q)">
+              <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+            </button>
+          </div>
+          <div id="ankiQuickSearchList" class="anki-quick-search-list">
+            <div class="empty-state compact">Loading…</div>
+          </div>
+        </aside>
+        <div class="anki-splitter" data-anki-splitter="left" role="separator" aria-orientation="vertical"
+          aria-label="Resize quick search" tabindex="0"></div>
+        <section class="anki-note-list-panel" aria-label="Card list">
+          <div class="anki-note-statusbar">
+            <span id="ankiBrowserStatus" class="anki-browser-status system-message" role="status"></span>
+            <span id="ankiSelectedCount" class="anki-selected-count">0 selected</span>
+          </div>
+          <div class="anki-note-toolbar" role="toolbar" aria-label="Note actions">
+            <div class="anki-note-toolbar-left">
+              <button id="ankiStudyOptions" class="button button-ui button-icon" type="button"
+                aria-label="Open study options" title="Open study options">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sliders"></use></svg>
+              </button>
+              <button id="ankiEditNoteType" class="button button-ui button-icon" type="button"
+                aria-label="Open note type studio" title="Open note type studio">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"></use></svg>
+              </button>
+              <button id="ankiManageDecks" class="button button-ui button-icon" type="button"
+                aria-label="Open deck studio" title="Open deck studio">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-deck"></use></svg>
+              </button>
+              <button id="ankiManageTags" class="button button-ui button-icon" type="button"
+                aria-label="Manage tags" title="Manage tags">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+              </button>
+              <button id="ankiPreviewNote" class="button button-ui button-icon" type="button" disabled
+                aria-label="Preview first selected note or first note" title="Preview first selected note or first note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg>
+              </button>
+              <button id="ankiFindReplace" class="button button-ui button-icon" type="button"
+                aria-label="Find and replace" title="Find and replace">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-find-replace"></use></svg>
+              </button>
+            </div>
+            <div class="anki-note-toolbar-right">
+              <button id="ankiUndo" class="button button-write button-icon" type="button" disabled
+                aria-label="Undo" title="Undo">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-undo"></use></svg>
+              </button>
+              <button id="ankiRedo" class="button button-write button-icon" type="button" disabled
+                aria-label="Redo" title="Redo">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-redo"></use></svg>
+              </button>
+              <button id="ankiFirstNote" class="button button-ui button-icon" type="button" disabled
+                aria-label="First note" title="First note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up-bar"></use></svg>
+              </button>
+              <button id="ankiPreviousNote" class="button button-ui button-icon" type="button" disabled
+                aria-label="Previous note" title="Previous note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+              </button>
+              <button id="ankiNextNote" class="button button-ui button-icon" type="button" disabled
+                aria-label="Next note" title="Next note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-down"></use></svg>
+              </button>
+              <button id="ankiLastNote" class="button button-ui button-icon" type="button" disabled
+                aria-label="Last note" title="Last note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-down-bar"></use></svg>
+              </button>
+              <button id="ankiChangeDeck" class="button button-write button-icon" type="button" disabled
+                aria-label="Change deck" title="Change deck">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-deck"></use></svg>
+              </button>
+              <button id="ankiSetDueDate" class="button button-write button-icon" type="button" disabled
+                aria-label="Set due time" title="Set due time">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+              </button>
+              <button id="ankiSelectedSearch" class="button button-ui button-icon" type="button" disabled
+                aria-label="Search selected notes" title="Search selected notes">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+              </button>
+              <button id="ankiSelectedAi" class="button button-ui button-icon" type="button" disabled
+                aria-label="Send selected notes to AI chat" title="Send selected notes to AI chat">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkles"></use></svg>
+              </button>
+              <button id="ankiSelectedCopy" class="button button-ui button-icon" type="button" disabled
+                aria-label="Copy selected notes" title="Copy selected notes">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg>
+              </button>
+              <button id="ankiSelectedDelete" class="button button-delete button-icon" type="button" disabled
+                aria-label="Delete selected notes; press twice" title="Delete selected notes; press twice">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+              </button>
+              <button id="ankiNewNote" class="button button-write button-icon" type="button"
+                aria-label="New note" title="New note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+              </button>
+            </div>
+          </div>
+          <div id="ankiNoteEditor" class="anki-note-editor" hidden></div>
+          <div id="ankiNoteList" class="anki-note-list" tabindex="-1" aria-label="Anki note table">
+            <div class="empty-state compact">Press "Search" to load cards.</div>
+          </div>
+        </section>
+        <div class="anki-splitter" data-anki-splitter="right" role="separator" aria-orientation="vertical"
+          aria-label="Resize anki agent" tabindex="0"></div>
+        <template data-partial="/html/anki-chat.html"></template>
+      </div>
+    </div>
+
+    <dialog id="agentProposalPreviewDialog" class="dialog dialog-lg agent-proposal-preview-dialog"
+      aria-labelledby="agentProposalPreviewTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <h2 id="agentProposalPreviewTitle" class="dialog-title dialog-title-lg">Preview</h2>
+          <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close"
+            title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div id="agentProposalPreviewContent" class="agent-proposal-preview-content"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiCardPreviewDialog" class="dialog dialog-lg anki-card-preview-dialog"
+      aria-labelledby="ankiCardPreviewTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <h2 id="ankiCardPreviewTitle" class="dialog-title dialog-title-lg">Card preview</h2>
+          <select id="ankiPreviewMode" class="field field-sm field-select" aria-label="Preview mode"></select>
+          <button class="button button-ui button-icon" type="button" data-dialog-close aria-label="Close"
+            title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div id="ankiCardPreviewContent" class="anki-card-preview-content"></div>
+          <footer class="dialog-actions anki-card-preview-actions">
+          <div class="anki-card-preview-nav">
+            <button id="ankiPreviewFirst" class="button button-ui button-icon" type="button" disabled
+              aria-label="First note" title="First note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left-bar"></use></svg>
+            </button>
+            <button id="ankiPreviewPrevious" class="button button-ui button-icon" type="button" disabled
+              aria-label="Previous note" title="Previous note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg>
+            </button>
+          </div>
+          <span id="ankiPreviewPosition" class="anki-card-preview-position" role="status"></span>
+          <div class="anki-card-preview-nav">
+            <button id="ankiPreviewNext" class="button button-ui button-icon" type="button" disabled
+              aria-label="Next note" title="Next note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+            </button>
+            <button id="ankiPreviewLast" class="button button-ui button-icon" type="button" disabled
+              aria-label="Last note" title="Last note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right-bar"></use></svg>
+            </button>
+          </div>
+          </footer>
+        </div>
+      </div>
+    </dialog>
+
+    <template data-partial="/html/anki-deck-dialog.html"></template>
+
+    <template data-partial="/html/anki-tag-dialog.html"></template>
+
+    <template data-partial="/html/anki-study-options-dialog.html"></template>
+
+    <template data-partial="/html/anki-note-type-dialog.html"></template>
+
+    <template data-partial="/html/anki-batch-dialog.html"></template>
+
+    <template data-partial="/html/anki-find-replace-dialog.html"></template>
+
+    <template data-partial="/html/anki-settings-dialog.html"></template>
+
+    <template data-partial="/html/anki-account-dialog.html"></template>
+
+    <template data-partial="/html/sync-dialogs.html"></template>
+
+  </section>
+
+  <script src="/scripts/bootstrap.js"></script>
+</body>
+</html>
