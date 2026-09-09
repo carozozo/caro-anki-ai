@@ -1,0 +1,1115 @@
+/* ============================================================================================
+   Caro Anki frontend styles.
+   Section 1 holds the tokens, section 2 the UI kit — the base style and states of every
+   component family the app is built from (icons, buttons, fields, chips, status messages,
+   dialogs, lists, panels). Section 3 lays those components out per screen and section 4 adapts
+   them to narrow viewports. `frontend/scripts/core/ui-kit.js` is the behaviour half of the same kit, so a new
+   control only needs a kit class here and a kit factory there.
+   ============================================================================================ */
+
+/* ---------------------------------------------------------------- 1. tokens */
+:root {
+  color-scheme: dark;
+  --ink: #e4edf9;
+  --muted: #9aaecb;
+  --line: #293e5d;
+  --paper: #081426;
+  --panel: #0e1d33;
+  --white: #13253f;
+  --accent: #4285e8;
+  --accent-soft: #203e67;
+  --status-pending: #f4d18e;
+  --status-ok: #98dfc1;
+  --status-warn: #ffc27a;
+  --status-warn-soft: #4d3319;
+  --status-error: #ffb5bd;
+  --shadow: 0 16px 48px rgba(0, 6, 18, .25);
+  /* The one dim every disabled control wears, so "this cannot be used right now" reads the same
+     on a button, a field and a chip. */
+  --disabled-opacity: .48;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  min-width: 320px;
+  margin: 0;
+  padding-top: 74px;
+  color: var(--ink);
+  background: var(--paper);
+  font: 15px/1.5 Arial, sans-serif;
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+/* Every form control, not just a button: an input or a select that cannot be typed in must look it. */
+button:disabled, input:disabled, textarea:disabled, select:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+button:focus-visible { outline: 2px solid #9fc5ff; outline-offset: 3px; }
+.muted { color: var(--muted); font: 11px/1.3 Arial, sans-serif; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ---------------------------------------------------------------- 2. UI kit */
+
+/* 2.1 icons — one sprite of <symbol>s, referenced through `icon(name)` or `<use href="#i-*">`.
+   `flex: none` keeps a glyph from shrinking inside a flex parent. */
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icon { flex: none; }
+
+/* 2.2 buttons — text buttons carry a colour variant; icon-only buttons are square targets that keep
+   those same variants. Labelled icon buttons preserve their text for actions where direction matters. */
+.button {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font: 700 12px/1 Arial, sans-serif;
+  letter-spacing: .04em;
+}
+.button-primary { color: #fff; background: #2865bd; }
+.button-dark { color: #fff; background: #245394; }
+.button-quiet { color: var(--muted); background: transparent; border-color: var(--line); }
+.button-warn { color: var(--status-warn); background: var(--status-warn-soft); border-color: var(--status-warn); }
+.button-danger { color: #fff; background: #b33a48; border-color: #b33a48; }
+.button-confirm { color: #fff; background: var(--accent); border-color: var(--accent); }
+.button-with-icon { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.button-with-icon svg { width: 14px; height: 14px; }
+
+.button-icon, .icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--icon-button-size, 26px);
+  min-width: var(--icon-button-size, 26px);
+  min-height: var(--icon-button-size, 26px);
+  height: var(--icon-button-size, 26px);
+  padding: 0;
+  border-radius: 5px;
+}
+.button-icon { --icon-button-size: 38px; --icon-button-glyph: 16px; }
+.icon-button-xs { --icon-button-size: 20px; --icon-button-glyph: 12px; }
+.icon-button-sm { --icon-button-size: 24px; --icon-button-glyph: 13px; }
+.button-icon svg, .icon-button svg {
+  flex: none;
+  width: var(--icon-button-glyph, 14px);
+  height: var(--icon-button-glyph, 14px);
+}
+/* A bare icon control — the compact panel/row affordance that takes no text-button variant. */
+.icon-button {
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--white);
+  transition: color .15s ease, border-color .15s ease;
+}
+.icon-button:hover, .icon-button:focus-visible { color: #9fc5ff; border-color: var(--accent-soft); }
+.icon-button-round { border-color: transparent; border-radius: 999px; background: transparent; }
+
+@keyframes icon-spin { to { transform: rotate(1turn); } }
+.button-icon.is-syncing:disabled { opacity: 1; cursor: progress; }
+.button-icon.is-syncing svg { animation: icon-spin .9s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .button-icon.is-syncing svg,
+  .chat-run-spinner,
+  .operation.is-running > summary::before,
+  .dialog-progress:not([value]) { animation: none; }
+  /* The window still lingers for its result here; without motion the reason it lingers is gone. */
+  .dialog.is-closing { animation-duration: .01s; }
+}
+
+/* 2.3 fields — every input, select and textarea shares the `.field` skeleton; a size variant and a
+   context rule add the rest. `optionsHtml()` in ui-kit.js renders the options of every select. */
+.field {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+}
+.field:focus { border-color: var(--accent); }
+.field::placeholder { color: var(--muted); }
+/* A disabled field is dimmed by the base rule and flattened here, so it reads as inert rather than as an
+   empty field waiting for input: no accent hover, no focus ring, and the page colour, not the field one. */
+.field:disabled { border-color: var(--line); color: var(--muted); background: var(--paper); box-shadow: none; }
+.field.field-bare:disabled { background: transparent; }
+.field-lg { min-height: 38px; padding: 0 12px; }
+.field-md { min-height: 34px; padding: 6px 9px; font: 12px/1.3 Arial, sans-serif; }
+.field-sm { padding: 4px 6px; font: 12px/1.2 Arial, sans-serif; }
+.field-bare { border: 0; background: transparent; }
+.field-select { min-width: 160px; max-width: 320px; }
+.field-select:not(:disabled):hover, .field-select:not(:disabled):focus-visible { border-color: var(--accent); }
+/* Card-content fields keep the face the card template itself renders with (Arial) and get an accent focus ring. */
+.card-input {
+  padding: 8px 9px;
+  border-radius: 4px;
+  font: 14px/1.35 Arial, sans-serif;
+}
+.card-input:focus { border-color: #79adfb; box-shadow: 0 0 0 2px #4285e833; }
+.card-input[aria-invalid="true"] { border-color: #e68a9c; }
+.card-field { display: grid; gap: 4px; padding: 7px 0; border: 0; border-top: 1px solid var(--line); }
+.card-field:first-child { border-top: 0; }
+.card-field > span { padding: 0; color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .06em; }
+.card-fields { padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: #0b192e; }
+
+/* 2.4 chips and text-only buttons — content affordances that intentionally stay text. */
+.locate-note {
+  max-width: 100%; padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--white); color: var(--accent);
+  font: 700 11px/1.7 Arial, sans-serif; letter-spacing: .02em;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.locate-note:hover { border-color: var(--accent); background: var(--line); }
+.anki-tag-chip {
+  display: inline-flex; align-items: center; gap: 3px; max-width: 100%; min-height: 20px;
+  padding: 1px 4px 1px 9px; border: 1px solid var(--accent-soft); border-radius: 999px;
+  color: #9fc5ff; background: var(--accent-soft); font: 700 11px/1.7 Arial, sans-serif;
+  letter-spacing: .02em; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.anki-tag-chip:hover, .anki-tag-chip:focus-visible {
+  border-color: #b33a48; color: #ffb5bd; background: #3b2531; outline: none;
+}
+.anki-tag-chip svg { width: 9px; height: 9px; }
+
+/* 2.5 status messages — one vocabulary and a reserved line for every system-generated status. The block
+   padding is the minimum every status gets: a line of text never sits flush against what is above or below it,
+   so a status landing in a new host needs no spacing rule of its own. It is unconditional rather than gated on
+   content, because an empty status reserves its `1lh` line and a filled one is that line plus this padding —
+   the same box either way once it has text. A host wanting more air (the chat strip) or none at all (the
+   status pill, which sizes itself with `min-height`) overrides `padding` itself. */
+.system-message { min-block-size: 1lh; padding-block: 2px; color: var(--muted); }
+.system-message.is-pending { color: var(--status-pending); }
+.system-message.is-ok { color: var(--status-ok); }
+.system-message.is-warn { color: var(--status-warn); }
+.system-message.is-error { color: var(--status-error); }
+.status-pill {
+  display: inline-flex; align-items: center; min-height: 25px; padding: 0 9px; border-radius: 999px;
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em; text-transform: uppercase;
+}
+.status-pill.is-pending { background: #3a3024; }
+.status-pill.is-ok { background: #173b39; }
+.status-pill.is-warn { background: var(--status-warn-soft); }
+.status-pill.is-error { background: #492a3b; }
+
+/* 2.6 dialogs — every modal is a native <dialog> built from these blocks and opened through
+   `CaroUI.dialogs.create()`, which owns Escape, the backdrop and `[data-dialog-close]`. */
+dialog {
+  position: fixed; top: 150px; bottom: auto; max-height: calc(100vh - 166px); margin: 0 auto; padding: 0;
+  color: var(--ink); border: 1px solid var(--line); border-radius: 7px; box-shadow: var(--shadow);
+}
+dialog::backdrop { background: rgba(0, 6, 18, .65); }
+.dialog { color: var(--ink); background: var(--panel); overflow: hidden; }
+.dialog[open] { display: flex; flex-direction: column; }
+.dialog-sm { width: min(380px, calc(100vw - 40px)); }
+/* Wide enough for the one actions row that carries three labelled buttons (the sync direction choice). */
+.dialog-md { width: min(460px, calc(100vw - 40px)); }
+.dialog-lg { width: fit-content; max-width: calc(100vw - 32px); }
+.dialog-body {
+  --dialog-pad-x: 22px; --dialog-pad-y: 20px;
+  display: flex; flex-direction: column; min-height: 0; max-height: calc(100vh - 168px); overflow: hidden;
+}
+.dialog-lg .dialog-body { width: clamp(520px, 58vw, 720px); max-width: calc(100vw - 32px); }
+.dialog-head {
+  --dialog-head-pad-b: 15px;
+  flex: none; display: flex; align-items: center; gap: 8px;
+  padding: var(--dialog-pad-y) var(--dialog-pad-x) var(--dialog-head-pad-b);
+  background: var(--panel); border-bottom: 1px solid var(--line);
+}
+.dialog-content {
+  display: flex; flex: 1 1 auto; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto;
+  padding: 12px var(--dialog-pad-x) 18px;
+}
+.dialog-title { flex: 1; margin: 0; font: 700 14px/1.2 Arial, sans-serif; }
+.dialog-title-lg { flex: 0 0 auto; font: 700 18px/1.2 Arial, sans-serif; letter-spacing: .01em; }
+.dialog-head .button-icon { margin-left: auto; }
+.dialog-head > div { flex: 1 1 auto; min-width: 0; }
+.dialog-head-title-row { display: flex; align-items: baseline; gap: 12px; flex: 1 1 auto; min-width: 0; }
+.dialog-head-title-row .dialog-title { flex: 0 0 auto; }
+.dialog-head-title-row .system-message { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.dialog-head-title-row .system-message:empty { display: none; }
+.dialog-head-statuses { display: flex; flex: 1 1 auto; gap: 12px; min-width: 0; }
+.dialog-head-statuses .system-message { margin: 0; }
+.dialog-hint { margin: 0; font: 12px/1.45 Arial, sans-serif; }
+#ankiSyncProgressText { white-space: pre-line; }
+.dialog-field { display: flex; flex-direction: column; gap: 6px; }
+.dialog-label { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.dialog-help, .dialog-error { margin: 0; font: 11px/1.45 Arial, sans-serif; }
+.dialog-help { color: var(--muted); }
+.dialog-keys {
+  margin: 0; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--muted); font: 10px/1.4 Arial, sans-serif;
+}
+.dialog-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+/* The one dialog block that reports work in flight. A full sync is the only kind Anki reports a byte total
+   for, so it is the only kind that gets a determinate fill from `value`; a merge sends change chunks and
+   reports no total, and that is also the one state `appearance: none` leaves completely empty, so it draws
+   its own band and sweeps it across the track instead of relying on the control's own animation. */
+.dialog-progress {
+  width: 100%; height: 6px; border: 0; border-radius: 999px; background: var(--line);
+  appearance: none; overflow: hidden;
+}
+.dialog-progress::-webkit-progress-bar { background: transparent; border-radius: 999px; }
+.dialog-progress::-webkit-progress-value { background: var(--accent); }
+.dialog-progress:not([value]) {
+  background-image: linear-gradient(90deg, transparent 35%, var(--accent) 35% 65%, transparent 65%);
+  background-size: 60% 100%; background-repeat: no-repeat;
+  animation: progress-sweep 1.3s linear infinite;
+}
+@keyframes progress-sweep { from { background-position: -60% 0; } to { background-position: 160% 0; } }
+/* A finished sync holds its window for as long as the result needs to be read, then goes. The fade is one
+   more state of the same dialog, set by `runAnkiSync` and cleared by the factory's own close hook. */
+.dialog.is-closing { animation: dialog-fade .25s ease-in forwards; pointer-events: none; }
+@keyframes dialog-fade { to { opacity: 0; } }
+
+/* 2.7 lists — the shared row shell, empty state and message bubble of every panel. */
+.empty-state { display: grid; justify-items: start; gap: 9px; max-width: 330px; color: var(--muted); }
+.empty-state.compact { font-size: 13px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.eyebrow { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .12em; }
+.operation { min-width: 0; font-size: 12px; color: var(--muted); }
+.operation > summary { cursor: pointer; }
+.operation pre { max-height: 240px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* The raw record behind a step, for tracking down a slow or surprising one without a log file. */
+.operation-raw { margin-top: 6px; }
+.operation-raw > summary, .operation-save-preview-path {
+  color: var(--muted);
+  font: 700 10px/1.7 Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase;
+}
+.operation-raw > summary { cursor: pointer; }
+.operation-raw > pre, .operation-save-preview > pre {
+  max-height: 320px; margin: 4px 0 0; padding: 8px;
+  border: 1px solid var(--line); border-radius: 4px; background: #0b192e;
+}
+/* Card-profile proposals remain inline. Instruction and skill proposals place the same content in an inert
+   template until their Preview button opens it in the dialog below. */
+.operation-save-preview > pre { overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* What a run proposed, under the reply that asked for it. The agent still writes it with apply_instructions /
+   apply_skills once the user agrees in words; Preview only opens a read-only modal and holds no write payload. */
+.operation-saves { display: grid; gap: 10px; margin-top: 6px; }
+.operation-save { display: grid; gap: 4px; }
+.operation-save-name { font-size: 13px; }
+.operation-save-preview { display: grid; gap: 2px; }
+.operation-save-preview-button { justify-self: start; }
+.agent-proposal-preview-dialog { top: 48px; max-height: calc(100vh - 96px); }
+.agent-proposal-preview-dialog .dialog-body {
+  width: min(920px, calc(100vw - 32px)); max-height: calc(100vh - 96px);
+}
+.agent-proposal-preview-content { display: grid; gap: 12px; min-width: 0; }
+.agent-proposal-preview-content .operation-save-preview > pre { max-height: none; overflow: visible; }
+/* Term chips always sit in a flex row — a bare grid item with `overflow: hidden` gets
+   `min-height: 0`, so its row collapses and the label disappears. */
+.operation-notes {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);
+}
+.message-list {
+  display: grid; flex: 1; align-content: center; gap: 14px; min-height: 0; overflow-y: auto; padding: 40px 0;
+}
+.message-list:has(.message, .chat-step, .chat-run) { align-content: start; overflow-y: auto; }
+.message {
+  width: min(86%, 620px); padding: 13px 15px; border: 1px solid var(--line); border-radius: 7px;
+  background: var(--white);
+}
+.message-user { justify-self: end; border-color: #305887; background: #183457; }
+.message > span {
+  display: block; margin-bottom: 5px; color: var(--muted);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+}
+.message p { margin: 0; white-space: pre-wrap; }
+/* The answer streams into the bubble token by token; the ellipsis holds the line until the first one. */
+.message-stream:empty::before { content: '…'; color: var(--muted); }
+.message-retry { margin-top: 10px; }
+
+/* 2.8 markdown — the one place an agent's own formatting is rendered (`frontend/scripts/chat/markdown.js`). Every
+   rule is scoped to `.message-body`, so nothing here reaches the rest of the page and the bubble keeps
+   its own scale; the table scrolls sideways instead of widening the bubble. */
+.message-body { min-width: 0; overflow-wrap: anywhere; }
+.message-body > :first-child { margin-top: 0; }
+.message-body > :last-child { margin-bottom: 0; }
+.message-body p, .message-body ul, .message-body ol, .message-body blockquote,
+.message-body .md-code, .message-body .md-table { margin: 0 0 10px; }
+.message-body h1, .message-body h2, .message-body h3, .message-body h4, .message-body h5,
+.message-body h6 { margin: 14px 0 8px; font: 700 15px/1.3 Arial, sans-serif; }
+.message-body h1 { font-size: 18px; }
+.message-body h2 { font-size: 16.5px; }
+.message-body h3 { font-size: 15.5px; }
+.message-body h4, .message-body h5, .message-body h6 { font-size: 14.5px; color: var(--muted); }
+.message-body ul, .message-body ol { padding-left: 21px; }
+.message-body li + li { margin-top: 4px; }
+.message-body li > ul, .message-body li > ol { margin: 4px 0 0; }
+.message-body code {
+  padding: 1px 5px; border-radius: 3px; background: #0b192e;
+  font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.message-body .md-code {
+  padding: 9px 11px; overflow-x: auto; border: 1px solid var(--line); border-radius: 5px; background: #0b192e;
+}
+.message-body .md-code code { padding: 0; background: none; white-space: pre; }
+.message-body blockquote { padding: 2px 0 2px 11px; border-left: 2px solid var(--accent-soft); color: var(--muted); }
+.message-body hr { margin: 12px 0; border: 0; border-top: 1px solid var(--line); }
+.message-body a { color: #9fc5ff; }
+.message-body .md-table { overflow-x: auto; }
+.message-body table { border-collapse: collapse; font: 13px/1.4 Arial, sans-serif; }
+.message-body th, .message-body td { padding: 5px 9px; border: 1px solid var(--line); text-align: left; }
+.message-body th { background: var(--panel); color: var(--muted); font-weight: 700; }
+.message-body .md-right { text-align: right; }
+.message-body .md-center { text-align: center; }
+.session-list {
+  display: grid; gap: 8px; align-content: start; flex: 1; min-height: 0; overflow-y: auto;
+  margin-top: 24px; padding: 0 22px;
+}
+.session-row { position: relative; }
+.session-item {
+  width: 100%; padding: 12px 42px 12px 13px; border: 1px solid transparent; border-radius: 5px;
+  color: var(--ink); text-align: left; background: transparent;
+}
+.session-item:hover, .session-item.active { border-color: var(--accent-soft); background: var(--white); }
+.session-item strong {
+  display: block; overflow: hidden; color: var(--muted);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.session-item time { display: block; margin-top: 5px; color: var(--muted); font: 11px/1.2 Arial, sans-serif; }
+/* The delete affordance stays hidden until the row is hovered or the button is focused. The armed
+   (button-danger) state keeps it visible so the second click of the confirm stays reachable. */
+.session-delete { position: absolute; top: 9px; right: 9px; opacity: 0; transition: opacity .12s ease; }
+.session-row:hover .session-delete, .session-delete:focus-visible,
+.session-delete.button-danger { opacity: 1; }
+.session-delete:hover, .session-delete.button-danger { color: #fff; background: #b33a48; border-color: #b33a48; }
+@media (hover: none) { .session-delete { opacity: 1; } }
+.anki-query-history {
+  position: absolute; z-index: 10; top: calc(100% + 4px); right: 0; left: 0; max-height: 260px;
+  overflow-y: auto; border: 1px solid var(--line); border-radius: 5px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.anki-query-history-item {
+  display: block; width: 100%; padding: 9px 12px; overflow: hidden; border: 0; color: var(--ink);
+  background: transparent; font: inherit; text-align: left;
+  text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
+}
+.anki-query-history-item:hover, .anki-query-history-item.active { background: var(--accent-soft); }
+
+/* 2.8 panels and splitters — a panel is a flex column that owns its own scroller; a splitter is a
+   6px drag handle between two of them. */
+.sessions-panel { display: flex; flex-direction: column; overflow: hidden; }
+.sessions-panel .panel-heading { padding: 28px 22px 0; }
+.conversation-panel {
+  display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden;
+  padding: 30px clamp(22px, 4vw, 62px); background: var(--panel);
+}
+.anki-splitter {
+  position: relative; z-index: 1; padding: 0; border: 0; cursor: col-resize;
+  background: transparent; touch-action: none;
+}
+.anki-splitter::after {
+  content: ''; position: absolute; z-index: 0; inset: 0 2px; border-radius: 3px;
+  background: transparent; transition: background .15s ease;
+}
+.anki-splitter::before {
+  content: ''; position: absolute; z-index: 1; top: 50%; left: 50%; width: 6px; height: 18px;
+  transform: translate(-50%, -50%); opacity: .55;
+  background-image: radial-gradient(circle, var(--muted) 1.5px, transparent 1.6px); background-size: 6px 6px;
+  transition: opacity .15s ease, background-image .15s ease;
+}
+.anki-splitter:hover::after, .anki-splitter:focus-visible::after, .anki-splitter.active::after {
+  background: var(--accent);
+}
+.anki-splitter:hover::before, .anki-splitter:focus-visible::before, .anki-splitter.active::before {
+  opacity: 1; background-image: radial-gradient(circle, #9fc5ff 1.5px, transparent 1.6px);
+}
+.anki-splitter:focus-visible { outline: none; }
+body.is-resizing { cursor: col-resize; }
+body.is-resizing * { user-select: none; }
+
+/* ---------------------------------------------------------------- 3. screens */
+
+/* 3.1 topbar */
+.topbar {
+  position: fixed; z-index: 20; inset: 0 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 74px; padding: 0 28px; border-bottom: 1px solid var(--line); background: #0b192e;
+}
+.brand { color: var(--ink); font: 700 16px/1.1 Arial, sans-serif; letter-spacing: .08em; text-decoration: none; }
+.brand span { color: var(--accent); }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+/* 3.2 browser shell */
+.anki-browser-pannel { height: calc(100vh - 74px); min-height: 0; }
+.anki-browser { display: flex; width: 100%; height: 100%; min-height: 0; flex-direction: column; }
+.anki-search { display: flex; gap: 8px; padding: 22px 24px 16px; }
+.anki-query-field { position: relative; flex: 1; min-width: 0; }
+.anki-browser-body {
+  position: relative; display: grid;
+  --quick-track: var(--anki-quick-panel, 150px);
+  --quick-handle: 6px;
+  --chat-track: var(--anki-chat-panel, clamp(300px, 32vw, 480px));
+  --chat-handle: 6px;
+  grid-template-columns: var(--quick-track) var(--quick-handle) minmax(0, 1fr)
+    var(--chat-handle) var(--chat-track);
+  flex: 1; min-height: 0; border-top: 1px solid var(--line);
+}
+/* Collapsing a panel swaps in a 46px rail and hides its splitter (visibility, not display, so the
+   remaining children keep their grid tracks). Never collapse a panel to 0 width. */
+.anki-browser-body.is-quick-collapsed { --quick-track: 46px; --quick-handle: 0px; }
+.anki-browser-body.is-chat-collapsed { --chat-track: 46px; --chat-handle: 0px; }
+.anki-browser-body.is-quick-collapsed .anki-splitter[data-anki-splitter="left"],
+.anki-browser-body.is-chat-collapsed .anki-splitter[data-anki-splitter="right"] {
+  visibility: hidden; pointer-events: none;
+}
+.anki-quick-search {
+  display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden;
+  border-right: 1px solid var(--line);
+}
+.anki-quick-search .panel-heading { padding: 14px 14px 0; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .panel-heading { justify-content: center; padding: 14px 0 0; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .eyebrow,
+.anki-browser-body.is-quick-collapsed .anki-quick-search-list { display: none; }
+.anki-browser-body.is-quick-collapsed .anki-quick-search .icon-button svg { transform: rotate(180deg); }
+.anki-quick-search-list {
+  display: grid; align-content: start; gap: 14px; flex: 1; min-height: 0; overflow-y: auto; padding: 12px 14px;
+}
+.anki-quick-group { display: grid; gap: 7px; align-content: start; }
+.anki-quick-group-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; padding: 5px 2px; border: 0; border-bottom: 1px solid var(--line);
+  color: var(--muted); background: transparent; cursor: grab;
+}
+.anki-quick-group-head:hover, .anki-quick-group-head:focus-visible { color: #9fc5ff; border-bottom-color: var(--accent-soft); }
+.anki-quick-group-head svg { flex: none; width: 13px; height: 13px; transition: transform .2s ease; }
+.anki-quick-group.is-expanded .anki-quick-group-head svg { transform: rotate(180deg); }
+.anki-quick-group.is-quick-group-dragging { opacity: .45; }
+.anki-quick-group.is-quick-group-drop-before { box-shadow: inset 0 3px 0 var(--accent); }
+.anki-quick-group.is-quick-group-drop-after { box-shadow: inset 0 -3px 0 var(--accent); }
+body.is-reordering-quick-groups { cursor: grabbing; user-select: none; }
+.anki-quick-group-body { display: none; gap: 5px; align-content: start; }
+.anki-quick-group.is-expanded .anki-quick-group-body { display: grid; }
+.anki-quick-item {
+  width: 100%; padding: 8px 10px; border: 1px solid transparent; border-radius: 5px;
+  color: var(--muted); text-align: left; background: transparent;
+  font: 12px/1.3 Arial, sans-serif; overflow-wrap: anywhere;
+}
+.anki-quick-item:hover, .anki-quick-item:focus-visible {
+  color: #9fc5ff; border-color: var(--accent-soft); background: var(--white);
+}
+.anki-quick-item.is-flag-item { color: #000; background: var(--anki-flag-color); }
+.anki-quick-item.is-flag-item:hover, .anki-quick-item.is-flag-item:focus-visible {
+  color: #000; border-color: #000; background: var(--anki-flag-color);
+}
+.anki-note-list-panel { display: flex; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden; }
+.anki-note-list-panel.is-editing .anki-note-list { display: none; }
+/* The status bar sits above the table: db operation messages left, the selected count right. */
+.anki-note-statusbar {
+  display: flex; align-items: center; gap: 10px; flex: none; padding: 12px 16px; border-bottom: 1px solid var(--line);
+}
+.anki-selected-count {
+  flex: none; margin-left: auto; color: #9fc5ff; font: 700 10px/1 Arial, sans-serif; letter-spacing: .04em;
+}
+.anki-note-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none; min-height: 42px;
+  padding: 12px; border-bottom: 1px solid var(--line);
+}
+.anki-note-toolbar-left, .anki-note-toolbar-right { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.anki-note-toolbar-left .field-select { width: min(240px, 32vw); }
+.anki-note-toolbar-right { margin-left: auto; }
+.anki-card-preview-dialog { width: min(980px, calc(100vw - 32px)); }
+/* The preview owns its whole window, so its body states its own width instead of the shared `.dialog-lg`
+   clamp — otherwise the panel is wider than the content and the frame stops lining up with its footer. */
+.anki-card-preview-dialog .dialog-body { width: auto; }
+.anki-card-preview-content { display: grid; gap: 16px; min-width: 0; }
+.anki-card-preview-card { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.anki-card-preview-card:first-child { padding-top: 0; border-top: 0; }
+.anki-card-preview-card h3, .anki-card-preview-side h4 { margin: 0; }
+.anki-card-preview-card h3 { color: var(--ink); font: 700 14px/1.3 Arial, sans-serif; }
+.anki-card-preview-side { display: grid; gap: 5px; min-width: 0; }
+.anki-card-preview-side h4 { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+/* The frame carries the card's own page, so it never draws a surface of its own: the document inside states
+   it (`previewDocument`), and this only has to hold that page's size and outline it. */
+.anki-card-preview-frame {
+  width: 100%; height: clamp(240px, 46vh, 560px); border: 1px solid var(--line); background: var(--paper);
+}
+.anki-card-preview-actions { justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--line); }
+.anki-card-preview-nav { display: flex; align-items: center; gap: 6px; }
+.anki-card-preview-position {
+  color: var(--muted); font: 11px/1 Arial, sans-serif; font-variant-numeric: tabular-nums;
+}
+.anki-template-source {
+  display: block; min-height: 250px; padding: 12px; resize: vertical; font: 12px/1.5 ui-monospace, SFMono-Regular,
+    Menlo, Monaco, Consolas, monospace; tab-size: 2;
+}
+.anki-note-type-dialog { width: min(1040px, calc(100vw - 32px)); }
+/* Note Type Studio holds the app's tallest content — one note type's whole field set — so it is the one dialog
+   whose own box has to stay inside the window it was opened in: the head, the message and the tabs hold their
+   place, and the field list is the part that gives way instead of pushing the dialog's bottom edge past the
+   window. Only if even that is not enough does the body itself scroll. */
+.anki-note-type-dialog .dialog-body { width: 100%; }
+.anki-note-type-dialog .anki-entity-section { flex: none; }
+/* The message is written on the title's own line rather than a row of its own: the head is the one block nothing
+   scrolls, so the answer to a save is where the user is already looking. */
+/* The studios whose header is one control that changes what it is — the collection's list, the open one's name, or
+   a name for a new one — share this row: the confirm button that takes the step and the return button that gives
+   the list back sit beside whichever of the three is showing, and a destructive delete stays at the far end, apart
+   from the two the row exists for. Note Type Studio, its card templates, Deck Studio, Study Options and the
+   Collection Profile picker in Settings are all built from it; only the last one adds a control of its own to the
+   row, the switch that opens the collection the list is showing. */
+.anki-picker-row { display: flex; align-items: center; gap: 8px; }
+.anki-note-type-panel {
+  display: flex; flex-direction: column; gap: 9px; flex: 1; min-height: 0; overflow-y: auto;
+}
+/* The field list is the one pane whose height the user sets: fifteen fields are read at a height they chose
+   instead of at whatever the dialog's own maximum happens to leave. It is also the only pane allowed to shrink,
+   so the height it gives up is what keeps the dialog inside the window. */
+.anki-note-type-panel-fields {
+  flex: 0 1 auto; height: 46vh; min-height: 140px; max-height: 62vh; resize: vertical;
+}
+.anki-deck-dialog { width: min(520px, calc(100vw - 32px)); }
+.anki-tag-dialog { width: min(520px, calc(100vw - 32px)); }
+/* Study Options is the third studio: the same picker as the other two, plus the preset's own form, which
+   is its schema rendered in two columns instead of a bespoke layout per option. */
+.anki-study-options-dialog { width: min(760px, calc(100vw - 32px)); }
+.anki-study-options-dialog .dialog-body { width: 100%; }
+.anki-entity-sections { display: flex; flex-direction: column; gap: 12px; }
+.anki-study-option-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+.anki-template-editor { display: flex; flex-direction: column; gap: 9px; }
+.anki-template-source-labels { display: flex; align-items: center; gap: 4px; }
+.anki-template-source-label { color: var(--muted); }
+.anki-template-source-label.is-active { color: var(--ink); background: var(--white); box-shadow: inset 0 -2px var(--accent); }
+/* A section divides itself from the section above it, never from the head: the head already draws that line,
+   and two of them 12px apart is what made the same dialog look different from one that starts with a plain
+   block. The leading section keeps the body's own gap as its spacing. */
+.anki-entity-section { display: flex; flex-direction: column; gap: 9px; padding-top: 12px; border-top: 1px solid var(--line); }
+.dialog-content > .anki-entity-section:first-child { padding-top: 0; border-top: 0; }
+.anki-entity-section-head { display: flex; align-items: center; gap: 10px; }
+.anki-entity-section-head .button { margin-left: auto; }
+.anki-deck-study-option-picker .field { flex: 0 1 320px; }
+.anki-deck-study-option-picker .button { margin-left: 0; }
+.anki-inline-control { display: flex; align-items: center; gap: 8px; }
+/* A row pairs a field with the icon button that acts on it, and the two are one control: the row states one height
+   (the toolbar button's own 38px) and the field takes it instead of keeping its own shorter line box, so a select
+   and the button beside it line up. Note Type Studio, Deck Studio, Study Options and the collection profiles all
+   arrange their controls this way; the dense field list keeps its own smaller rows. */
+.anki-picker-row .field,
+.anki-entity-section-head .field,
+.anki-inline-control .field { flex: 1; min-width: 0; min-height: var(--row-control-height, 38px); }
+.anki-schema-list { display: flex; flex-direction: column; gap: 8px; }
+/* One field is a row of controls plus the settings it owns, which stay folded until the row's own toggle is
+   used: Anki's ``Fields`` screen is a list and a settings pane, and this is that pane under its row. */
+.anki-schema-row { display: flex; flex-direction: column; }
+.anki-schema-row-main { display: flex; align-items: center; gap: 7px; }
+.anki-schema-row-main .field { min-width: 0; flex: 1; }
+/* Which of the note type's fields Anki sorts the note by is one radio per row, at the head of the row it names. */
+.anki-field-sort {
+  flex: none; width: 14px; height: 14px; margin: 0; accent-color: var(--accent); cursor: pointer;
+}
+.anki-field-settings {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px;
+  margin: 6px 0 2px 8px; padding: 10px 12px; border-left: 2px solid var(--line); background: var(--white);
+}
+.anki-field-toggles { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.anki-field-description, .anki-field-toggles { grid-column: 1 / -1; }
+.anki-field-narrow { max-width: 110px; }
+.anki-field-settings .anki-setting-check { padding: 0; border-top: 0; }
+@media (max-width: 700px) {
+  .anki-study-option-grid { grid-template-columns: 1fr; }
+  .anki-inline-control { flex-wrap: wrap; }
+}
+.anki-note-list { flex: 1; min-width: 0; min-height: 0; overflow: auto; }
+.anki-browser-status { font: 11px/1.4 Arial, sans-serif; overflow-wrap: anywhere; }
+
+/* 3.3 note table */
+.anki-note-table { width: 100%; min-width: 1344px; border-collapse: collapse; table-layout: fixed; }
+.anki-note-table col.anki-note-col-index { width: 60px; }
+.anki-note-table col.anki-note-col-flag { width: 56px; }
+.anki-note-table col.anki-note-col-note-type { width: 120px; }
+.anki-note-table col.anki-note-col-tags { width: 120px; }
+.anki-note-table col.anki-note-col-deck { width: 90px; }
+.anki-note-table col.anki-note-col-term { width: 210px; }
+.anki-note-table col.anki-note-col-created, .anki-note-table col.anki-note-col-due { width: 180px; }
+.anki-note-table th, .anki-note-table td {
+  height: 42px; padding: 7px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  overflow: hidden; text-align: left; text-overflow: ellipsis; vertical-align: middle; white-space: nowrap;
+}
+.anki-note-table th:last-child, .anki-note-table td:last-child { border-right: 0; }
+.anki-note-table th {
+  position: sticky; top: 0; z-index: 2; color: var(--muted); background: var(--paper);
+  font: 700 10px/1 Arial, sans-serif; letter-spacing: .05em;
+  box-shadow: inset -1px 0 0 var(--line), inset 0 -1px 0 var(--line);
+}
+.anki-note-table th:last-child { box-shadow: inset 0 -1px 0 var(--line); }
+.anki-note-table .anki-note-index { text-align: center; }
+/* Anki user flags are numbered 1-7 with a colour each; the quick-search buttons reuse the exact palette. */
+.anki-note-table th.anki-note-flag, .anki-note-table tbody td.anki-note-flag-cell { text-align: center; }
+.anki-note-flag-badge {
+  display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 9px;
+  color: #fff; background: var(--anki-flag-color); font: 700 10px/1.4 Arial, sans-serif;
+}
+.is-flag-1 { --anki-flag-color: #d0453e; }
+.is-flag-2 { --anki-flag-color: #e08a1e; }
+.is-flag-3 { --anki-flag-color: #3fa34d; }
+.is-flag-4 { --anki-flag-color: #3b7dd8; }
+.is-flag-5 { --anki-flag-color: #d16bb0; }
+.is-flag-6 { --anki-flag-color: #29a8a2; }
+.is-flag-7 { --anki-flag-color: #8a5cd1; }
+/* The whole row is the selection affordance; the row number is just a visual index. */
+.anki-note-table tbody tr { cursor: pointer; }
+.anki-note-table tbody td.anki-note-index { color: var(--muted); user-select: none; }
+.anki-note-table tbody td:not(.anki-note-index) { user-select: text; }
+.anki-note-table tbody tr:hover td.anki-note-index,
+.anki-note-table tbody tr.selected td.anki-note-index { color: var(--accent); }
+.anki-note-table tbody tr:hover { background: var(--white); }
+/* Selected rows must read at a glance: tinted fill, left accent rail, and a filled index badge. */
+.anki-note-table tbody tr.selected, .anki-note-table tbody tr.selected:hover { background: rgba(66, 133, 232, .22); }
+.anki-note-table tbody tr.selected td { border-bottom-color: var(--accent-soft); }
+.anki-note-table tbody tr.selected td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.anki-note-table tbody tr.selected td.anki-note-index {
+  color: var(--ink); font-weight: 700; background: rgba(66, 133, 232, .32);
+}
+.anki-note-table tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.anki-note-table tbody tr.anki-note-spacer { cursor: default; }
+.anki-note-table tbody tr.anki-note-spacer td { height: 0; padding: 0; border: 0; }
+.anki-note-table tbody tr.anki-note-empty { cursor: default; }
+.anki-note-table tbody tr.anki-note-empty td { padding: 22px 10px; color: var(--muted); text-align: center; cursor: default; }
+.anki-note-table th.anki-note-sortable { cursor: pointer; }
+.anki-note-table th.anki-note-sortable:hover, .anki-note-table th.anki-note-sortable:focus-visible {
+  color: var(--accent); background: var(--white); outline: none;
+}
+.anki-note-table th.anki-note-sortable:focus-visible { box-shadow: inset 0 0 0 2px var(--accent-soft); }
+.anki-note-table th.anki-note-sortable.is-sorted-asc,
+.anki-note-table th.anki-note-sortable.is-sorted-desc { color: var(--accent); }
+.anki-note-sort-label { vertical-align: middle; }
+.anki-note-sort-indicator { display: none; margin-left: 4px; color: var(--accent); font-size: 9px; vertical-align: middle; }
+.anki-note-table th.is-sorted-asc .anki-note-sort-indicator,
+.anki-note-table th.is-sorted-desc .anki-note-sort-indicator { display: inline; }
+.anki-note-table th.is-column-draggable { cursor: grab; }
+.anki-note-table th.is-column-dragging { opacity: .45; cursor: grabbing; }
+.anki-note-table th.is-column-draggable:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: -2px; }
+.anki-note-table th.is-column-drop-before {
+  box-shadow: inset 3px 0 0 var(--accent), inset 0 -1px 0 var(--line);
+}
+.anki-note-table th.is-column-drop-after {
+  box-shadow: inset -3px 0 0 var(--accent), inset 0 -1px 0 var(--line);
+}
+body.is-reordering-columns { cursor: grabbing; user-select: none; }
+/* Higher specificity than `th.anki-note-sortable` so every resizable header shows the col-resize cursor. */
+.anki-note-table th.is-column-boundary, .anki-note-table td.is-column-boundary,
+.anki-note-table th.is-column-resizing, .anki-note-table td.is-column-resizing {
+  border-right-color: var(--accent); cursor: col-resize;
+}
+
+/* 3.4 note editor — fixed metadata and tag bars bracket the scrolling field body. */
+.anki-note-editor { flex: 1; min-height: 0; flex-direction: column; overflow: hidden; }
+.anki-note-editor:not([hidden]) { display: flex; }
+.anki-note-top {
+  display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 22px; border-bottom: 1px solid var(--line); background: var(--paper);
+}
+.anki-note-top-items { display: flex; flex: 1; align-items: center; gap: 12px; min-width: 0; }
+.anki-note-body {
+  display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 12px;
+  overflow-y: auto; padding: 0 22px;
+}
+.anki-note-body > .card-fields { margin-top: 18px; }
+.anki-note-footer { flex: none; padding: 12px 22px; border-top: 1px solid var(--line); background: var(--paper); }
+.anki-note-type-field, .anki-deck-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.anki-note-type, .anki-note-deck {
+  min-width: 0; color: var(--ink); font: 12px/1.4 Arial, sans-serif; overflow-wrap: anywhere;
+}
+.anki-note-type-select { min-width: 130px; max-width: 220px; }
+/* The deck is a readout: the toolbar's Change-deck action (⌘/Ctrl+D) is the only way to move the note. */
+.anki-tag-field { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; }
+/* The tag input box holds the note's chips plus a free-text input, so both wrap in one bordered field. */
+.anki-tag-control {
+  position: relative; display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: 5px;
+  min-width: 150px; padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white);
+}
+.anki-tag-control:focus-within { border-color: var(--accent); }
+/* `display: contents` lets the chips sit directly in the control's flex row without an extra box. */
+.anki-tag-chips { display: contents; }
+.anki-tag-input { flex: 1; min-width: 70px; padding: 2px 3px; font: 12px/1.4 Arial, sans-serif; }
+.anki-tag-suggestions {
+  position: absolute; z-index: 6; bottom: calc(100% + 4px); left: -1px; right: -1px; max-height: 190px;
+  overflow-y: auto; border: 1px solid var(--accent); border-radius: 4px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.anki-tag-suggestion {
+  display: block; width: 100%; padding: 6px 9px; border: 0; border-top: 1px solid var(--line);
+  color: var(--ink); background: transparent; text-align: left; font: 12px/1.3 Arial, sans-serif;
+}
+.anki-tag-suggestion:first-child { border-top: 0; }
+.anki-tag-suggestion:hover, .anki-tag-suggestion:focus-visible,
+.anki-tag-suggestion.is-active { color: #9fc5ff; background: var(--accent-soft); outline: none; }
+/* Note fields: an editable rendered preview by default, toggled into a raw-HTML textarea. A field name is also its
+   own fold control, while the note type only determines how that control starts. */
+.anki-rich-head { display: flex; align-items: center; gap: 8px; }
+.anki-rich-field-name {
+  display: flex; align-items: center; gap: 3px; min-width: 0; margin: 0; padding: 0; border: 0;
+  color: var(--muted); background: transparent; font: 700 10px/1 Arial, sans-serif; letter-spacing: .06em;
+  text-align: left; cursor: pointer;
+}
+.anki-rich-field-name:hover { color: var(--ink); }
+.anki-rich-field-name:focus-visible { color: var(--ink); outline: 1px solid #79adfb; outline-offset: 3px; }
+.anki-rich-field-name .icon { width: 12px; height: 12px; }
+.anki-rich-hint {
+  min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--muted);
+}
+.anki-rich-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.anki-rich-field-options {
+  display: flex; flex-wrap: wrap; gap: 5px 14px; margin: 2px 0; padding: 7px 9px;
+  border-left: 2px solid var(--line); background: var(--white);
+}
+.anki-rich-setting-check {
+  display: flex; align-items: center; gap: 5px; color: var(--muted); font: 700 10px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+.anki-rich-setting-check input { margin: 0; accent-color: var(--accent); }
+.anki-rich-collapse { background: transparent; }
+.anki-rich-collapse:hover { color: var(--ink); }
+.anki-rich-collapse .icon { transition: transform .12s ease; }
+.anki-rich-field:not(.is-collapsed) .anki-rich-collapse .icon { transform: rotate(90deg); }
+.anki-rich-field.is-collapsed > .anki-rich-view,
+.anki-rich-field.is-collapsed > .anki-note-input,
+.anki-rich-field.is-collapsed > .anki-rich-field-options { display: none; }
+.anki-rich-toggle { background: transparent; }
+.anki-rich-toggle:hover { color: var(--ink); border-color: #79adfb; }
+.anki-rich-toggle[aria-pressed="true"] { color: var(--ink); background: #14243d; border-color: #79adfb; }
+.anki-rich-view {
+  display: block; width: 100%; min-height: 34px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--white); overflow: hidden;
+}
+/* The caret lives in the frame's own document, so the field — not `:focus-within`, which no frame's focus
+   ever reaches — states that it is being typed in (`bindRichView`). */
+.anki-rich-field.is-focused > .anki-rich-view { border-color: #79adfb; box-shadow: 0 0 0 2px #4285e833; }
+.anki-rich-field:not(.is-editing) > .anki-note-input { display: none; }
+.anki-rich-field.is-editing > .anki-rich-view { display: none; }
+.anki-note-input { resize: none; max-height: 300px; overflow-y: hidden; }
+
+/* 3.5 anki agent chat */
+.anki-chat {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  border-left: 1px solid var(--line); background: var(--panel); overflow: hidden;
+}
+.anki-chat [hidden], .anki-chat[hidden] { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > :not(.panel-heading) { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading { justify-content: center; padding: 10px 0; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading > :not(#collapseChat) { display: none; }
+.anki-browser-body.is-chat-collapsed .anki-chat > .panel-heading .icon-button svg { transform: rotate(180deg); }
+/* The heading must not set `padding` on its buttons: it would beat the kit's `padding: 0`. */
+.anki-chat > .panel-heading { gap: 4px; padding: 10px; border-bottom: 1px solid var(--line); }
+.anki-chat > .panel-heading .eyebrow {
+  flex: 1; overflow: hidden; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis;
+}
+.anki-chat > .panel-heading button { flex-shrink: 0; }
+.agent-chat-workspace { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+.agent-disabled-panel {
+  display: grid; flex: 1; place-items: center; padding: 24px; color: var(--muted); text-align: center;
+}
+.agent-disabled-panel p { max-width: 260px; margin: 0; }
+.anki-chat .sessions-panel, .anki-chat .conversation-panel {
+  flex: 1; min-height: 0; height: auto; padding: 0; border: 0; overflow: hidden;
+}
+.anki-chat .sessions-panel .panel-heading { padding: 16px; }
+.anki-chat .session-list { overflow-y: auto; min-height: 0; padding: 0 12px 12px; }
+.anki-chat .message-list { padding: 14px; align-content: start; overflow-wrap: anywhere; }
+.anki-chat .composer { flex-shrink: 0; margin: 0; padding: 12px; }
+.anki-chat .composer textarea { min-width: 0; }
+/* The status strip is a band of its own above the content, so it gets air above and below its one line and a
+   rule that separates it from what the panel shows underneath — the session list or the conversation. Only the
+   inline padding is stated here so the empty strip keeps the shared `system-message` block minimum; a filled
+   one widens that padding and draws the rule, while the heading's own rule is the divider for an empty strip. */
+.chat-status { padding-inline: 12px; font-size: 12px; overflow-wrap: anywhere; }
+.chat-status:not(:empty) { padding: 8px 12px; border-bottom: 1px solid var(--line); }
+/* A run is one window: the head reports it and folds it, the body is a fixed-height box that scrolls its own
+   overflow, so a long run cannot push the answer under it off the screen. It deliberately uses the muted
+   default — a normally working turn is not a warning state. */
+.chat-run { display: flex; flex-direction: column; gap: 6px; min-width: 0; color: var(--muted); font-size: 12px; }
+.chat-run-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+/* The head is the disclosure, and a button rather than a `<summary>` so the Stop control can sit beside it
+   without having to cancel a toggle it is nested in. */
+.chat-run-toggle {
+  display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; padding: 2px 0;
+  border: 0; color: inherit; background: transparent; font: inherit; text-align: left; cursor: pointer;
+}
+.chat-run-toggle:hover, .chat-run-toggle:focus-visible { color: var(--ink); outline: none; }
+.chat-run-toggle:focus-visible .chat-run-title { text-decoration: underline; }
+.chat-run-chevron { flex: none; width: 12px; height: 12px; transition: transform .15s ease; }
+.chat-run:not(.is-collapsed) .chat-run-chevron { transform: rotate(90deg); }
+.chat-run-title { flex: none; font-weight: 700; }
+.chat-run-meta {
+  flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+.chat-run-stop { flex: none; }
+.chat-run-body {
+  display: grid; gap: 10px; align-content: start; min-width: 0;
+  max-height: 220px; overflow-y: auto; padding: 2px 0 2px 20px;
+  border-left: 1px solid var(--line);
+}
+.chat-run.is-collapsed .chat-run-body { display: none; }
+.chat-run-spinner {
+  flex: none; width: 11px; height: 11px; border: 2px solid currentColor; border-radius: 50%;
+  border-right-color: transparent; animation: icon-spin .7s linear infinite;
+}
+/* A streamed step owns both of the elements `renderMessage` returns for a tool record, so the pair
+   replaces as one node when the call finishes. */
+.chat-step { display: grid; gap: 6px; min-width: 0; }
+.operation.is-running > summary { color: var(--status-pending); }
+.operation.is-running > summary::before {
+  content: ''; display: inline-block; width: 9px; height: 9px; margin-right: 6px; vertical-align: -1px;
+  border: 2px solid currentColor; border-radius: 50%; border-right-color: transparent;
+  animation: icon-spin .7s linear infinite;
+}
+.chat-selection {
+  display: flex; align-items: center; gap: 6px; margin: 8px 12px 0; padding: 6px 8px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--white);
+  color: var(--muted); font-size: 12px;
+}
+.chat-selection-text { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chat-selection-clear, .chat-selection-clear:hover { border-color: transparent; }
+.chat-selection-clear { color: inherit; }
+.chat-selection-clear:hover { background: var(--line); color: var(--ink); }
+/* Composer: the input row grows with the textarea, the tools row stays underneath. The form is the
+   positioning context for the slash menu, which opens upward over the conversation. */
+.composer { display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 1px solid var(--line); position: relative; }
+.composer-input { display: flex; gap: 10px; align-items: flex-end; }
+.composer textarea {
+  flex: 1 1 120px; resize: none; min-height: 23px; max-height: 180px; overflow-y: hidden; padding: 0 3px;
+}
+/* The slash menu is the tag suggestion list in the composer: same rows, anchored just above the form so
+   the message the user is typing stays visible underneath. */
+.composer-skills {
+  position: absolute; z-index: 6; bottom: calc(100% + 4px); left: 12px; right: 12px; max-height: 190px;
+  overflow-y: auto; border: 1px solid var(--accent); border-radius: 4px; background: var(--white);
+  box-shadow: var(--shadow);
+}
+.composer-skill {
+  display: block; width: 100%; padding: 6px 9px; border: 0; border-top: 1px solid var(--line);
+  color: var(--ink); background: transparent; text-align: left; font: 12px/1.3 Arial, sans-serif;
+}
+.composer-skill:first-child { border-top: 0; }
+.composer-skill:hover, .composer-skill:focus-visible,
+.composer-skill.is-active { color: #9fc5ff; background: var(--accent-soft); outline: none; }
+.composer-skill-name { font-weight: 700; }
+.composer-skill-description {
+  display: block; margin-top: 2px; overflow: hidden; opacity: .8;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+/* The message box is one bordered field the way a note's tag control is: the pinned skill — the `/name` the
+   message itself starts with, resolved against the installed library — is a chip inside it, and the message
+   continues beside that chip. The chip is its own remove button and removing it is a plain clear: nothing is
+   lost, the command is simply dropped from the message. */
+.composer-skill-control {
+  flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px;
+  padding: 9px 11px; border: 1px solid var(--line); border-radius: 5px; background: var(--white);
+}
+.composer-skill-control:focus-within { border-color: var(--accent); }
+/* `display: contents` lets the chip sit directly in the box's flex row without an extra box. */
+.composer-skill-chips { display: contents; }
+.composer-tools { display: flex; align-items: center; gap: 10px; }
+.composer-tool { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.composer-tool select { min-width: 0; }
+.composer-tool select:not(:disabled) { cursor: pointer; }
+/* The armed request's escape control ends its row, away from the controls that only shape a new request. */
+#dismissPending { margin-left: auto; }
+.composer-submit .composer-icon-pending { display: none; }
+.composer-submit.is-pending .composer-icon-send { display: none; }
+.composer-submit.is-pending .composer-icon-pending { display: block; }
+
+/* 3.6 settings — one dialog keeps Anki and Agent controls separate without duplicating modal chrome. */
+.settings-tabs, .anki-note-type-tabs { display: flex; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+#ankiSettingsDialog .dialog-content { gap: 0; overflow: hidden; padding-bottom: 0; }
+#ankiSettingsDialog .settings-tabs { flex: none; flex-wrap: wrap; }
+.settings-tab, .anki-note-type-tab { flex: 1; }
+#ankiSettingsDialog .settings-tab { flex-basis: 120px; }
+.settings-dialog-panels {
+  display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; overflow-y: auto;
+  padding: 12px 0 18px;
+}
+.settings-tab.is-active, .anki-note-type-tab.is-active {
+  color: var(--ink); background: var(--accent-soft); border-color: var(--accent);
+}
+.settings-panel, .settings-form { display: flex; flex-direction: column; gap: 12px; }
+.settings-form .field-select { width: 100%; max-width: none; }
+.settings-panel[hidden] { display: none; }
+.shortcut-settings-section { display: grid; gap: 12px; }
+.shortcut-settings-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.shortcut-settings-heading .eyebrow, .shortcut-settings-heading .dialog-help { margin: 0; }
+.shortcut-settings-actions { display: flex; align-items: center; gap: 6px; }
+.shortcut-filter { width: 210px; }
+.shortcut-reset-all { --icon-button-size: 30px; --icon-button-glyph: 15px; flex: none; }
+.shortcut-settings-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-width: 0; }
+.shortcut-setting { display: grid; grid-template-columns: minmax(0, 1fr) 150px 26px; align-items: center; gap: 8px;
+  min-width: 0; padding: 8px;
+  border: 1px solid var(--line); border-radius: 5px; background: #0b192e; }
+.shortcut-setting-label { min-width: 0; overflow-wrap: anywhere; color: var(--ink); font-size: 12px; line-height: 1.3; }
+.shortcut-binding { width: 150px; min-width: 0; text-align: center; }
+.shortcut-binding.is-capturing { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+.shortcut-reset { --icon-button-size: 26px; --icon-button-glyph: 14px; }
+.shortcut-empty { grid-column: 1 / -1; margin: 4px 0; }
+@media (max-width: 640px) {
+  .shortcut-settings-heading { align-items: stretch; flex-direction: column; }
+  .shortcut-settings-actions { align-self: stretch; }
+  .shortcut-filter { flex: 1; width: auto; }
+  .shortcut-setting { grid-template-columns: minmax(0, 1fr) 124px 26px; }
+  .shortcut-binding { width: 124px; }
+}
+@media (max-width: 480px) { .shortcut-settings-list { grid-template-columns: 1fr; } }
+.library-editor { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(0, 1.5fr); gap: 14px; }
+.library-entries, .library-editor-form { display: grid; align-content: start; gap: 8px; min-width: 0; }
+.library-group { display: grid; gap: 4px; }
+.library-group-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.library-group .eyebrow { margin: 4px 0; }
+.library-add-row { display: flex; align-items: center; gap: 4px; margin-top: 8px; padding: 5px;
+  border: 1px dashed var(--accent-soft); border-radius: 5px; background: #0b192e; }
+.library-add-name { flex: 1; min-width: 0; border-style: dashed; background: var(--paper); }
+.library-add-row .button-icon, .library-group-heading .button-icon { --icon-button-size: 24px; --icon-button-glyph: 13px; }
+.library-entry-row { display: flex; align-items: center; gap: 4px; padding: 2px 4px 2px 9px;
+  border-left: 2px solid var(--accent-soft); background: #0b192e; }
+.library-entry-row .library-entry { flex: 1; min-width: 0; padding: 6px 2px; border: 0; color: var(--ink);
+  background: transparent; text-align: left; font: 12px/1.3 Arial, sans-serif; }
+.library-entry-row .library-entry:hover { color: #9fc5ff; }
+.library-entry-row .library-entry.is-selected { color: #fff; font-weight: 700; }
+.library-entry-row:has(.library-entry.is-selected) { border-left-color: var(--accent); background: var(--accent-soft); }
+.library-entry-row.is-draft { border-left-style: dashed; }
+.library-entry-row .button-icon { --icon-button-size: 24px; --icon-button-glyph: 13px; }
+.library-entry { padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted);
+  background: var(--white); text-align: left; font: 12px/1.3 Arial, sans-serif; }
+.library-entry:hover { color: var(--ink); border-color: var(--accent); }
+.library-editor-content { min-height: 360px; padding: 10px; resize: vertical; font: 13px/1.5 ui-monospace, monospace; }
+@media (max-width: 640px) { .library-editor { grid-template-columns: 1fr; } }
+
+/* Agent settings — availability and configuration management are separate, self-naming blocks. */
+.agent-availability, .agent-profile-manager, .agent-profile-form {
+  padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: #0b192e;
+}
+.agent-availability {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; min-width: 0;
+}
+.agent-section-copy { display: grid; gap: 5px; min-width: 0; }
+.agent-section-copy .eyebrow, .agent-section-copy .dialog-help { margin: 0; }
+.agent-switch {
+  position: relative; flex: none; width: 38px; height: 22px; padding: 2px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--white);
+  transition: background .15s ease, border-color .15s ease;
+}
+.agent-switch > span {
+  display: block; width: 16px; height: 16px; border-radius: 50%; background: var(--muted);
+  transition: transform .15s ease, background .15s ease;
+}
+.agent-switch.is-enabled { border-color: var(--accent); background: var(--accent); }
+.agent-switch.is-enabled > span { transform: translateX(16px); background: #fff; }
+.agent-profile-manager { display: grid; gap: 10px; }
+.agent-profile-manager .eyebrow { margin: 0; }
+.agent-profile-picker { --row-control-height: 30px; min-width: 0; }
+.agent-profile-picker .button-icon {
+  --icon-button-size: var(--row-control-height); --icon-button-glyph: 15px;
+}
+.agent-profile-form { display: grid; gap: 10px; }
+.agent-profile-form-heading { display: grid; gap: 5px; }
+.agent-profile-form-heading .eyebrow, .agent-profile-form-heading .dialog-help { margin: 0; }
+.agent-field-help { color: var(--muted); font: 11px/1.4 Arial, sans-serif; }
+.agent-profile-form .field-select { width: 100%; max-width: none; }
+
+/* 3.7 Anki settings */
+.anki-settings-section { display: grid; gap: 8px; }
+.anki-settings-section .eyebrow { margin: 2px 0 0; }
+/* Settings' rows are denser than a studio's, so the profile picker states the smaller height and the field and
+   every button in its row take it. */
+.anki-settings-section .anki-picker-row { --row-control-height: 30px; }
+.anki-settings-section .anki-picker-row .button-icon {
+  --icon-button-size: var(--row-control-height);
+  --icon-button-glyph: 15px;
+}
+.anki-setting-check {
+  display: flex; align-items: center; gap: 8px; padding: 10px 0 3px;
+  border-top: 1px solid var(--line); color: var(--muted); font: 700 11px/1.2 Arial, sans-serif;
+}
+.anki-setting-check input { accent-color: var(--accent); }
+.anki-settings-heading, .anki-account-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.anki-account-actions { justify-content: flex-end; }
+.anki-sync-conflict-actions { flex-wrap: wrap; }
+.anki-account-actions [hidden], .anki-sync-conflict-actions [hidden] { display: none; }
+#ankiRuntimeState { margin: 8px 0 0; }
+
+/* The deck list is a scrollable checkbox grid: a collection holds far more decks than a dialog should
+   grow to fit, and the "All decks" choice disables the grid instead of hiding it so the names stay
+   visible while they are switched off. */
+.anki-deck-modes { display: flex; flex-wrap: wrap; gap: 16px; }
+.anki-deck-mode {
+  display: flex; align-items: center; gap: 8px; color: var(--muted); font: 700 11px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+.anki-deck-mode input, .anki-deck-choice input { accent-color: var(--accent); }
+.anki-deck-choices {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 2px;
+  max-height: 176px; margin-top: 10px; padding: 6px; overflow-y: auto;
+  border: 1px solid var(--line); border-radius: 5px; background: var(--paper);
+}
+.anki-deck-choices.is-disabled, .anki-deck-choices.is-disabled .anki-deck-choice { cursor: default; }
+/* Its checkbox already dims through the global `input:disabled` rule, so only the label text fades here. */
+.anki-deck-choices.is-disabled .anki-deck-choice span { opacity: var(--disabled-opacity); }
+.anki-deck-choices.is-disabled .anki-deck-choice:hover { background: none; }
+.anki-deck-choice {
+  display: flex; align-items: center; gap: 7px; min-width: 0; padding: 3px 5px; border-radius: 4px;
+  color: var(--ink); font: 11px/1.4 Arial, sans-serif; cursor: pointer;
+}
+.anki-deck-choice:hover { background: var(--white); }
+.anki-deck-choice span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#ankiDeckHint { margin: 8px 0 0; }
+
+/* The account dialog shows either the sign-in form or the stored account, so only one of the two
+   states is ever in the DOM's flow. */
+.anki-account-details { display: grid; gap: 10px; margin: 0; }
+.anki-account-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.anki-account-details dt { color: var(--muted); font: 700 10px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.anki-account-details dd { margin: 0; overflow-wrap: anywhere; font: 12px/1.4 Arial, sans-serif; }
+/* The topbar controls reflect their own state: the accent while signed in, a warn fill for ordinary pending
+   changes, and an error fill when AnkiWeb requires a full upload or download. */
+#ankiAccountOpen.is-signed-in { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+#syncAnki.is-needs-sync {
+  color: var(--status-warn); border-color: var(--status-warn); background: var(--status-warn-soft);
+}
+#syncAnki.is-full-sync-required { color: var(--status-error); border-color: var(--status-error); background: #492a3b; }
+
+/* ---------------------------------------------------------------- 4. responsive */
+@media (max-width: 1050px) {
+  .anki-browser-body:not(.is-chat-collapsed) .anki-chat {
+    position: absolute; z-index: 20; inset: 0 0 0 auto; width: min(440px, 100vw); box-shadow: var(--shadow);
+  }
+  .anki-browser-body { --chat-track: 0px; --chat-handle: 0px; }
+  .anki-browser-body.is-chat-collapsed { --chat-track: 46px; }
+  .anki-splitter[data-anki-splitter="right"] { visibility: hidden; pointer-events: none; }
+}
+
+@media (max-width: 720px) {
+  .anki-browser-body {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+    --chat-track: 0px; --chat-handle: 0px;
+  }
+  .anki-browser-body.is-quick-collapsed {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: 46px minmax(0, 1fr);
+  }
+  .anki-splitter { display: none; }
+  .anki-quick-search { border-right: 0; border-bottom: 1px solid var(--line); }
+  .anki-browser-body.is-chat-collapsed .anki-chat {
+    position: fixed; z-index: 20; right: 0; top: 64px; bottom: 0; width: 46px; box-shadow: var(--shadow);
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar { min-height: 64px; padding: 0 16px; }
+  .topbar-actions { gap: 6px; }
+  #connectionStatus { display: none; }
+  body { padding-top: 64px; }
+  .button { padding: 0 11px; font-size: 11px; }
+  /* Icon-only buttons must stay square: the padding above is for text buttons. */
+  .button-icon { padding: 0; }
+  .anki-browser-pannel { height: calc(100vh - 64px); }
+  .session-list { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-top: 16px; padding: 0 16px; }
+}

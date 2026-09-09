@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS anki_exports_version_card_attempt_idx;

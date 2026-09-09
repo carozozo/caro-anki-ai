@@ -1,0 +1,43 @@
+<dialog id="ankiSyncConflictDialog" class="dialog dialog-md" aria-labelledby="ankiSyncConflictTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <div>
+        <h2 id="ankiSyncConflictTitle" class="dialog-title">Choose sync direction</h2>
+        <p class="dialog-help">The local and AnkiWeb collections cannot be merged automatically.</p>
+      </div>
+      <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+    <div class="dialog-content">
+      <p id="ankiSyncConflictMessage" class="dialog-help"></p>
+      <footer class="dialog-actions anki-sync-conflict-actions">
+      <button id="ankiFullUpload" class="button button-warn button-with-icon" type="button"
+        aria-label="Upload local collection" title="Upload local collection">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+        <span>Upload Local</span>
+      </button>
+      <button id="ankiFullDownload" class="button button-dark button-with-icon" type="button"
+        aria-label="Download AnkiWeb collection" title="Download AnkiWeb collection">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-down"></use></svg>
+        <span>Download AnkiWeb</span>
+      </button>
+      <button class="button button-quiet" type="button" data-dialog-close>Cancel</button>
+      </footer>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ankiSyncProgressDialog" class="dialog dialog-sm" aria-labelledby="ankiSyncProgressTitle">
+  <div class="dialog-body">
+    <header class="dialog-head">
+      <h2 id="ankiSyncProgressTitle" class="dialog-title">Syncing with AnkiWeb</h2>
+    </header>
+    <div class="dialog-content">
+      <p id="ankiSyncProgressText" class="system-message dialog-hint" role="status"></p>
+      <progress id="ankiSyncProgressBar" class="dialog-progress" max="100"></progress>
+      <p class="dialog-help">The sync holds the collection open, so this window reports it and leaves on its own once
+        the result has been read.</p>
+    </div>
+  </div>
+</dialog>

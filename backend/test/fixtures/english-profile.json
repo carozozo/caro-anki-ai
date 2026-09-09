@@ -1,0 +1,141 @@
+{
+  "profile": 1,
+  "noteType": "English",
+  "version": "1.6",
+  "groups": {
+    "phrase": ["phrasal verb", "idiom"]
+  },
+  "fields": [
+    {
+      "name": "meaning",
+      "required": true,
+      "script": "en",
+      "guidance": "Clear English definition of this card single sense, without Chinese characters and without giving away the term."
+    },
+    {
+      "name": "translation",
+      "required": true,
+      "script": "zh",
+      "traditional": true,
+      "guidance": "Concise Traditional Chinese (zh-TW) gloss of this card single sense, written the way a Taiwanese speaker would say it. Traditional characters and Taiwan vocabulary only; never a word-for-word rendering of meaning, never a semicolon-joined dictionary list of several senses."
+    },
+    {
+      "name": "implications",
+      "kind": "list",
+      "maxChars": 4,
+      "script": "zh",
+      "traditional": true,
+      "guidance": "Prefer 3 to 6 zh-TW concept keywords (at most 4 characters each) naming the hidden concepts and usage contexts the term activates, for court the four items being 正義 公正 程序 法律. Use fewer when the sense is genuinely clear; never invent awkward concepts to meet a count. Never translations, synonyms, antonyms, descriptions, or sentences. Overlapping a correlation is expected: implications are Chinese concepts, correlations are English words."
+    },
+    {
+      "name": "literal",
+      "script": "zh",
+      "traditional": true,
+      "requiredWhen": { "field": "type", "in": "phrase", "message": "for idioms and phrasal verbs" },
+      "guidance": "Word-for-word Traditional Chinese gloss of the whole expression, 灑出豆子 for spill the beans. Required for idioms and phrasal verbs, empty for plain literal senses, and never the idiomatic translation."
+    },
+    {
+      "name": "annotation",
+      "ai": false
+    },
+    {
+      "name": "term",
+      "required": true
+    },
+    {
+      "name": "termUs"
+    },
+    {
+      "name": "termUk"
+    },
+    {
+      "name": "synonyms",
+      "kind": "list"
+    },
+    {
+      "name": "antonyms",
+      "kind": "list"
+    },
+    {
+      "name": "correlations",
+      "kind": "list"
+    },
+    {
+      "name": "type",
+      "required": true,
+      "enum": [
+        "noun", "verb", "adjective", "adverb", "preposition", "conjunction", "determiner", "pronoun",
+        "interjection", "auxiliary verb", "modal verb", "number", "ordinal number", "predeterminer",
+        "prepositional phrase", "adverbial phrase", "prefix", "suffix", "phrasal verb", "idiom",
+        "noun phrase", "verb phrase", "adjective phrase"
+      ]
+    },
+    {
+      "name": "typeLabel",
+      "enum": [
+        "C", "U", "S", "C or U", "plural", "usually plural", "usually singular",
+        "T", "I", "I or T",
+        "not gradable", "before noun", "usually before noun"
+      ],
+      "enumMode": "labels",
+      "forbiddenWhen": { "field": "type", "in": "phrase", "message": "for idioms and phrasal verbs" },
+      "guidance": "Space-separated labels chosen only from this list: {values}. Empty only when no label applies; no brackets."
+    },
+    {
+      "name": "phonetic",
+      "pattern": "^/[^/]+/$",
+      "patternMessage": "must be US IPA enclosed in slashes",
+      "requiredWhen": { "field": "type", "notIn": "phrase" },
+      "forbiddenWhen": { "field": "type", "in": "phrase", "message": "for idioms and phrasal verbs" }
+    },
+    {
+      "name": "irregular"
+    },
+    {
+      "name": "examples",
+      "kind": "lines",
+      "editor": false,
+      "sort": "visualLength",
+      "item": {
+        "fields": [
+          {
+            "name": "en",
+            "required": true,
+            "script": "en",
+            "allowTags": ["div", "sup", "br", "b", "u", "i"],
+            "endPunctuation": ".?!",
+            "guidance": "Natural English sentence using this card sense of the term, ending in . ? or !; no Chinese; no markup except <b> around a collocation other than the term."
+          },
+          {
+            "name": "zh",
+            "required": true,
+            "script": "zh",
+            "traditional": true,
+            "guidance": "Natural Traditional Chinese (zh-TW) translation of that same sense, keeping the sentence voice (a question stays a question)."
+          }
+        ]
+      }
+    }
+  ],
+  "collapseDuplicates": [
+    { "keep": "term", "fields": ["term", "termUs", "termUk"] }
+  ],
+  "punctuation": { "zh": "、；，。？！()/\"" },
+  "storage": [
+    { "field": "意思", "of": ["meaning", "translation"], "join": "<br>" },
+    { "field": "含意", "of": "implications", "join": "/" },
+    { "field": "字意", "of": "literal" },
+    { "field": "註解", "of": "annotation" },
+    { "field": "詞彙", "of": "term" },
+    { "field": "詞彙US", "of": "termUs" },
+    { "field": "詞彙UK", "of": "termUk" },
+    { "field": "同義詞", "of": "synonyms", "join": ", " },
+    { "field": "反義詞", "of": "antonyms", "join": ", " },
+    { "field": "聯想詞", "of": "correlations", "join": ", " },
+    { "field": "類型", "of": "type" },
+    { "field": "類型標籤", "of": "typeLabel", "stripEnds": "[]" },
+    { "field": "音標", "of": "phonetic" },
+    { "field": "不規則", "of": "irregular" },
+    { "field": "範例", "of": "examples", "join": "<br>", "line": "{en} {zh}" }
+  ]
+}

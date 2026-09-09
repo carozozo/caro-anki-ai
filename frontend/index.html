@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{APP_TITLE}}</title>
+  <link rel="stylesheet" href="/styles/app.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-chat" viewBox="0 0 16 16">
+      <path d="M4.5 2.3h7a1.9 1.9 0 0 1 1.9 1.9v4.3a1.9 1.9 0 0 1-1.9 1.9H7.6L4.4 12.9v-2.5h.1a1.9 1.9 0 0 1-1.9-1.9V4.2a1.9 1.9 0 0 1 1.9-1.9z"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 16 16">
+      <path d="M2.5 4h11M2.5 8h11M2.5 12h11" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="6" cy="4" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+      <circle cx="10.5" cy="8" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+      <circle cx="7.5" cy="12" r="1.5" fill="var(--panel)" stroke="currentColor" stroke-width="1.3"/>
+    </symbol>
+    <symbol id="i-sync" viewBox="0 0 16 16">
+      <path d="M13.4 5.7A5.8 5.8 0 0 0 3 4.2L1.8 6.1M2.6 10.3A5.8 5.8 0 0 0 13 11.8l1.2-1.9"
+        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M1.7 2.9v3.3H5M14.3 13.1V9.8H11" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 16 16">
+      <circle cx="8" cy="5.4" r="2.8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M2.7 14a5.5 5.5 0 0 1 10.6 0" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-login" viewBox="0 0 16 16">
+      <path d="M9.6 2.6h3A1.4 1.4 0 0 1 14 4v8a1.4 1.4 0 0 1-1.4 1.4h-3" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M2.2 8h6.6M6.4 4.6 9.8 8l-3.4 3.4" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-logout" viewBox="0 0 16 16">
+      <path d="M6.4 2.6h-3A1.4 1.4 0 0 0 2 4v8a1.4 1.4 0 0 0 1.4 1.4h3" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M13.8 8H7.2M9.6 4.6 13 8l-3.4 3.4" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-retry" viewBox="0 0 16 16">
+      <path d="M3.11 6.22A5.2 5.2 0 1 0 7.1 2.88" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M7.1 1.3 4.1 2.9 7.1 4.5" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-undo" viewBox="0 0 16 16">
+      <path d="M4.4 3.6 1.7 6.3l2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M1.7 6.3h7.2a4.4 4.4 0 0 1 0 8.8H5.6" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-redo" viewBox="0 0 16 16">
+      <path d="M11.6 3.6 14.3 6.3l-2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.3 6.3H7.1a4.4 4.4 0 0 0 0 8.8h3.3" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 16 16">
+      <circle cx="6.8" cy="6.8" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M10.2 10.2 13.8 13.8" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-history" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 4.8V8l2.4 1.5" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 16 16">
+      <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 16 16">
+      <path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 16 16">
+      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 16 16">
+      <path d="M14.2 1.8 7.4 8.6M14.2 1.8 9.9 14.2l-2.5-5.6-5.6-2.5z" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-check-circle" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M5.6 8.2 7.3 9.9l3.2-3.4" fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 16 16">
+      <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 16 16">
+      <rect x="2.5" y="5.5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor"
+        stroke-width="1.4"/>
+      <path d="M5.5 4.5V3A1.5 1.5 0 0 1 7 1.5h5A1.5 1.5 0 0 1 13.5 3v5A1.5 1.5 0 0 1 12 9.5h-1.5"
+        fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="i-sparkles" viewBox="0 0 16 16">
+      <path d="M6.4 1.8 7.6 5l3.2 1.2L7.6 7.4 6.4 10.6 5.2 7.4 2 6.2 5.2 5z" fill="none"
+        stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M12.2 9.2l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-stop" viewBox="0 0 16 16">
+      <rect x="4" y="4" width="8" height="8" rx="1.6" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16">
+      <path d="M3.5 4.5h9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M6.5 4.5V3.2A1.2 1.2 0 0 1 7.7 2h.6a1.2 1.2 0 0 1 1.2 1.2v1.3"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M4.8 4.5l.6 8.3a1.5 1.5 0 0 0 1.5 1.4h2.2a1.5 1.5 0 0 0 1.5-1.4l.6-8.3"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 16 16">
+      <path d="M13 8H3.4M7.6 3.6 3.2 8l4.4 4.4" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-locate" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 1.4v2.2M8 12.4v2.2M1.4 8h2.2M12.4 8h2.2" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16">
+      <path d="M1.4 8S3.8 3.7 8 3.7 14.6 8 14.6 8 12.2 12.3 8 12.3 1.4 8 1.4 8z" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="i-code" viewBox="0 0 16 16">
+      <path d="M5.8 3.8 2.2 8l3.6 4.2M10.2 3.8 13.8 8l-3.6 4.2" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-deck" viewBox="0 0 16 16">
+      <path d="M2 4.2 8 1.8l6 2.4L8 6.6zM2 7.2l6 2.4 6-2.4M2 10.2l6 2.4 6-2.4" fill="none"
+        stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 16 16">
+      <path d="M2.2 3.4v4.8l5.5 5.5a1.5 1.5 0 0 0 2.1 0l3.7-3.7a1.5 1.5 0 0 0 0-2.1L8 2.4H3.2a1 1 0 0 0-1 1z"
+        fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="5.3" cy="5.4" r=".9" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 4.6V8l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16">
+      <path d="M8 2.5v11M2.5 8h11" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-pencil" viewBox="0 0 16 16">
+      <path d="M2.6 13.4l.6-2.7 7.6-7.6 2.1 2.1-7.6 7.6z" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M9.3 4.6l2.1 2.1" fill="none" stroke="currentColor" stroke-width="1.4"
+        stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 16 16">
+      <path d="M8 13V3M3.8 7.2 8 3l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 16 16">
+      <path d="M8 3v10m4.2-4.2L8 13 3.8 8.8" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-up-bar" viewBox="0 0 16 16">
+      <path d="M3.2 2.8h9.6M8 13.4V6.2M4.7 9.5 8 6.2l3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-down-bar" viewBox="0 0 16 16">
+      <path d="M3.2 13.2h9.6M8 2.6v7.2m-3.3-3.3L8 9.8l3.3-3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 16 16">
+      <path d="M13 8H3m4.2-4.2L3 8l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 16 16">
+      <path d="M3 8h10m-4.2-4.2L13 8l-4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-left-bar" viewBox="0 0 16 16">
+      <path d="M2.8 3.2v9.6M13.4 8H6.2M9.5 4.7 6.2 8l3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-right-bar" viewBox="0 0 16 16">
+      <path d="M13.2 3.2v9.6M2.6 8h7.2M6.5 4.7 9.8 8l-3.3 3.3" fill="none" stroke="currentColor"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-sliders" viewBox="0 0 16 16">
+      <path d="M2.4 4.6h1.3M6.9 4.6h6.7M2.4 11.4h6.9M12.5 11.4h1.1" fill="none" stroke="currentColor"
+        stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="5.3" cy="4.6" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="10.9" cy="11.4" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+  </svg>
+
+  <template data-partial="/html/topbar.html"></template>
+
+  <section id="ankiBrowserPannel" class="anki-browser-pannel" aria-label="Anki card browser">
+    <div class="anki-browser">
+      <form id="ankiSearchForm" class="anki-search">
+        <label class="sr-only" for="ankiQuery">Anki search syntax</label>
+        <div class="anki-query-field">
+          <input id="ankiQuery" class="field field-lg" type="search" autocomplete="off" aria-autocomplete="list"
+            aria-label="Search Anki cards (Command or Control+F)" aria-controls="ankiQueryHistory"
+            aria-expanded="false"
+            placeholder='Search syntax, e.g. deck:"_Todo" or tag:verb'>
+          <div id="ankiQueryHistory" class="anki-query-history" role="listbox" hidden></div>
+        </div>
+        <button class="button button-dark button-icon" type="submit" aria-label="Search" title="Search">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+        </button>
+      </form>
+      <div class="anki-browser-body">
+        <aside class="anki-quick-search" aria-label="Quick search">
+          <div class="panel-heading">
+            <span class="eyebrow">QUICK SEARCH</span>
+            <button id="toggleAnkiQuickSearch" class="icon-button" type="button"
+              aria-label="Collapse quick search (Command or Control+Alt+Q)" aria-expanded="true"
+              aria-controls="ankiQuickSearchList" title="Collapse quick search (⌘/Ctrl+Alt+Q)">
+              <svg aria-hidden="true" focusable="false"><use href="#i-chevron-left"></use></svg>
+            </button>
+          </div>
+          <div id="ankiQuickSearchList" class="anki-quick-search-list">
+            <div class="empty-state compact">Loading…</div>
+          </div>
+        </aside>
+        <div class="anki-splitter" data-anki-splitter="left" role="separator" aria-orientation="vertical"
+          aria-label="Resize quick search" tabindex="0"></div>
+        <section class="anki-note-list-panel" aria-label="Card list">
+          <div class="anki-note-statusbar">
+            <span id="ankiBrowserStatus" class="anki-browser-status system-message" role="status"></span>
+            <span id="ankiSelectedCount" class="anki-selected-count">0 selected</span>
+          </div>
+          <div class="anki-note-toolbar" role="toolbar" aria-label="Note actions">
+            <div class="anki-note-toolbar-left">
+              <button id="ankiStudyOptions" class="button button-quiet button-icon" type="button"
+                aria-label="Open study options" title="Open study options">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sliders"></use></svg>
+              </button>
+              <button id="ankiEditNoteType" class="button button-quiet button-icon" type="button"
+                aria-label="Open note type studio" title="Open note type studio">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"></use></svg>
+              </button>
+              <button id="ankiManageDecks" class="button button-quiet button-icon" type="button"
+                aria-label="Open deck studio" title="Open deck studio">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-deck"></use></svg>
+              </button>
+              <button id="ankiManageTags" class="button button-quiet button-icon" type="button"
+                aria-label="Manage tags" title="Manage tags">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-tag"></use></svg>
+              </button>
+              <button id="ankiPreviewNote" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Preview first selected note or first note" title="Preview first selected note or first note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-eye"></use></svg>
+              </button>
+            </div>
+            <div class="anki-note-toolbar-right">
+              <button id="ankiUndo" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Undo" title="Undo">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-undo"></use></svg>
+              </button>
+              <button id="ankiRedo" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Redo" title="Redo">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-redo"></use></svg>
+              </button>
+              <button id="ankiFirstNote" class="button button-quiet button-icon" type="button" disabled
+                aria-label="First note" title="First note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up-bar"></use></svg>
+              </button>
+              <button id="ankiPreviousNote" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Previous note" title="Previous note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+              </button>
+              <button id="ankiNextNote" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Next note" title="Next note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-down"></use></svg>
+              </button>
+              <button id="ankiLastNote" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Last note" title="Last note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-down-bar"></use></svg>
+              </button>
+              <button id="ankiChangeDeck" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Change deck" title="Change deck">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-deck"></use></svg>
+              </button>
+              <button id="ankiSetDueDate" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Set due time" title="Set due time">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>
+              </button>
+              <button id="ankiSelectedSearch" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Search selected notes" title="Search selected notes">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg>
+              </button>
+              <button id="ankiSelectedAi" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Send selected notes to AI chat" title="Send selected notes to AI chat">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkles"></use></svg>
+              </button>
+              <button id="ankiSelectedCopy" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Copy selected notes" title="Copy selected notes">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-copy"></use></svg>
+              </button>
+              <button id="ankiSelectedDelete" class="button button-quiet button-icon" type="button" disabled
+                aria-label="Delete selected notes; press twice" title="Delete selected notes; press twice">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+              </button>
+              <button id="ankiNewNote" class="button button-quiet button-icon" type="button"
+                aria-label="New note" title="New note">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+              </button>
+            </div>
+          </div>
+          <div id="ankiNoteEditor" class="anki-note-editor" hidden></div>
+          <div id="ankiNoteList" class="anki-note-list" tabindex="-1" aria-label="Anki note table">
+            <div class="empty-state compact">Press "Search" to load cards.</div>
+          </div>
+        </section>
+        <div class="anki-splitter" data-anki-splitter="right" role="separator" aria-orientation="vertical"
+          aria-label="Resize anki agent" tabindex="0"></div>
+        <template data-partial="/html/anki-chat.html"></template>
+      </div>
+    </div>
+
+    <dialog id="agentProposalPreviewDialog" class="dialog dialog-lg agent-proposal-preview-dialog"
+      aria-labelledby="agentProposalPreviewTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <h2 id="agentProposalPreviewTitle" class="dialog-title dialog-title-lg">Preview</h2>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close"
+            title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div id="agentProposalPreviewContent" class="agent-proposal-preview-content"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiCardPreviewDialog" class="dialog dialog-lg anki-card-preview-dialog"
+      aria-labelledby="ankiCardPreviewTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <h2 id="ankiCardPreviewTitle" class="dialog-title dialog-title-lg">Card preview</h2>
+          <select id="ankiPreviewMode" class="field field-sm field-select" aria-label="Preview mode"></select>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close"
+            title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div id="ankiCardPreviewContent" class="anki-card-preview-content"></div>
+          <footer class="dialog-actions anki-card-preview-actions">
+          <div class="anki-card-preview-nav">
+            <button id="ankiPreviewFirst" class="button button-quiet button-icon" type="button" disabled
+              aria-label="First note" title="First note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left-bar"></use></svg>
+            </button>
+            <button id="ankiPreviewPrevious" class="button button-quiet button-icon" type="button" disabled
+              aria-label="Previous note" title="Previous note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg>
+            </button>
+          </div>
+          <span id="ankiPreviewPosition" class="anki-card-preview-position" role="status"></span>
+          <div class="anki-card-preview-nav">
+            <button id="ankiPreviewNext" class="button button-quiet button-icon" type="button" disabled
+              aria-label="Next note" title="Next note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+            </button>
+            <button id="ankiPreviewLast" class="button button-quiet button-icon" type="button" disabled
+              aria-label="Last note" title="Last note">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right-bar"></use></svg>
+            </button>
+          </div>
+          </footer>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiDeckDialog" class="dialog dialog-md anki-deck-dialog" aria-labelledby="ankiDeckDialogTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div>
+            <div class="dialog-head-title-row">
+              <h2 id="ankiDeckDialogTitle" class="dialog-title dialog-title-lg">Deck Studio</h2>
+              <p id="ankiDeckStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            </div>
+            <p class="dialog-help">Deleting a deck deletes every note filed under it, and Anki cannot undo it.</p>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <section class="anki-entity-section">
+          <div class="anki-picker-row">
+            <select id="ankiDeckSelect" class="field" aria-label="Deck"></select>
+            <input id="ankiDeckName" class="field" placeholder="Deck name" aria-label="Rename deck" hidden>
+            <input id="ankiNewDeckName" class="field" placeholder="e.g. English::Idioms"
+              aria-label="Create deck" hidden>
+            <button id="ankiDeckConfirm" class="button button-quiet button-icon" type="button"
+              aria-label="Rename deck" title="Rename deck">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="ankiDeckReturn" class="button button-quiet button-icon" type="button" hidden
+              aria-label="Back to the deck list" title="Back to the deck list">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="ankiDeleteDeck" class="button button-quiet button-icon" type="button"
+              aria-label="Delete deck" title="Delete deck">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+          <p id="ankiDeckHelp" class="dialog-help"></p>
+          </section>
+          <section class="anki-entity-section">
+          <div class="anki-entity-section-head"><span class="eyebrow">STUDY OPTIONS</span></div>
+          <div class="anki-entity-section-head anki-deck-study-option-picker">
+            <select id="ankiDeckStudyOption" class="field field-select" aria-label="Study options"></select>
+            <button id="ankiEditDeckStudyOptions" class="button button-quiet button-icon" type="button"
+              aria-label="Edit study options" title="Edit study options">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sliders"></use></svg>
+            </button>
+          </div>
+          <p id="ankiDeckStudyOptionHelp" class="dialog-help"></p>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiTagDialog" class="dialog dialog-md anki-tag-dialog" aria-labelledby="ankiTagDialogTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div>
+            <div class="dialog-head-title-row">
+              <h2 id="ankiTagDialogTitle" class="dialog-title dialog-title-lg">Tags</h2>
+              <p id="ankiTagStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            </div>
+            <p class="dialog-help">Deleting a tag removes it from every note, and Anki cannot undo it.</p>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close"
+            title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <section class="anki-entity-section">
+          <div class="anki-picker-row">
+            <select id="ankiTagSelect" class="field" aria-label="Tag"></select>
+            <input id="ankiTagName" class="field" placeholder="Tag name" aria-label="Rename tag" hidden>
+            <button id="ankiTagConfirm" class="button button-quiet button-icon" type="button"
+              aria-label="Rename tag" title="Rename tag">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="ankiTagReturn" class="button button-quiet button-icon" type="button" hidden
+              aria-label="Back to the tag list" title="Back to the tag list">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="ankiDeleteTag" class="button button-quiet button-icon" type="button"
+              aria-label="Delete tag" title="Delete tag">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+            <button id="ankiClearUnusedTags" class="button button-quiet" type="button">
+              Clear unused tags
+            </button>
+          </div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiStudyOptionsDialog" class="dialog dialog-lg anki-study-options-dialog"
+      aria-labelledby="ankiStudyOptionsTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div>
+            <div class="dialog-head-title-row">
+              <h2 id="ankiStudyOptionsTitle" class="dialog-title dialog-title-lg">Study Options</h2>
+              <p id="ankiStudyOptionStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            </div>
+            <p class="dialog-help">Anki schedules a deck with the study options it names, so every deck on
+              the same preset is scheduled the same way.</p>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <section class="anki-entity-section">
+          <div class="anki-picker-row">
+            <select id="ankiStudyOptionSelect" class="field" aria-label="Study options"></select>
+            <input id="ankiStudyOptionName" class="field" placeholder="Study options name"
+              aria-label="Rename study options" hidden>
+            <input id="ankiNewStudyOptionName" class="field" placeholder="e.g. Slow &amp; steady"
+              aria-label="Create study options" hidden>
+            <button id="ankiStudyOptionConfirm" class="button button-quiet button-icon" type="button"
+              aria-label="Rename study options" title="Rename study options">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="ankiStudyOptionReturn" class="button button-quiet button-icon" type="button" hidden
+              aria-label="Back to the study options list" title="Back to the study options list">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="ankiDeleteStudyOption" class="button button-quiet button-icon" type="button"
+              aria-label="Delete study options" title="Delete study options">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+          <p id="ankiStudyOptionHelp" class="dialog-help"></p>
+          </section>
+          <div id="ankiStudyOptionFields" class="anki-entity-sections"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiNoteTypeDialog" class="dialog dialog-lg anki-note-type-dialog" aria-labelledby="ankiNoteTypeTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div>
+            <div class="dialog-head-title-row">
+              <h2 id="ankiNoteTypeTitle" class="dialog-title dialog-title-lg">Note Type Studio</h2>
+              <p id="ankiNoteTypeStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            </div>
+            <p class="dialog-help">The removal of fields or templates will directly modify the Anki collection.</p>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <section class="anki-entity-section">
+          <div class="anki-picker-row">
+            <select id="ankiNoteTypeSelect" class="field" aria-label="Note type"></select>
+            <input id="ankiNoteTypeName" class="field" placeholder="Note type name" aria-label="Rename note type"
+              hidden>
+            <input id="ankiNewNoteTypeName" class="field" placeholder="New note type" aria-label="Create note type"
+              hidden>
+            <button id="ankiNoteTypeConfirm" class="button button-quiet button-icon" type="button"
+              aria-label="Rename note type" title="Rename note type">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="ankiNoteTypeReturn" class="button button-quiet button-icon" type="button" hidden
+              aria-label="Back to the note type list" title="Back to the note type list">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="ankiDeleteNoteType" class="button button-quiet button-icon anki-note-type-delete"
+              type="button" aria-label="Delete note type" title="Delete note type">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+          </section>
+        <div class="settings-tabs anki-note-type-tabs" role="tablist" aria-label="Note type sections">
+          <button id="ankiNoteTypeFieldsTab" class="button button-quiet anki-note-type-tab is-active" type="button"
+            role="tab" aria-controls="ankiNoteTypeFieldsPanel" aria-selected="true"
+            data-note-type-section="fields">Fields</button>
+          <button id="ankiNoteTypeCardsTab" class="button button-quiet anki-note-type-tab" type="button"
+            role="tab" aria-controls="ankiNoteTypeCardsPanel" aria-selected="false" tabindex="-1"
+            data-note-type-section="cards">Card templates</button>
+        </div>
+        <section id="ankiNoteTypeFieldsPanel" class="anki-note-type-panel anki-note-type-panel-fields" role="tabpanel"
+          aria-labelledby="ankiNoteTypeFieldsTab">
+          <p class="dialog-help">A field saves as you change it: its name when the row loses focus, and each of its
+            own settings — font, size, direction, hint, and what the note editor shows — as you change it. The
+            mark on the left names the field Anki sorts the note by.</p>
+          <div id="ankiNoteTypeFields" class="anki-schema-list"></div>
+          <div class="anki-inline-control">
+            <input id="ankiNewNoteTypeField" class="field" placeholder="New field name">
+            <button id="ankiAddNoteTypeField" class="button button-quiet button-icon" type="button"
+              aria-label="Add field" title="Add field">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>
+            </button>
+          </div>
+          </section>
+          <section id="ankiNoteTypeCardsPanel" class="anki-note-type-panel" role="tabpanel"
+          aria-labelledby="ankiNoteTypeCardsTab" hidden>
+          <div class="anki-picker-row">
+            <select id="ankiNoteTypeTemplateSelect" class="field" aria-label="Card template"></select>
+            <input id="ankiNoteTypeTemplateName" class="field" placeholder="Card name"
+              aria-label="Rename card template" hidden>
+            <input id="ankiNewNoteTypeTemplate" class="field" placeholder="New card name"
+              aria-label="Create card template" hidden>
+            <select id="ankiNewNoteTypeTemplateField" class="field field-select" aria-label="Front field"
+              title="Field the new card's front template shows" hidden></select>
+            <button id="ankiNoteTypeTemplateConfirm" class="button button-quiet button-icon" type="button"
+              aria-label="Rename card template" title="Rename card template">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+            </button>
+            <button id="ankiNoteTypeTemplateReturn" class="button button-quiet button-icon" type="button" hidden
+              aria-label="Back to the card list" title="Back to the card list">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+            </button>
+            <button id="ankiDeleteNoteTypeTemplate" class="button button-quiet button-icon" type="button"
+              aria-label="Delete card template" title="Delete card template">
+              <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+            </button>
+          </div>
+          <div class="anki-template-editor">
+            <div class="anki-template-source-labels" aria-label="Card template source">
+              <button class="button button-quiet anki-template-source-label is-active" type="button"
+                data-template-source="front" aria-pressed="true">Front</button>
+              <button class="button button-quiet anki-template-source-label" type="button"
+                data-template-source="back" aria-pressed="false">Back</button>
+              <button class="button button-quiet anki-template-source-label" type="button"
+                data-template-source="styling" aria-pressed="false">Styling</button>
+            </div>
+            <label class="dialog-field" for="ankiNoteTypeTemplateSource">
+              <span id="ankiNoteTypeTemplateSourceLabel" class="dialog-label">Front template</span>
+              <textarea id="ankiNoteTypeTemplateSource" class="field anki-template-source" spellcheck="false"
+                aria-labelledby="ankiNoteTypeTemplateSourceLabel"></textarea>
+            </label>
+          </div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiBatchDialog" class="dialog dialog-sm" aria-labelledby="ankiBatchDialogTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div class="dialog-head-title-row">
+            <h2 id="ankiBatchDialogTitle" class="dialog-title"></h2>
+            <p id="ankiBatchDialogError" class="dialog-error system-message is-error" role="alert"></p>
+          </div>
+          <button id="ankiBatchDialogClose" class="button button-quiet button-icon" type="button"
+            data-dialog-close aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <p id="ankiBatchDialogHint" class="dialog-hint"></p>
+        <div class="dialog-field" data-dialog-field="deck">
+          <label class="dialog-label" for="ankiBatchDeck">Destination deck</label>
+          <select id="ankiBatchDeck" class="field field-md" aria-describedby="ankiBatchDialogHelp"></select>
+        </div>
+        <div class="dialog-field" data-dialog-field="due">
+          <label class="dialog-label" for="ankiBatchDue">Due time</label>
+          <input id="ankiBatchDue" class="field field-md" type="text" inputmode="numeric" autocomplete="off"
+            placeholder="1 or 1-3" aria-describedby="ankiBatchDialogHelp">
+        </div>
+        <p id="ankiBatchDialogHelp" class="dialog-help"></p>
+        <p class="dialog-keys">⌘/Ctrl + D change deck · ⌘/Ctrl + U set due time · Esc close</p>
+        <footer class="dialog-actions">
+          <button id="ankiBatchDialogCancel" class="button button-quiet" type="button"
+            data-dialog-close>Cancel</button>
+          <button id="ankiBatchDialogConfirm" class="button button-dark button-icon" type="button"
+            aria-label="Apply changes" title="Apply changes">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+          </button>
+          </footer>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="ankiSettingsDialog" class="dialog dialog-lg" aria-labelledby="ankiSettingsTitle">
+      <div class="dialog-body">
+        <header class="dialog-head">
+          <div class="dialog-head-title-row">
+            <h2 id="ankiSettingsTitle" class="dialog-title dialog-title-lg">Settings</h2>
+            <div class="dialog-head-statuses">
+              <p id="ankiSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+              <p id="ankiProfileStatus" class="dialog-help dialog-status system-message" role="status"></p>
+              <p id="ankiRuntimeState" class="dialog-error system-message is-error" role="alert"></p>
+              <p id="librarySettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+              <p id="agentSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+              <p id="agentProfileFormStatus" class="dialog-help dialog-status system-message" role="status"></p>
+              <p id="shortcutSettingsStatus" class="dialog-help dialog-status system-message" role="status"></p>
+            </div>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close
+            aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+          <button id="ankiSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+            aria-controls="ankiSettingsPanel" aria-selected="true" data-settings-section="anki">Anki</button>
+          <button id="quickSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+            aria-controls="quickSettingsPanel" aria-selected="false" tabindex="-1"
+            data-settings-section="quick">Quick settings</button>
+          <button id="shortcutsSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+            aria-controls="shortcutsSettingsPanel" aria-selected="false" tabindex="-1"
+            data-settings-section="shortcuts">Shortcuts</button>
+          <button id="agentSettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+            aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1"
+            data-settings-section="agent">Agent</button>
+          <button id="librarySettingsTab" class="button button-quiet settings-tab" type="button" role="tab"
+            aria-controls="librarySettingsPanel" aria-selected="false" tabindex="-1"
+            data-settings-section="library">Instructions / Skills</button>
+        </div>
+        <div class="settings-dialog-panels">
+        <section id="ankiSettingsPanel" class="settings-panel" role="tabpanel" aria-labelledby="ankiSettingsTab">
+          <div class="settings-form">
+            <section class="anki-settings-section" aria-labelledby="ankiProfileTitle">
+              <h3 id="ankiProfileTitle" class="eyebrow">COLLECTION PROFILE</h3>
+              <div class="card-fields">
+                <div class="anki-picker-row">
+                  <select id="ankiProfileSelect" class="field field-select" aria-label="Collection profile"
+                    aria-describedby="ankiProfileHelp"></select>
+                  <input id="ankiProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                    aria-label="Rename this collection profile" aria-describedby="ankiProfileHelp">
+                  <input id="ankiNewProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                    placeholder="New collection profile" aria-label="New collection profile name"
+                    aria-describedby="ankiProfileHelp">
+                  <button id="ankiProfileConfirm" class="button button-quiet button-icon" type="button"
+                    aria-label="Rename this collection profile" title="Rename this collection profile">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+                  </button>
+                  <button id="ankiProfileReturn" class="button button-quiet button-icon" type="button" hidden
+                    aria-label="Back to the collection profiles" title="Back to the collection profiles">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+                  </button>
+                  <button id="ankiProfileActivate" class="button button-quiet button-icon" type="button"
+                    aria-label="Switch to this collection profile" title="Switch to this collection profile">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+                  </button>
+                  <button id="ankiProfileDelete" class="button button-quiet button-icon" type="button"
+                    aria-label="Delete this collection profile" title="Delete this collection profile">
+                    <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+                  </button>
+                </div>
+              </div>
+              <p id="ankiProfileHelp" class="dialog-help"></p>
+            </section>
+          </div>
+          </section>
+          <section id="quickSettingsPanel" class="settings-panel" role="tabpanel" aria-labelledby="quickSettingsTab"
+          hidden>
+          <div id="ankiSettingsForm" class="settings-form">
+            <section class="anki-settings-section" aria-labelledby="ankiDefaultsTitle">
+              <h3 id="ankiDefaultsTitle" class="eyebrow">CARD DEFAULTS</h3>
+              <div class="card-fields">
+                <label class="card-field">
+                  <span>Note type</span>
+                  <select id="ankiDefaultModel" class="field field-select card-input"></select>
+                </label>
+                <label class="anki-setting-check">
+                  <input id="ankiAllowDuplicate" type="checkbox">
+                  <span>Allow duplicate cards</span>
+                </label>
+              </div>
+            </section>
+            <section class="anki-settings-section" aria-labelledby="ankiDecksTitle">
+              <h3 id="ankiDecksTitle" class="eyebrow">DECK LIST</h3>
+              <div class="card-fields">
+                <div class="anki-deck-modes" role="radiogroup" aria-label="Decks listed in quick search">
+                  <label class="anki-deck-mode">
+                    <input id="ankiDeckModeAll" type="radio" name="ankiDeckMode" value="all" checked>
+                    <span>All decks</span>
+                  </label>
+                  <label class="anki-deck-mode">
+                    <input id="ankiDeckModeSelected" type="radio" name="ankiDeckMode" value="selected">
+                    <span>Selected decks only</span>
+                  </label>
+                </div>
+                <div id="ankiDeckChoices" class="anki-deck-choices" role="group"
+                  aria-label="Decks to list in quick search"></div>
+                <p id="ankiDeckHint" class="dialog-help"></p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section id="shortcutsSettingsPanel" class="settings-panel" role="tabpanel"
+          aria-labelledby="shortcutsSettingsTab" hidden>
+          <section class="anki-settings-section shortcut-settings-section" aria-labelledby="shortcutSettingsTitle">
+            <div class="shortcut-settings-heading">
+              <div>
+                <h3 id="shortcutSettingsTitle" class="eyebrow">KEYBOARD SHORTCUTS</h3>
+                <p class="dialog-help">Select a binding, then press Command or Control with the key you want.</p>
+              </div>
+              <div class="shortcut-settings-actions">
+                <label class="sr-only" for="shortcutFilter">Search shortcuts</label>
+                <input id="shortcutFilter" class="field field-sm shortcut-filter" type="search"
+                  autocomplete="off" placeholder="Search shortcuts" aria-label="Search shortcuts">
+                <button id="shortcutResetAll" class="button button-quiet button-icon shortcut-reset-all" type="button"
+                  aria-label="Restore all default shortcuts" title="Restore all defaults">
+                  <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+                </button>
+              </div>
+            </div>
+            <div id="shortcutSettingsList" class="shortcut-settings-list" role="list"
+              aria-label="Customizable keyboard shortcuts"></div>
+          </section>
+        </section>
+        <section id="librarySettingsPanel" class="settings-panel" role="tabpanel"
+          aria-labelledby="librarySettingsTab" hidden>
+          <div class="library-editor">
+            <nav id="libraryEntries" class="library-entries" aria-label="Instructions and skills"></nav>
+            <div id="libraryEditorForm" class="library-editor-form">
+              <input id="libraryEntryType" type="hidden"><input id="libraryEntryName" type="hidden">
+              <h3 id="libraryEditorTitle" class="eyebrow">SELECT AN ENTRY</h3>
+              <label id="libraryNameField" class="dialog-field" hidden>
+                <span id="libraryNameLabel" class="dialog-label">Name</span>
+                <input id="libraryEditorName" class="field field-md">
+              </label>
+              <label id="libraryDescriptionField" class="dialog-field" hidden>
+                <span class="dialog-label">Description</span>
+                <input id="libraryEditorDescription" class="field field-md">
+              </label>
+              <textarea id="libraryEditorContent" class="field library-editor-content"
+                aria-label="Instruction or skill content"></textarea>
+            </div>
+          </div>
+        </section>
+        <section id="agentSettingsPanel" class="settings-panel" role="tabpanel"
+          aria-labelledby="agentSettingsTab" hidden>
+          <div class="agent-availability">
+            <div class="agent-section-copy">
+              <h3 class="eyebrow">ANKI AGENT</h3>
+              <p id="agentAvailabilityText" class="dialog-help">Disabled</p>
+            </div>
+            <button id="agentToggle" class="agent-switch" type="button" role="switch"
+              aria-checked="false" aria-describedby="agentAvailabilityText"
+              aria-label="Enable Anki Agent" title="Enable Anki Agent">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <section class="agent-profile-manager" aria-labelledby="agentProfileManagerTitle">
+            <h3 id="agentProfileManagerTitle" class="eyebrow">CONFIGURATION</h3>
+            <div id="agentProfilePicker" class="anki-picker-row agent-profile-picker">
+              <select id="agentProfileSelect" class="field field-select" aria-label="Agent configuration"></select>
+              <input id="agentProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                aria-label="Rename this Agent configuration">
+              <input id="agentNewProfileName" class="field" maxlength="64" autocomplete="off" hidden
+                placeholder="New Agent configuration" aria-label="New Agent configuration name">
+              <button id="agentProfileConfirm" class="button button-quiet button-icon" type="button"
+                aria-label="Rename this Agent configuration" title="Rename this Agent configuration">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pencil"></use></svg>
+              </button>
+              <button id="agentProfileReturn" class="button button-quiet button-icon" type="button" hidden
+                aria-label="Back to Agent configurations" title="Back to Agent configurations">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>
+              </button>
+              <button id="agentProfileDelete" class="button button-quiet button-icon" type="button"
+                aria-label="Delete configuration" title="Delete configuration">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>
+              </button>
+            </div>
+          </section>
+          <form id="agentProfileForm" class="agent-profile-form" aria-labelledby="agentProfileFormTitle" hidden>
+            <header class="agent-profile-form-heading">
+              <h3 id="agentProfileFormTitle" class="eyebrow">NEW CONFIGURATION</h3>
+              <p id="agentProfileFormHint" class="dialog-help">Create an Agent configuration.</p>
+            </header>
+            <div class="card-fields">
+              <label class="card-field">
+                <span>Provider</span>
+                <select id="agentProfileProvider" class="field field-sm field-select" required>
+                  <option value="deepseek">DeepSeek</option>
+                </select>
+              </label>
+              <label class="card-field">
+                <span>Model</span>
+                <input id="agentProfileModel" class="field card-input" required placeholder="The model to use">
+              </label>
+              <label class="card-field">
+                <span>API endpoint</span>
+                <input id="agentProfileBaseUrl" class="field card-input" required
+                  placeholder="The API endpoint URL">
+              </label>
+              <label class="card-field">
+                <span>Default thinking</span>
+                <select id="agentProfileEffort" class="field field-sm">
+                  <option value="none">Off</option><option value="low">Low</option><option value="high">High</option>
+                  <option value="max">Max</option><option value="auto" selected>Auto</option>
+                </select>
+                <small class="agent-field-help">Used for this profile's chats and card writing; Auto asks
+                  the backend to pick a budget per request.</small>
+              </label>
+              <label class="card-field">
+                <span>API key</span>
+                <input id="agentProfileApiKey" class="field card-input" type="password"
+                  autocomplete="new-password" placeholder="Enter API key" required
+                  aria-describedby="agentProfileApiKeyHelp">
+                <small id="agentProfileApiKeyHelp" class="agent-field-help">
+                  Required and stored in the macOS Keychain.
+                </small>
+              </label>
+            </div>
+          </form>
+          </section>
+        </div>
+        </div>
+    </dialog>
+
+    <dialog id="ankiAccountDialog" class="dialog dialog-sm" aria-labelledby="ankiAccountTitle">
+      <form id="ankiAccountForm" class="dialog-body">
+        <header class="dialog-head">
+          <div class="dialog-head-title-row">
+            <h2 id="ankiAccountTitle" class="dialog-title dialog-title-lg">AnkiWeb account</h2>
+            <p id="ankiAccountStatus" class="dialog-help dialog-status system-message" role="status"></p>
+          </div>
+          <button class="button button-quiet button-icon" type="button" data-dialog-close
+            aria-label="Close" title="Close">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+          </button>
+        </header>
+        <div class="dialog-content">
+          <div id="ankiAccountSignIn" class="card-fields">
+          <label class="card-field">
+            <span>AnkiWeb ID</span>
+            <input id="ankiSyncUsername" class="field card-input" type="email" required
+              autocomplete="username" placeholder="name@example.com">
+          </label>
+          <label class="card-field">
+            <span>Password</span>
+            <input id="ankiSyncPassword" class="field card-input" type="password" required
+              autocomplete="current-password" placeholder="Your AnkiWeb password">
+          </label>
+          <label class="card-field">
+            <span>Custom sync server</span>
+            <input id="ankiSyncEndpoint" class="field card-input" type="url" autocomplete="off"
+              placeholder="Optional — leave blank for AnkiWeb">
+          </label>
+          <label class="anki-setting-check">
+            <input id="ankiSyncMedia" type="checkbox">
+            <span>Sync media</span>
+          </label>
+        </div>
+        <div id="ankiAccountSignedIn" hidden>
+          <dl class="anki-account-details">
+            <div><dt>AnkiWeb ID</dt><dd id="ankiAccountUsername"></dd></div>
+            <div><dt>Sync server</dt><dd id="ankiAccountEndpoint"></dd></div>
+            <div><dt>Media</dt><dd id="ankiAccountMedia"></dd></div>
+          </dl>
+        </div>
+        <p id="ankiAccountHelp" class="dialog-help"></p>
+        <footer class="dialog-actions anki-account-actions">
+          <button id="ankiAccountLogout" class="button button-quiet button-icon" type="button" hidden
+            aria-label="Log out of AnkiWeb" title="Log out of AnkiWeb">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg>
+          </button>
+          <button id="ankiAccountLogin" class="button button-dark button-icon" type="submit"
+            aria-label="Log in to AnkiWeb" title="Log in to AnkiWeb">
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-login"></use></svg>
+          </button>
+          </footer>
+        </div>
+      </form>
+    </dialog>
+
+    <template data-partial="/html/sync-dialogs.html"></template>
+
+  </section>
+
+  <script src="/scripts/bootstrap.js"></script>
+</body>
+</html>
